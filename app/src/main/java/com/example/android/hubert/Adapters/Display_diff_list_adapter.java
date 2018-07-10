@@ -1,6 +1,7 @@
 package com.example.android.hubert.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -61,7 +62,12 @@ public class Display_diff_list_adapter extends RecyclerView.Adapter<Display_diff
         void onItemLongClickListerner(int itemId);
     }
 
-    public class A_list_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+    public interface ItemTouchHelperViewHolder{
+        void onItemSelected();
+        void onItemClear();
+    }
+
+    public class A_list_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener, ItemTouchHelperViewHolder{
 
         TextView tv_list_name;
 
@@ -83,6 +89,17 @@ public class Display_diff_list_adapter extends RecyclerView.Adapter<Display_diff
             int itemId = listEntries.get(getAdapterPosition()).getId();
             itemLongClickListerner.onItemLongClickListerner(itemId);
             return true;
+        }
+
+        @Override
+        public void onItemSelected() {
+            int color = context.getResources().getColor(R.color.colorPrimaryLight);
+            itemView.setBackgroundColor(color);
+        }
+
+        @Override
+        public void onItemClear() {
+            itemView.setBackgroundColor(0);
         }
     }
 

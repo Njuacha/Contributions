@@ -67,7 +67,28 @@ public class Display_diff_list extends AppCompatActivity implements Display_diff
                   });
             }
 
+            @Override
+            public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+                // We only want the active item
+                if (actionState != ItemTouchHelper.ACTION_STATE_IDLE){
+                    if ( viewHolder instanceof Display_diff_list_adapter.ItemTouchHelperViewHolder){
+                        Display_diff_list_adapter.ItemTouchHelperViewHolder
+                                itemViewHolder = (Display_diff_list_adapter.ItemTouchHelperViewHolder) viewHolder;
+                                itemViewHolder.onItemSelected();
+                    }
+                }
+                super.onSelectedChanged(viewHolder, actionState);
+            }
 
+            @Override
+            public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                super.clearView(recyclerView, viewHolder);
+                if ( viewHolder instanceof Display_diff_list_adapter.ItemTouchHelperViewHolder){
+                    Display_diff_list_adapter.ItemTouchHelperViewHolder
+                            itemViewHolder = (Display_diff_list_adapter.ItemTouchHelperViewHolder) viewHolder;
+                            itemViewHolder.onItemClear();
+                }
+            }
         }).attachToRecyclerView(recyclerView);
 
         setupViewModel();
