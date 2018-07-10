@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.android.hubert">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".Activities.PasswordActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Activities.Display_diff_list" />
+        <activity
+            android:name=".Activities.Display_a_list"
+            android:label="@string/title_activity_display_a_list"
+            android:parentActivityName=".Activities.Display_diff_list"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.hubert.Activities.Display_diff_list" />
+        </activity>
+        <activity
+            android:name=".Activities.Add_a_contribution"
+            android:label="@string/title_activity_add_a_contribution"
+            android:parentActivityName=".Activities.Display_a_list"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.hubert.Activities.Display_a_list" />
+        </activity>
+        <activity android:name=".Activities.AddMember" />
+        <activity
+            android:name=".Activities.MainSettingsActivity"
+            android:label="@string/general_settings"
+            android:parentActivityName=".Activities.Display_diff_list">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.hubert.Activities.Display_diff_list"/>
+        </activity>
+    </application>
+
+</manifest>

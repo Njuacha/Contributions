@@ -55,7 +55,7 @@ public class Display_diff_list_adapter extends RecyclerView.Adapter<Display_diff
     }
 
     public interface ItemClickListerner{
-        void onItemCLickListerner(int itemId);
+        void onItemCLickListerner(int itemId, String name);
     }
 
     public interface ItemLongClickListerner{
@@ -80,8 +80,11 @@ public class Display_diff_list_adapter extends RecyclerView.Adapter<Display_diff
 
         @Override
         public void onClick(View v) {
-            int itemId = listEntries.get(getAdapterPosition()).getId();
-            itemClickListerner.onItemCLickListerner(itemId);
+            int position = getAdapterPosition();
+            A_list a_list = listEntries.get(position);
+            int itemId = a_list.getId();
+            String name = a_list.getName();
+            itemClickListerner.onItemCLickListerner(itemId, name);
         }
 
         @Override

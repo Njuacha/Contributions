@@ -18,6 +18,9 @@ public class PasswordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password);
+        // Temporarily i would skip this
+        startActivity(new Intent(PasswordActivity.this,Display_diff_list.class));
+        finish();
     }
 
     public void enter(View view) {

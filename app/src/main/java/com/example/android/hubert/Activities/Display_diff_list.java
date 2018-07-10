@@ -3,6 +3,8 @@ package com.example.android.hubert.Activities;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +13,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,7 +23,7 @@ import com.example.android.hubert.AppExecutors;
 import com.example.android.hubert.DatabaseClasses.A_list;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.Listname_dialog;
-import com.example.android.hubert.View_models.Main_view_model;
+import com.example.android.hubert.View_model_classes.Main_view_model;
 import com.example.android.hubert.R;
 
 import java.util.List;
@@ -32,6 +33,7 @@ import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 public class Display_diff_list extends AppCompatActivity implements Display_diff_list_adapter.ItemClickListerner, Display_diff_list_adapter.ItemLongClickListerner {
     private static final String TAG = Display_diff_list.class.getSimpleName();
     public static final String LIST_ID_EXTRA = "list Id";
+    public static final String LIST_NAME_EXTRA = "list name";
     Display_diff_list_adapter adapter;
     RecyclerView recyclerView;
     AppDatabase mdb;
@@ -48,7 +50,6 @@ public class Display_diff_list extends AppCompatActivity implements Display_diff
         mdb = AppDatabase.getDatabaseInstance(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
         /* adding the swipping functionality*/
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -92,6 +93,14 @@ public class Display_diff_list extends AppCompatActivity implements Display_diff
         }).attachToRecyclerView(recyclerView);
 
         setupViewModel();
+        setAssociationName();
+    }
+
+    private void setAssociationName() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String associationName = sharedPreferences.getString(getString(R.string.pref_association_name_key)
+                ,getString(R.string.pref_association_name_label));
+        setTitle(associationName);
     }
 
     @Override
@@ -108,10 +117,13 @@ public class Display_diff_list extends AppCompatActivity implements Display_diff
         switch (id){
             case R.id.add_list:
                 open_edit_list_name_dialog(DEFAULT_LIST_ID);
-                break;
+                return true;
             case R.id.add_member:
                 openAddMemberActivity();
-                break;
+                return true;
+            case R.id.action_settings:
+                startActivity(new Intent(this,MainSettingsActivity.class));
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -125,7 +137,7 @@ public class Display_diff_list extends AppCompatActivity implements Display_diff
 
         Listname_dialog dialog = new Listname_dialog();
         Bundle bundle = new Bundle();
-        bundle.putInt("listId",listId);
+        bundle.putInt("mListId",listId);
         dialog.setArguments(bundle);
         dialog.show(getSupportFragmentManager(), "edit_list_name_dialog");
     }
@@ -133,8 +145,9 @@ public class Display_diff_list extends AppCompatActivity implements Display_diff
 
 
     @Override
-    public void onItemCLickListerner(int itemId) {
+    public void onItemCLickListerner(int itemId, String name) {
         Intent intent = new Intent(Display_diff_list.this, Display_a_list.class);
+        intent.putExtra(LIST_NAME_EXTRA, name);
         intent.putExtra(LIST_ID_EXTRA, itemId);
         startActivity(intent);
     }

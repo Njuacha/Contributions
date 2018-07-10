@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Layout;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -17,7 +16,7 @@ import com.example.android.hubert.DatabaseClasses.A_member_in_a_list;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.DatabaseClasses.Member;
 import com.example.android.hubert.R;
-import com.example.android.hubert.View_models.Main3_view_model;
+import com.example.android.hubert.View_model_classes.Main3_view_model;
 
 import java.util.List;
 

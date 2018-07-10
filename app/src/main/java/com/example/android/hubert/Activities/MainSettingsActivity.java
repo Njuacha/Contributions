@@ -1,0 +1,21 @@
+package com.example.android.hubert.Activities;
+
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+import com.example.android.hubert.R;
+
+public class MainSettingsActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_settings);
+
+        ActionBar actionBar = this.getSupportActionBar();
+        if ( actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+}

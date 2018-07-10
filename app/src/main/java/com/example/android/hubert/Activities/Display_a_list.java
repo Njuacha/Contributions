@@ -18,16 +18,19 @@ import com.example.android.hubert.AppExecutors;
 import com.example.android.hubert.DatabaseClasses.A_member_in_a_list;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.DatabaseClasses.Contribution;
-import com.example.android.hubert.View_models.Main2_view_model;
+import com.example.android.hubert.View_model_classes.Main2ViewModelFactory;
+import com.example.android.hubert.View_model_classes.Main2_view_model;
 import com.example.android.hubert.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Display_a_list extends AppCompatActivity {
-    RecyclerView rv;
-    Display_a_list_adapter adapter;
-    int listId;
+    RecyclerView mRv;
+    Display_a_list_adapter mAdapter;
+    int mListId;
+    String mListName;
+    AppDatabase mDb;
 
 
     @Override
@@ -37,39 +40,42 @@ public class Display_a_list extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        rv = findViewById(R.id.rv_contributions);
-        adapter = new Display_a_list_adapter(this);
-        rv.setAdapter(adapter);
-        rv.setLayoutManager(new LinearLayoutManager(this));
+        mRv = findViewById(R.id.rv_contributions);
+        mAdapter = new Display_a_list_adapter(this);
+        mRv.setAdapter(mAdapter);
+        mRv.setLayoutManager(new LinearLayoutManager(this));
 
-
+        // instantiate the database variable
+        mDb = AppDatabase.getDatabaseInstance(this);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent addIntent = new Intent(Display_a_list.this,Add_a_contribution.class);
-                addIntent.putExtra(Display_diff_list.LIST_ID_EXTRA,listId);
+                addIntent.putExtra(Display_diff_list.LIST_ID_EXTRA, mListId);
                 startActivity(addIntent);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getListIdFromIntent();
+        getListIdAndNameFromIntent();
         setupViewModel();
-        Log.d("Oncreate","Oncreate method is called");
+        setTitle(mListName);
     }
 
-    private void getListIdFromIntent() {
-        if (getIntent().hasExtra(Display_diff_list.LIST_ID_EXTRA)) {
-            listId = getIntent().getIntExtra(Display_diff_list.LIST_ID_EXTRA, Display_diff_list.DEFAULT_LIST_ID);
+    private void getListIdAndNameFromIntent() {
+        if (getIntent().hasExtra(Display_diff_list.LIST_ID_EXTRA) && getIntent().hasExtra(Display_diff_list.LIST_NAME_EXTRA)) {
+            mListId = getIntent().getIntExtra(Display_diff_list.LIST_ID_EXTRA, Display_diff_list.DEFAULT_LIST_ID);
+            mListName = getIntent().getStringExtra(Display_diff_list.LIST_NAME_EXTRA);
         }
     }
 
     private void setupViewModel() {
-        Main2_view_model view_model2 = ViewModelProviders.of(this).get(Main2_view_model.class);
+        Main2ViewModelFactory factory = new Main2ViewModelFactory(mDb,mListId);
+        Main2_view_model view_model2 = ViewModelProviders.of(this,factory).get(Main2_view_model.class);
 
-        view_model2.getMembersInList(listId).observe(this, new Observer<List<A_member_in_a_list>>() {
+        view_model2.getMembersInList().observe(this, new Observer<List<A_member_in_a_list>>() {
             @Override
             public void onChanged(@Nullable List<A_member_in_a_list> a_member_in_a_lists) {
                 extractContributions(a_member_in_a_lists);
@@ -95,7 +101,7 @@ public class Display_a_list extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapter.setContributions(contributions);
+                        mAdapter.setContributions(contributions);
                     }
                 });
 
