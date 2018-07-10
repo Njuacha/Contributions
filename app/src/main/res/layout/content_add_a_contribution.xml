@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.android.hubert.Activities.Add_a_contribution"
+    tools:showIn="@layout/activity_add_a_contribution"
+    android:padding="16dp"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/name_field"
+        android:gravity="start">
+
+        <TextView
+            android:id="@+id/tv_member"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Choose a name: "
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@android:color/primary_text_light"/>
+        <Spinner
+            android:id="@+id/sp_members"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/et_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:layout_marginTop="48dp"
+        android:ems="10"
+        android:hint="Enter an amount..."
+        android:inputType="numberDecimal"
+        />
+
+    <Button
+        android:id="@+id/bt_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="46dp"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:text="ADD"
+        android:gravity="center"
+        android:background="@color/colorPrimary"
+        android:onClick="add"/>
+
+</android.widget.LinearLayout>

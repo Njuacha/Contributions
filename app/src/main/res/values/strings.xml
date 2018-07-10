@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Hubert</string>
+    <string name="title_activity_display_a_list">Display_a_list</string>
+    <string name="title_activity_add_a_contribution">Add_a_contribution</string>
+    <string name="add_member">Add member</string>
+    <string name="add_list">Add list</string>
+    <string name="member_name_hint">Enter new member\'s name</string>
+    <string name="non_member">enter non member</string>
+</resources>

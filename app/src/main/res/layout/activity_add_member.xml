@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context="com.example.android.hubert.Activities.AddMember">
+
+    <EditText
+        android:id="@+id/et_member_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/member_name_hint"
+        android:inputType="textPersonName" />
+    <Button
+        android:id="@+id/bt_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="46dp"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:text="ADD"
+        android:gravity="center"
+        android:background="@color/colorPrimary"
+        android:onClick="add"/>
+</android.widget.LinearLayout>
