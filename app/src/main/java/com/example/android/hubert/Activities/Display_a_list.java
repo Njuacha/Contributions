@@ -8,9 +8,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.android.hubert.Adapters.Display_a_list_adapter;
@@ -18,6 +20,7 @@ import com.example.android.hubert.AppExecutors;
 import com.example.android.hubert.DatabaseClasses.A_member_in_a_list;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.DatabaseClasses.Contribution;
+import com.example.android.hubert.DialogFragments.Add_amount_dialog;
 import com.example.android.hubert.View_model_classes.Main2ViewModelFactory;
 import com.example.android.hubert.View_model_classes.Main2_view_model;
 import com.example.android.hubert.R;
@@ -25,12 +28,15 @@ import com.example.android.hubert.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Display_a_list extends AppCompatActivity {
+public class Display_a_list extends AppCompatActivity implements Display_a_list_adapter.OptionTextViewClickListerner, Add_amount_dialog.Add_amount_dialog_listener{
     RecyclerView mRv;
     Display_a_list_adapter mAdapter;
     int mListId;
     String mListName;
+    Contribution mContribution;
     AppDatabase mDb;
+    boolean mIsAdd;
+    private int mOptionMenuItemClickedId;
 
 
     @Override
@@ -41,7 +47,7 @@ public class Display_a_list extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mRv = findViewById(R.id.rv_contributions);
-        mAdapter = new Display_a_list_adapter(this);
+        mAdapter = new Display_a_list_adapter(this,this);
         mRv.setAdapter(mAdapter);
         mRv.setLayoutManager(new LinearLayoutManager(this));
 
@@ -101,7 +107,7 @@ public class Display_a_list extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter.setContributions(contributions);
+                        mAdapter.setmContributions(contributions);
                     }
                 });
 
@@ -109,4 +115,46 @@ public class Display_a_list extends AppCompatActivity {
         });
     }
 
+    // Opens up a popup menu when the three vertical dot(optionView) is clicked
+    @Override
+    public void onOptionTextViewClicked(Contribution contribution, View view) {
+        mContribution = contribution;
+        PopupMenu popupMenu = new PopupMenu(this,view);
+        popupMenu.inflate(R.menu.add_amount);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            // Opens up the same dialog when either the add or subtract option is clicked
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Add_amount_dialog dialog = new Add_amount_dialog();
+                dialog.show(getSupportFragmentManager(),"edit amount dialog fragment");
+                // Try to record whether it was add or subtract that was selected in a boolean
+                switch(item.getItemId()){
+                    case R.id.action_add:
+                        mIsAdd = true;
+                        break;
+                    case R.id.action_subtract:
+                        mIsAdd = false;
+                        break;
+                }
+                return false;
+            }
+        });
+
+        popupMenu.show();
+    }
+
+
+    @Override
+    public void onPositiveButtonClicked(final int amount) {
+        AppExecutors.getsInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+               int memberId = mDb.member_dao().loadAMemberId(mContribution.getName());
+               int newAmount =  mContribution.getAmount() + (mIsAdd?amount:-amount);
+               A_member_in_a_list a_member_in_a_list = new A_member_in_a_list(memberId,mListId
+                       ,newAmount);
+               mDb.a_member_in_a_list_dao().update_a_member_in_a_list(a_member_in_a_list);
+            }
+        });
+    }
 }

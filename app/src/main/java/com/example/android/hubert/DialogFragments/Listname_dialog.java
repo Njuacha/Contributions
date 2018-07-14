@@ -1,4 +1,4 @@
-package com.example.android.hubert;
+package com.example.android.hubert.DialogFragments;
 
 
 import android.app.AlertDialog;
@@ -12,8 +12,13 @@ import android.view.LayoutInflater;
 import android.widget.EditText;
 
 import com.example.android.hubert.Activities.Display_diff_list;
+import com.example.android.hubert.AppExecutors;
 import com.example.android.hubert.DatabaseClasses.A_list;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
+import com.example.android.hubert.R;
+
+import static com.example.android.hubert.Activities.Display_diff_list.LIST_ID_EXTRA;
+import static com.example.android.hubert.Activities.Display_diff_list.LIST_NAME_EXTRA;
 
 /**
  * Created by hubert on 6/15/18.
@@ -55,34 +60,22 @@ public class Listname_dialog extends DialogFragment {
             }
         });
 
-        listId = getArguments().getInt("listId",DEFAULT_LIST_ID);
 
-        if( listId != DEFAULT_LIST_ID){ // put former name of list if we are mordifying an old list
-            populateUI();
-        }
         return builder.create();
     }
 
     private void populateUI(){
-       AppExecutors.getsInstance().diskIO().execute(new Runnable() {
-           @Override
-           public void run() {
-               final String listName = mdb.a_list_dao().load_a_list(listId).getName();
-               AppExecutors.getsInstance().mainThread().execute(new Runnable() {
-                   @Override
-                   public void run() {
-                       Log.i("PopulateUI","We are actively retrieving list from database");
-                       editText.setText(listName);
-                   }
-               });
-           }
-       });
+        editText.setText(getArguments().getString(LIST_NAME_EXTRA));
     }
 
     @Override
     public void onResume() {
         super.onResume();
         editText = getDialog().findViewById(R.id.et_list_name);
+        listId = getArguments().getInt(LIST_ID_EXTRA,DEFAULT_LIST_ID);
+        if( listId != DEFAULT_LIST_ID){ // put former name of list if we are modifying an old list
+            populateUI();
+        }
     }
 
     private void saveName(){

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context="com.example.android.hubert.Activities.AddMember">
+    tools:mContext="com.example.android.hubert.Activities.AddMember">
 
     <EditText
         android:id="@+id/et_member_name"

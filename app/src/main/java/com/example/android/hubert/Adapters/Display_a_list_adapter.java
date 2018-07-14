@@ -20,50 +20,68 @@ import java.util.List;
 
 public class Display_a_list_adapter extends RecyclerView.Adapter<Display_a_list_adapter.A_Contribution_ViewHolder>{
 
-    private Context context;
-    private List<Contribution> contributions;
-    public Display_a_list_adapter(Context context){
-        this.context = context;
+    private Context mContext;
+    private List<Contribution> mContributions;
+    private final OptionTextViewClickListerner mOptionTextViewClickListerner;
+
+    public Display_a_list_adapter(Context mContext, OptionTextViewClickListerner optionTextViewClickListerner){
+        this.mContext = mContext;
+        mOptionTextViewClickListerner = optionTextViewClickListerner;
     }
 
     @NonNull
     @Override
     public A_Contribution_ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.a_list,parent,false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.a_list,parent,false);
         return new A_Contribution_ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull A_Contribution_ViewHolder holder, int position) {
-        holder.tvName.setText(contributions.get(position).getName());
-        holder.tvAmount.setText(String.valueOf(contributions.get(position).getAmount()));
+        holder.tvName.setText(mContributions.get(position).getName());
+        holder.tvAmount.setText(String.valueOf(mContributions.get(position).getAmount()));
     }
 
 
     @Override
     public int getItemCount() {
-        if( contributions == null){
+        if( mContributions == null){
             return 0;
         }
-        else return contributions.size();
+        else return mContributions.size();
 
+    }
+    public interface OptionTextViewClickListerner{
+        void onOptionTextViewClicked(Contribution contribution, View view);
     }
 
     public class A_Contribution_ViewHolder extends RecyclerView.ViewHolder{
         TextView tvName;
         TextView tvAmount;
+        TextView tvOptions;
 
         public A_Contribution_ViewHolder(View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tv_member);
             tvAmount = itemView.findViewById(R.id.tv_amount);
+            tvOptions = itemView.findViewById(R.id.tv_options);
+
+            tvOptions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    Contribution contribution = mContributions.get(position);
+                    mOptionTextViewClickListerner.onOptionTextViewClicked(contribution,tvOptions);
+                }
+            });
         }
     }
 
-    public void setContributions(List<Contribution> contributions){
-        this.contributions = contributions;
+    public void setmContributions(List<Contribution> mContributions){
+        this.mContributions = mContributions;
         notifyDataSetChanged();
     }
+
 
 
 }

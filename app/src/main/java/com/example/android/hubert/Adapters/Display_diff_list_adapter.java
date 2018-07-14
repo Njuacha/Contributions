@@ -1,12 +1,13 @@
 package com.example.android.hubert.Adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.example.android.hubert.DatabaseClasses.A_list;
@@ -21,45 +22,48 @@ import java.util.List;
 
 public class Display_diff_list_adapter extends RecyclerView.Adapter<Display_diff_list_adapter.A_list_ViewHolder> {
 
-    private Context context;
-    private List<A_list> listEntries;
-    private final ItemClickListerner itemClickListerner;
-    private final ItemLongClickListerner itemLongClickListerner;
+    private Context mContext;
+    private List<A_list> mListEntries;
+    private final ItemClickListerner mItemClickListerner;
+    private final ItemLongClickListerner mItemLongClickListerner;
+    private final OptionTextViewClickListerner mOptionTextViewClickListerner;
 
-    public Display_diff_list_adapter(Context context, ItemClickListerner listerner, ItemLongClickListerner itemLongClickListerner){
-        this.context = context;
-        itemClickListerner = listerner;
-        this.itemLongClickListerner = itemLongClickListerner;
+    public Display_diff_list_adapter(Context context, ItemClickListerner listerner, ItemLongClickListerner mItemLongClickListerner, OptionTextViewClickListerner mOptionTextViewClickListerner){
+        this.mContext = context;
+        mItemClickListerner = listerner;
+        this.mItemLongClickListerner = mItemLongClickListerner;
+        this.mOptionTextViewClickListerner = mOptionTextViewClickListerner;
     }
 
     @NonNull
     @Override
     public A_list_ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.list,parent,false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.list,parent,false);
         return new A_list_ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull A_list_ViewHolder holder, int position) {
-        A_list a_list = listEntries.get(position);
-        holder.tv_list_name.setText(a_list.getName());
+    public void onBindViewHolder(@NonNull final A_list_ViewHolder holder, int position) {
+        A_list a_list = mListEntries.get(position);
+        holder.tvListName.setText(a_list.getName());
+
     }
 
     @Override
     public int getItemCount() {
-        if(listEntries == null){
+        if(mListEntries == null){
             return 0;
         }
         else
-        return listEntries.size();
+        return mListEntries.size();
     }
 
     public interface ItemClickListerner{
-        void onItemCLickListerner(int itemId, String name);
+        void onItemCLicked(int itemId, String name);
     }
 
     public interface ItemLongClickListerner{
-        void onItemLongClickListerner(int itemId);
+        void onItemLongClicked(int itemId, String name);
     }
 
     public interface ItemTouchHelperViewHolder{
@@ -67,36 +71,55 @@ public class Display_diff_list_adapter extends RecyclerView.Adapter<Display_diff
         void onItemClear();
     }
 
+    public interface OptionTextViewClickListerner{
+        void onOptionTextViewClicked(int itemId, View view);
+    }
+
     public class A_list_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener, ItemTouchHelperViewHolder{
 
-        TextView tv_list_name;
+        TextView tvListName;
+        TextView tvOptions;
 
         public A_list_ViewHolder(View itemView) {
             super(itemView);
-            tv_list_name = itemView.findViewById(R.id.tv_list_name);
+            tvListName = itemView.findViewById(R.id.tv_list_name);
+            tvOptions = itemView.findViewById(R.id.tv_options);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
+
+            tvOptions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    A_list a_list = mListEntries.get(position);
+                    int itemId = a_list.getId();
+                    mOptionTextViewClickListerner.onOptionTextViewClicked(itemId, tvOptions);
+                }
+            });
         }
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            A_list a_list = listEntries.get(position);
+            A_list a_list = mListEntries.get(position);
             int itemId = a_list.getId();
             String name = a_list.getName();
-            itemClickListerner.onItemCLickListerner(itemId, name);
+            mItemClickListerner.onItemCLicked(itemId, name);
         }
 
         @Override
         public boolean onLongClick(View v) {
-            int itemId = listEntries.get(getAdapterPosition()).getId();
-            itemLongClickListerner.onItemLongClickListerner(itemId);
+            int position = getAdapterPosition();
+            A_list a_list = mListEntries.get(position);
+            int itemId = a_list.getId();
+            String name = a_list.getName();
+            mItemLongClickListerner.onItemLongClicked(itemId, name);
             return true;
         }
 
         @Override
         public void onItemSelected() {
-            int color = context.getResources().getColor(R.color.colorPrimaryLight);
+            int color = mContext.getResources().getColor(R.color.colorPrimaryLight);
             itemView.setBackgroundColor(color);
         }
 
@@ -107,11 +130,13 @@ public class Display_diff_list_adapter extends RecyclerView.Adapter<Display_diff
     }
 
     public void setListEntries(List<A_list> listEntries){
-        this.listEntries = listEntries;
+        this.mListEntries = listEntries;
         notifyDataSetChanged();
     }
 
     public List<A_list> getListEntries(){
-        return listEntries;
+        return mListEntries;
     }
+
+
 }

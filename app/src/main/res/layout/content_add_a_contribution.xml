@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.android.hubert.Activities.Add_a_contribution"
+    tools:mContext="com.example.android.hubert.Activities.Add_a_contribution"
     tools:showIn="@layout/activity_add_a_contribution"
     android:padding="16dp"
     android:orientation="vertical">
