@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:mContext="com.example.android.hubert.Activities.SummaryActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_marginLeft="16dp"
+        android:text="Date Created :"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/SummaryHeadingStyle"/>
+    <TextView
+        android:id="@+id/tv_date"
+        app:layout_constraintStart_toEndOf="@id/textView"
+        android:text="12/04/2018"
+        app:layout_constraintBaseline_toBaselineOf="@id/textView"
+        style="@style/SummaryValuesStyle"/>
+    <TextView
+        android:id="@+id/tv_number"
+        app:layout_constraintStart_toStartOf="@id/textView"
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        android:text="Number Of Items In List :"
+        style="@style/SummaryHeadingStyle"
+        />
+    <TextView
+        android:id="@+id/tv_number_value"
+        app:layout_constraintStart_toEndOf="@+id/tv_number"
+        android:text="7"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_number"
+        style="@style/SummaryValuesStyle"/>
+    <TextView
+        android:id="@+id/tv_total_amt"
+        app:layout_constraintTop_toBottomOf="@id/tv_number"
+        app:layout_constraintStart_toStartOf="@id/tv_number"
+        android:text="Total Amount:"
+        style="@style/SummaryHeadingStyle"/>
+    <TextView
+        android:id="@+id/tv_amount_value"
+        app:layout_constraintStart_toEndOf="@+id/tv_total_amt"
+        android:text="5,000"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_total_amt"
+        style="@style/SummaryValuesStyle"/>
+
+</android.support.constraint.ConstraintLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.hubert">
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -9,6 +10,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <provider
+            android:authorities="com.example.android.hubert.fileProvider"
+            android:name="android.support.v4.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path"/>
+        </provider>
         <activity android:name=".Activities.PasswordActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,17 +38,18 @@
         </activity>
         <activity
             android:name=".Activities.Add_a_contribution"
-            android:label="@string/title_activity_add_a_contribution"
-            android:parentActivityName=".Activities.Display_a_list"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.hubert.Activities.Display_a_list" />
-        </activity>
+            android:label="@string/title_activity_add_a_contribution"/>
         <activity android:name=".Activities.AddMember" />
         <activity
             android:name=".Activities.MainSettingsActivity"
             android:label="@string/general_settings"
+            android:parentActivityName=".Activities.Display_diff_list">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.hubert.Activities.Display_diff_list" />
+        </activity>
+        <activity
+            android:name=".Activities.SummaryActivity"
             android:parentActivityName=".Activities.Display_diff_list">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

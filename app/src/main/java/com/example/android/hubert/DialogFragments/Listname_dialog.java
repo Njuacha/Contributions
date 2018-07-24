@@ -17,6 +17,8 @@ import com.example.android.hubert.DatabaseClasses.A_list;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.R;
 
+import java.util.Date;
+
 import static com.example.android.hubert.Activities.Display_diff_list.LIST_ID_EXTRA;
 import static com.example.android.hubert.Activities.Display_diff_list.LIST_NAME_EXTRA;
 
@@ -81,7 +83,7 @@ public class Listname_dialog extends DialogFragment {
     private void saveName(){
 
         String listName = editText.getText().toString();
-        final A_list a_list = new A_list(listName);
+        final A_list a_list = new A_list(listName,new Date());
 
             AppExecutors.getsInstance().diskIO().execute(new Runnable() {
                 @Override

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Hubert</string>
+    <string name="app_name">NkapJik</string>
     <string name="title_activity_display_a_list">Display_a_list</string>
     <string name="title_activity_add_a_contribution">Add_a_contribution</string>
     <string name="add_member">Add member</string>
@@ -10,4 +10,8 @@
     <string name="pref_association_name_label">Association Name</string>
     <string name="pref_association_name_value">@string/pref_association_name_label</string>
     <string name="pref_association_name_key" translatable="false">title</string>
+    <string name="authority" translatable="false">com.example.android.hubert.fileProvider</string>
+    <string name="share">Share</string>
+    <string name="add_contribution_empty">No members available to add to list</string>
+    <string name="no_list_available">No list available</string>
 </resources>

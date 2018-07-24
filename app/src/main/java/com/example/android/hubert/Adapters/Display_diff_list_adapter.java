@@ -2,6 +2,7 @@ package com.example.android.hubert.Adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -72,7 +73,7 @@ public class Display_diff_list_adapter extends RecyclerView.Adapter<Display_diff
     }
 
     public interface OptionTextViewClickListerner{
-        void onOptionTextViewClicked(int itemId, View view);
+        void onOptionTextViewClicked(int itemId,String name, View view);
     }
 
     public class A_list_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener, ItemTouchHelperViewHolder{
@@ -93,7 +94,8 @@ public class Display_diff_list_adapter extends RecyclerView.Adapter<Display_diff
                     int position = getAdapterPosition();
                     A_list a_list = mListEntries.get(position);
                     int itemId = a_list.getId();
-                    mOptionTextViewClickListerner.onOptionTextViewClicked(itemId, tvOptions);
+                    String name = a_list.getName();
+                    mOptionTextViewClickListerner.onOptionTextViewClicked(itemId, name,tvOptions);
                 }
             });
         }
@@ -125,8 +127,10 @@ public class Display_diff_list_adapter extends RecyclerView.Adapter<Display_diff
 
         @Override
         public void onItemClear() {
+
             itemView.setBackgroundColor(0);
         }
+
     }
 
     public void setListEntries(List<A_list> listEntries){

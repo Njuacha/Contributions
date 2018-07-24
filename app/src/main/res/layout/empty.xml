@@ -1,19 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:mContext="com.example.android.hubert.Activities.Display_a_list"
-    tools:showIn="@layout/activity_display_a_list">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_contributions"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="80dp">
-    </android.support.v7.widget.RecyclerView>
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <TextView
         android:id="@+id/tv_explain_emptiness"
         android:layout_width="wrap_content"
@@ -24,6 +13,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:textStyle="italic"
         android:textColor="@android:color/primary_text_light"/>
-
 
 </android.support.constraint.ConstraintLayout>
