@@ -103,6 +103,8 @@ public class Display_a_list_adapter extends RecyclerView.Adapter<Display_a_list_
 
     public void setmContributions(List<Contribution> mContributions){
         this.mContributions = mContributions;
+        longestNameLength = 0;
+        totalAmount = 0;
         notifyDataSetChanged();
     }
 
@@ -117,8 +119,6 @@ public class Display_a_list_adapter extends RecyclerView.Adapter<Display_a_list_
     public int getTotalAmount(){
         return totalAmount;
     }
-
-
 
 
 }

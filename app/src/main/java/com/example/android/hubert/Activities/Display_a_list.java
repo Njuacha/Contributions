@@ -212,10 +212,15 @@ public class Display_a_list extends AppCompatActivity implements Display_a_list_
         return allInfo.toString();
     }
 
-    private void writeContributions(StringBuilder allInfo) {
-        int spacing = mAdapter.getLongestNameLength() + 2;
 
-        allInfo.append(String.format("%-" + spacing + "s%s%n","Name","Amount"));
+    private void writeContributions(StringBuilder allInfo) {
+
+        int longestNameLength = mAdapter.getLongestNameLength();
+        String name_label = getString(R.string.name_label);
+
+        int spacing = (name_label.length()>longestNameLength?name_label.length():longestNameLength) + 2 ;
+
+        allInfo.append(String.format("%-" + spacing + "s%s%n",name_label,getString(R.string.amount_label)));
 
         for (Contribution contribution: mAdapter.getmContributions()){
             String name_amount = String.format("%-" + spacing + "s%,d%n"
