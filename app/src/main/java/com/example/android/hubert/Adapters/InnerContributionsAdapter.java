@@ -19,7 +19,7 @@ import java.util.List;
  * Created by hubert on 6/19/18.
  */
 
-public class Display_a_list_adapter extends RecyclerView.Adapter<Display_a_list_adapter.A_Contribution_ViewHolder>{
+public class InnerContributionsAdapter extends RecyclerView.Adapter<InnerContributionsAdapter.A_Contribution_ViewHolder>{
 
     private Context mContext;
     private List<Contribution> mContributions;
@@ -27,7 +27,7 @@ public class Display_a_list_adapter extends RecyclerView.Adapter<Display_a_list_
     private int longestNameLength = 0;
     private int totalAmount = 0;
 
-    public Display_a_list_adapter(Context mContext, OptionTextViewClickListerner optionTextViewClickListerner){
+    public InnerContributionsAdapter(Context mContext, OptionTextViewClickListerner optionTextViewClickListerner){
         this.mContext = mContext;
         mOptionTextViewClickListerner = optionTextViewClickListerner;
     }
@@ -67,7 +67,7 @@ public class Display_a_list_adapter extends RecyclerView.Adapter<Display_a_list_
         void onOptionTextViewClicked(Contribution contribution, View view);
     }
 
-    public class A_Contribution_ViewHolder extends RecyclerView.ViewHolder implements Display_diff_list_adapter.ItemTouchHelperViewHolder{
+    public class A_Contribution_ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName;
         TextView tvAmount;
         TextView tvOptions;
@@ -88,16 +88,6 @@ public class Display_a_list_adapter extends RecyclerView.Adapter<Display_a_list_
                     mOptionTextViewClickListerner.onOptionTextViewClicked(contribution,tvOptions);
                 }
             });
-        }
-        @Override
-        public void onItemSelected() {
-            int color = mContext.getResources().getColor(R.color.colorPrimaryLight);
-            cardView.setBackgroundColor(color);
-        }
-
-        @Override
-        public void onItemClear() {
-            cardView.setBackgroundColor(0);
         }
     }
 

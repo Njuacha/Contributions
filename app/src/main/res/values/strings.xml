@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NkapJik</string>
+    <string name="app_name">Our Contributions</string>
     <string name="title_activity_display_a_list">Display_a_list</string>
     <string name="title_activity_add_a_contribution">Add_a_contribution</string>
     <string name="add_member">Add member</string>
@@ -16,4 +16,9 @@
     <string name="no_list_available">No list available</string>
     <string name="name_label">Name</string>
     <string name="amount_label">Amount</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="tab_text_1">Members</string>
+    <string name="tab_text_2">Contributions</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

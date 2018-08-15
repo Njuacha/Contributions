@@ -16,16 +16,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.hubert.Adapters.Display_a_list_adapter;
-import com.example.android.hubert.Adapters.Display_diff_list_adapter;
+import com.example.android.hubert.Adapters.InnerContributionsAdapter;
 import com.example.android.hubert.AppExecutors;
 import com.example.android.hubert.DatabaseClasses.A_member_in_a_list;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
@@ -37,10 +34,10 @@ import com.example.android.hubert.R;
 
 import java.util.List;
 
-public class Display_a_list extends AppCompatActivity implements Display_a_list_adapter.OptionTextViewClickListerner, Add_amount_dialog.Add_amount_dialog_listener{
+public class Display_a_list extends AppCompatActivity implements InnerContributionsAdapter.OptionTextViewClickListerner, Add_amount_dialog.Add_amount_dialog_listener{
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 2;
     RecyclerView mRv;
-    Display_a_list_adapter mAdapter;
+    InnerContributionsAdapter mAdapter;
     int mListId;
     String mListName;
     Contribution mContribution;
@@ -58,7 +55,7 @@ public class Display_a_list extends AppCompatActivity implements Display_a_list_
 
         mRv = findViewById(R.id.rv_contributions);
         textView = findViewById(R.id.tv_explain_emptiness);
-        mAdapter = new Display_a_list_adapter(this,this);
+        mAdapter = new InnerContributionsAdapter(this,this);
         mRv.setAdapter(mAdapter);
         mRv.setLayoutManager(new LinearLayoutManager(this));
         // instantiate the database variable
@@ -81,50 +78,7 @@ public class Display_a_list extends AppCompatActivity implements Display_a_list_
         setupViewModel();
         setTitle(mListName);
 
-        /* adding the swipping functionality*/
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
-                AppExecutors.getsInstance().diskIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        Contribution contribution = mAdapter.getmContributions().get(viewHolder.getAdapterPosition());
-                        A_member_in_a_list a_member = new A_member_in_a_list(contribution.getMemberId(),mListId,contribution.getAmount());
-                        mDb.a_member_in_a_list_dao().deleteAContribution(a_member);
-                    }
-                });
-            }
-
-            @Override
-            public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-                // We only want the active item
-                if (actionState != ItemTouchHelper.ACTION_STATE_IDLE){
-                    if ( viewHolder instanceof Display_diff_list_adapter.ItemTouchHelperViewHolder){
-                        Display_diff_list_adapter.ItemTouchHelperViewHolder
-                                itemViewHolder = (Display_diff_list_adapter.ItemTouchHelperViewHolder) viewHolder;
-                        itemViewHolder.onItemSelected();
-                    }
-                }
-                super.onSelectedChanged(viewHolder, actionState);
-            }
-
-            @Override
-            public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                super.clearView(recyclerView, viewHolder);
-                if ( viewHolder instanceof Display_diff_list_adapter.ItemTouchHelperViewHolder){
-                    Display_diff_list_adapter.ItemTouchHelperViewHolder
-                            itemViewHolder = (Display_diff_list_adapter.ItemTouchHelperViewHolder) viewHolder;
-                    itemViewHolder.onItemClear();
-                }
-            }
-
-        }).attachToRecyclerView(mRv);
     }
 
     @Override

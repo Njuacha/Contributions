@@ -2,7 +2,6 @@ package com.example.android.hubert.Activities;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -14,8 +13,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,8 +20,7 @@ import android.view.View;
 import android.widget.TextView;
 
 
-import com.example.android.hubert.Adapters.Display_diff_list_adapter;
-import com.example.android.hubert.AppExecutors;
+import com.example.android.hubert.Adapters.ContributionsAdapter;
 import com.example.android.hubert.DatabaseClasses.A_list;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.DialogFragments.Listname_dialog;
@@ -35,30 +31,36 @@ import java.util.List;
 
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
-public class Display_diff_list extends AppCompatActivity implements Display_diff_list_adapter.ItemClickListerner, Display_diff_list_adapter.ItemLongClickListerner, Display_diff_list_adapter.OptionTextViewClickListerner {
+public class Display_diff_list extends AppCompatActivity implements ContributionsAdapter.ItemClickListerners {
     private static final String TAG = Display_diff_list.class.getSimpleName();
     public static final String LIST_ID_EXTRA = "list Id";
     public static final String LIST_NAME_EXTRA = "list name";
     private static final String DEFAULT_LIST_NAME = "No Name";
-    Display_diff_list_adapter adapter;
+    ContributionsAdapter adapter;
     RecyclerView recyclerView;
     TextView tvEmpty;
     AppDatabase mdb;
     public final static int DEFAULT_LIST_ID = -1;
-    Context mContext;
-    Display_diff_list_adapter.ItemClickListerner mClickListerner;
-    Display_diff_list_adapter.ItemLongClickListerner mLongClickListerner;
-    Display_diff_list_adapter.OptionTextViewClickListerner mOptionTvClickListerner;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setContentView(R.layout.activity_display_diff_list);
         super.onCreate(savedInstanceState);
+
+        recyclerView = findViewById(R.id.rv_all_list);
+        tvEmpty = findViewById(R.id.tv_explain_emptiness);
+
+        DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), VERTICAL);
+        recyclerView.addItemDecoration(decoration);
+
+        adapter = new ContributionsAdapter(this,this);
+
+        mdb = AppDatabase.getDatabaseInstance(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
         setAssociationName();
-        mContext = this;
-        mClickListerner = this;
-        mLongClickListerner = this;
-        mOptionTvClickListerner = this;
+
         setupViewModel();
     }
 
@@ -95,7 +97,7 @@ public class Display_diff_list extends AppCompatActivity implements Display_diff
     }
 
     private void openAddMemberActivity() {
-        Intent addMemberIntent = new Intent(Display_diff_list.this,AddMember.class);
+        Intent addMemberIntent = new Intent(Display_diff_list.this,MainActivity.class);
         startActivity(addMemberIntent);
     }
 
@@ -124,59 +126,10 @@ public class Display_diff_list extends AppCompatActivity implements Display_diff
             public void onChanged(@Nullable List<A_list> a_lists) {
                 if (a_lists.size() == 0){
                     setContentView(R.layout.empty);
-                    tvEmpty = findViewById(R.id.tv_explain_emptiness);
+                    tvEmpty.setVisibility(View.VISIBLE);
                     tvEmpty.setText(R.string.no_list_available);
                 }else{
-                    setContentView(R.layout.activity_display_diff_list);
-                    recyclerView = findViewById(R.id.rv_all_list);
-                    DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), VERTICAL);
-                    recyclerView.addItemDecoration(decoration);
-                    adapter = new Display_diff_list_adapter(mContext,mClickListerner,mLongClickListerner, mOptionTvClickListerner);
-                    mdb = AppDatabase.getDatabaseInstance(mContext);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-                    recyclerView.setAdapter(adapter);
-                    /* adding the swipping functionality*/
-                    new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-                        @Override
-                        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                            return false;
-                        }
-
-                        @Override
-                        public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
-                            AppExecutors.getsInstance().diskIO().execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    A_list a_list = adapter.getListEntries().get(viewHolder.getAdapterPosition());
-                                    mdb.a_list_dao().delete_a_list(a_list);
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-                            // We only want the active item
-                            if (actionState != ItemTouchHelper.ACTION_STATE_IDLE){
-                                if ( viewHolder instanceof Display_diff_list_adapter.ItemTouchHelperViewHolder){
-                                    Display_diff_list_adapter.ItemTouchHelperViewHolder
-                                            itemViewHolder = (Display_diff_list_adapter.ItemTouchHelperViewHolder) viewHolder;
-                                    itemViewHolder.onItemSelected();
-                                }
-                            }
-                            super.onSelectedChanged(viewHolder, actionState);
-                        }
-
-                        @Override
-                        public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                            super.clearView(recyclerView, viewHolder);
-                            if ( viewHolder instanceof Display_diff_list_adapter.ItemTouchHelperViewHolder){
-                                Display_diff_list_adapter.ItemTouchHelperViewHolder
-                                        itemViewHolder = (Display_diff_list_adapter.ItemTouchHelperViewHolder) viewHolder;
-                                itemViewHolder.onItemClear();
-                            }
-                        }
-
-                    }).attachToRecyclerView(recyclerView);
+                    tvEmpty.setVisibility(View.INVISIBLE);
                     adapter.setListEntries(a_lists);
                 }
             }
