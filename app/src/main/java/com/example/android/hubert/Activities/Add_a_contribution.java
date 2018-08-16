@@ -38,9 +38,9 @@ public class Add_a_contribution extends AppCompatActivity {
 
         mdb = AppDatabase.getDatabaseInstance(this);
         getListIdAndNameFromIntent();
-        setUpViewModel();
+       // setUpViewModel();
     }
-
+/*
     private void setUpViewModel() {
       AppExecutors.getsInstance().diskIO().execute(new Runnable() {
           @Override
@@ -70,7 +70,7 @@ public class Add_a_contribution extends AppCompatActivity {
           }
       });
     }
-
+*/
     public void add(View view) {
         add_a_member_in_a_list();
         finish();

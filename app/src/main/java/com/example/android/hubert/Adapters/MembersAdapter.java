@@ -47,6 +47,11 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberVi
 
     }
 
+    public void setMembers(List<Member> members){
+        mMemberList = members;
+        notifyDataSetChanged();
+    }
+
     public class MemberViewHolder extends RecyclerView.ViewHolder{
         TextView memberTv;
         public MemberViewHolder(View itemView) {

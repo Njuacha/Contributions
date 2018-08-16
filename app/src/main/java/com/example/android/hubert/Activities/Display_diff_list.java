@@ -24,7 +24,7 @@ import com.example.android.hubert.Adapters.ContributionsAdapter;
 import com.example.android.hubert.DatabaseClasses.A_list;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.DialogFragments.Listname_dialog;
-import com.example.android.hubert.View_model_classes.Main_view_model;
+import com.example.android.hubert.View_model_classes.ContributionsViewModel;
 import com.example.android.hubert.R;
 
 import java.util.List;
@@ -120,7 +120,7 @@ public class Display_diff_list extends AppCompatActivity implements Contribution
     }
     
     private void setupViewModel(){
-        Main_view_model view_model = ViewModelProviders.of(this).get(Main_view_model.class);
+        ContributionsViewModel view_model = ViewModelProviders.of(this).get(ContributionsViewModel.class);
         view_model.getLists().observe(this, new Observer<List<A_list>>() {
             @Override
             public void onChanged(@Nullable List<A_list> a_lists) {

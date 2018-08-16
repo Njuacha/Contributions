@@ -29,8 +29,10 @@ import com.example.android.hubert.Adapters.ContributionsAdapter;
 import com.example.android.hubert.Adapters.MembersAdapter;
 import com.example.android.hubert.DatabaseClasses.A_list;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
+import com.example.android.hubert.DatabaseClasses.Member;
 import com.example.android.hubert.R;
-import com.example.android.hubert.View_model_classes.Main_view_model;
+import com.example.android.hubert.View_model_classes.ContributionsViewModel;
+import com.example.android.hubert.View_model_classes.MembersViewModel;
 
 import java.util.List;
 
@@ -155,8 +157,24 @@ public class MainActivity extends AppCompatActivity {
             switch(sectionNumb){
                 case MEMBERS_SECTION:
                     // Declare and instantiate Members Adapter
-                    MembersAdapter membersAdapter = new MembersAdapter(getContext());
-
+                    final MembersAdapter membersAdapter = new MembersAdapter(getContext());
+                    recyclerView.setAdapter(membersAdapter);
+                    // Instantiates view model which provides list of members data
+                    MembersViewModel membView_model = ViewModelProviders.of(this).get(MembersViewModel.class);
+                    membView_model.getMembers().observe(this, new Observer<List<Member>>() {
+                        @Override
+                        public void onChanged(@Nullable List<Member> members) {
+                            if (members.size() == 0){
+                                recyclerView.setVisibility(View.INVISIBLE);
+                                textView.setVisibility(View.VISIBLE);
+                                textView.setText(R.string.no_list_available);
+                            }else{
+                                recyclerView.setVisibility(View.VISIBLE);
+                                textView.setVisibility(View.INVISIBLE);
+                                membersAdapter.setMembers(members);
+                            }
+                        }
+                    });
                     break;
                 case CONTRIBUTIONS_SECTION:
                     // Declare and instantiate Contributions Adapter
@@ -164,8 +182,8 @@ public class MainActivity extends AppCompatActivity {
                     // Set the adapter to the recycler view
                     recyclerView.setAdapter(contributionsAdapter);
                     // Instantiates view model which provides list of contributions data
-                    Main_view_model view_model = ViewModelProviders.of(this).get(Main_view_model.class);
-                    view_model.getLists().observe(this, new Observer<List<A_list>>() {
+                    ContributionsViewModel contViewModel = ViewModelProviders.of(this).get(ContributionsViewModel.class);
+                    contViewModel.getLists().observe(this, new Observer<List<A_list>>() {
                         @Override
                         public void onChanged(@Nullable List<A_list> a_lists) {
                             if (a_lists.size() == 0){
