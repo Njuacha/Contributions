@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.hubert.Adapters.ContributionsAdapter;
 import com.example.android.hubert.Adapters.MembersAdapter;
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String LIST_NAME_EXTRA = "list name";
     private static final String DEFAULT_LIST_NAME = "No Name";
     public final static int DEFAULT_LIST_ID = -1;
+    int mFabState = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +89,33 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mFabState = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                // 0 stands for first page which is members page
+                if(mFabState == 0){
+                    startActivity(new Intent(MainActivity.this,AddMember.class));
+                }else if(mFabState == 1){
+                    open_edit_list_name_dialog(DEFAULT_LIST_ID,DEFAULT_LIST_NAME);
+                }
             }
         });
 
@@ -121,18 +144,28 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void open_edit_list_name_dialog(int listId, String name) {
+
+        Listname_dialog dialog = new Listname_dialog();
+        Bundle bundle = new Bundle();
+        bundle.putInt(LIST_ID_EXTRA, listId);
+        bundle.putString(LIST_NAME_EXTRA, name);
+        dialog.setArguments(bundle);
+        dialog.show(getSupportFragmentManager(), "edit_list_name_dialog");
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment implements ContributionsAdapter.ItemClickListerners  {
+    public static class PlaceholderFragment extends Fragment implements ContributionsAdapter.ItemClickListerners{
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
-        private static final int MEMBERS_SECTION = 1 ;
+        private static final int MEMBERS_SECTION = 1;
         private static final int CONTRIBUTIONS_SECTION = 2;
-
+        public static int sectionNumb;
 
         public PlaceholderFragment() {
         }
@@ -162,9 +195,9 @@ public class MainActivity extends AppCompatActivity {
             DividerItemDecoration decoration = new DividerItemDecoration(getContext().getApplicationContext(), VERTICAL);
             recyclerView.addItemDecoration(decoration);
             // Get the section number
-            int sectionNumb = getArguments().getInt(ARG_SECTION_NUMBER);
+            sectionNumb = getArguments().getInt(ARG_SECTION_NUMBER);
             // Use sectionNumb in a switch
-            switch(sectionNumb){
+            switch (sectionNumb) {
                 case MEMBERS_SECTION:
                     // Declare and instantiate Members Adapter
                     final MembersAdapter membersAdapter = new MembersAdapter(getContext());
@@ -174,11 +207,11 @@ public class MainActivity extends AppCompatActivity {
                     membView_model.getMembers().observe(this, new Observer<List<Member>>() {
                         @Override
                         public void onChanged(@Nullable List<Member> members) {
-                            if (members.size() == 0){
+                            if (members.size() == 0) {
                                 recyclerView.setVisibility(View.INVISIBLE);
                                 textView.setVisibility(View.VISIBLE);
                                 textView.setText(R.string.no_list_available);
-                            }else{
+                            } else {
                                 recyclerView.setVisibility(View.VISIBLE);
                                 textView.setVisibility(View.INVISIBLE);
                                 membersAdapter.setMembers(members);
@@ -187,8 +220,9 @@ public class MainActivity extends AppCompatActivity {
                     });
                     break;
                 case CONTRIBUTIONS_SECTION:
+
                     // Declare and instantiate Contributions Adapter
-                    final ContributionsAdapter contributionsAdapter = new ContributionsAdapter(getContext(),this);
+                    final ContributionsAdapter contributionsAdapter = new ContributionsAdapter(getContext(), this);
                     // Set the adapter to the recycler view
                     recyclerView.setAdapter(contributionsAdapter);
                     // Instantiates view model which provides list of contributions data
@@ -196,11 +230,11 @@ public class MainActivity extends AppCompatActivity {
                     contViewModel.getLists().observe(this, new Observer<List<A_list>>() {
                         @Override
                         public void onChanged(@Nullable List<A_list> a_lists) {
-                            if (a_lists.size() == 0){
+                            if (a_lists.size() == 0) {
                                 recyclerView.setVisibility(View.INVISIBLE);
                                 textView.setVisibility(View.VISIBLE);
                                 textView.setText(R.string.no_list_available);
-                            }else{
+                            } else {
                                 recyclerView.setVisibility(View.VISIBLE);
                                 textView.setVisibility(View.INVISIBLE);
                                 contributionsAdapter.setListEntries(a_lists);
@@ -225,23 +259,28 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onItemLongClicked(int itemId, String name) {
-            open_edit_list_name_dialog(itemId, name);
+            Listname_dialog dialog = new Listname_dialog();
+            Bundle bundle = new Bundle();
+            bundle.putInt(LIST_ID_EXTRA, itemId);
+            bundle.putString(LIST_NAME_EXTRA, name);
+            dialog.setArguments(bundle);
+            dialog.show(getFragmentManager(), "edit_list_name_dialog");
         }
 
         @Override
         public void onOptionTextViewClicked(final int itemId, String name, View view) {
             final int listId = itemId;
             final String listName = name;
-            PopupMenu popupMenu = new PopupMenu(getContext(),view);
+            PopupMenu popupMenu = new PopupMenu(getContext(), view);
             popupMenu.inflate(R.menu.list);
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()){
+                    switch (item.getItemId()) {
                         case R.id.action_details:
-                            Intent showSummaryIntent = new Intent(getActivity(),SummaryActivity.class);
-                            showSummaryIntent.putExtra(LIST_ID_EXTRA,listId);
-                            showSummaryIntent.putExtra(LIST_NAME_EXTRA,listName);
+                            Intent showSummaryIntent = new Intent(getActivity(), SummaryActivity.class);
+                            showSummaryIntent.putExtra(LIST_ID_EXTRA, listId);
+                            showSummaryIntent.putExtra(LIST_NAME_EXTRA, listName);
                             startActivity(showSummaryIntent);
                             break;
                         case R.id.action_delete:
@@ -260,15 +299,7 @@ public class MainActivity extends AppCompatActivity {
             popupMenu.show();
         }
 
-        private void open_edit_list_name_dialog(int listId, String name){
 
-            Listname_dialog dialog = new Listname_dialog();
-            Bundle bundle = new Bundle();
-            bundle.putInt(LIST_ID_EXTRA,listId);
-            bundle.putString(LIST_NAME_EXTRA,name);
-            dialog.setArguments(bundle);
-            dialog.show(getFragmentManager(), "edit_list_name_dialog");
-        }
     }
 
     /**
@@ -294,4 +325,6 @@ public class MainActivity extends AppCompatActivity {
             return 2;
         }
     }
+
+
 }

@@ -56,9 +56,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberVi
         TextView memberTv;
         public MemberViewHolder(View itemView) {
             super(itemView);
-
             memberTv = itemView.findViewById(R.id.tv_member);
-
         }
     }
 }
