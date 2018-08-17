@@ -31,7 +31,7 @@ import java.util.List;
 
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
-public class Display_diff_list extends AppCompatActivity implements ContributionsAdapter.ItemClickListerners {
+public class Display_diff_list extends AppCompatActivity implements ContributionsAdapter.ItemClickListeners {
     private static final String TAG = Display_diff_list.class.getSimpleName();
     public static final String LIST_ID_EXTRA = "list Id";
     public static final String LIST_NAME_EXTRA = "list name";
@@ -112,7 +112,7 @@ public class Display_diff_list extends AppCompatActivity implements Contribution
     }
 
     @Override
-    public void onItemCLicked(int itemId, String name) {
+    public void onContributionListClicked(int itemId, String name) {
         Intent intent = new Intent(Display_diff_list.this, Display_a_list.class);
         intent.putExtra(LIST_NAME_EXTRA, name);
         intent.putExtra(LIST_ID_EXTRA, itemId);
@@ -137,12 +137,12 @@ public class Display_diff_list extends AppCompatActivity implements Contribution
     }
 
     @Override
-    public void onItemLongClicked(int itemId, String name) {
+    public void onContributionListLongClicked(int itemId, String name) {
         open_edit_list_name_dialog(itemId, name);
     }
 
     @Override
-    public void onOptionTextViewClicked(int itemId, String name, View view) {
+    public void onContributionOptionViewClicked(int itemId, String name, View view) {
         final int listId = itemId;
         final String listName = name;
         PopupMenu popupMenu = new PopupMenu(this,view);

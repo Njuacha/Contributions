@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.example.android.hubert.DatabaseClasses.Member;
 import com.example.android.hubert.R;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 /**
@@ -20,15 +22,17 @@ import java.util.List;
 public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberViewHolder> {
     private List<Member> mMemberList;
     private final Context mContext;
+    private final ItemClickListeners itemClickListeners;
 
-    public MembersAdapter(Context context){
+    public MembersAdapter(Context context, ItemClickListeners itemClickListeners){
         mContext = context;
+        this.itemClickListeners = itemClickListeners;
     }
 
     @NonNull
     @Override
     public MemberViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.a_member,parent,false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.list,parent,false);
         return new MemberViewHolder(view);
     }
 
@@ -52,11 +56,27 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberVi
         notifyDataSetChanged();
     }
 
-    public class MemberViewHolder extends RecyclerView.ViewHolder{
+    public interface ItemClickListeners{
+        void onMemberOptionViewClicked(Member member, View view);
+    }
+
+    public class MemberViewHolder extends RecyclerView.ViewHolder {
+
         TextView memberTv;
+        TextView tvOptions;
+
         public MemberViewHolder(View itemView) {
             super(itemView);
-            memberTv = itemView.findViewById(R.id.tv_member);
+            memberTv = itemView.findViewById(R.id.tv_list_name);
+            tvOptions = itemView.findViewById(R.id.tv_options);
+
+            tvOptions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Parse the member when the option view is clicked
+                    itemClickListeners.onMemberOptionViewClicked(mMemberList.get(getAdapterPosition()), tvOptions);
+                }
+            });
         }
     }
 }

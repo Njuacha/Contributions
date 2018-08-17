@@ -22,11 +22,11 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
 
     private Context mContext;
     private List<A_list> mListEntries;
-    private final ItemClickListerners mItemClickListerners;
+    private final ItemClickListeners mItemClickListeners;
 
-    public ContributionsAdapter(Context context, ItemClickListerners listerner ){
+    public ContributionsAdapter(Context context, ItemClickListeners listener ){
         this.mContext = context;
-        mItemClickListerners = listerner;
+        mItemClickListeners = listener;
     }
 
     @NonNull
@@ -51,10 +51,10 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
         return mListEntries.size();
     }
 
-    public interface ItemClickListerners {
-        void onItemCLicked(int itemId, String name);
-        void onItemLongClicked(int itemId, String name);
-        void onOptionTextViewClicked(int itemId,String name, View view);
+    public interface ItemClickListeners {
+        void onContributionListClicked(int itemId, String name);
+        void onContributionListLongClicked(int itemId, String name);
+        void onContributionOptionViewClicked(int itemId, String name, View view);
     }
 
 
@@ -77,7 +77,7 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
                     A_list a_list = mListEntries.get(position);
                     int itemId = a_list.getId();
                     String name = a_list.getName();
-                    mItemClickListerners.onOptionTextViewClicked(itemId, name,tvOptions);
+                    mItemClickListeners.onContributionOptionViewClicked(itemId, name,tvOptions);
                 }
             });
         }
@@ -88,7 +88,7 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
             A_list a_list = mListEntries.get(position);
             int itemId = a_list.getId();
             String name = a_list.getName();
-            mItemClickListerners.onItemCLicked(itemId, name);
+            mItemClickListeners.onContributionListClicked(itemId, name);
         }
 
         @Override
@@ -97,7 +97,7 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
             A_list a_list = mListEntries.get(position);
             int itemId = a_list.getId();
             String name = a_list.getName();
-            mItemClickListerners.onItemLongClicked(itemId, name);
+            mItemClickListeners.onContributionListLongClicked(itemId, name);
             return true;
         }
 

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,7 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.hubert.Adapters.ContributionsAdapter;
 import com.example.android.hubert.Adapters.MembersAdapter;
@@ -157,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment implements ContributionsAdapter.ItemClickListerners{
+    public static class PlaceholderFragment extends Fragment implements ContributionsAdapter.ItemClickListeners, MembersAdapter.ItemClickListeners {
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -200,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
             switch (sectionNumb) {
                 case MEMBERS_SECTION:
                     // Declare and instantiate Members Adapter
-                    final MembersAdapter membersAdapter = new MembersAdapter(getContext());
+                    final MembersAdapter membersAdapter = new MembersAdapter(getContext(), this);
                     recyclerView.setAdapter(membersAdapter);
                     // Instantiates view model which provides list of members data
                     MembersViewModel membView_model = ViewModelProviders.of(this).get(MembersViewModel.class);
@@ -250,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         @Override
-        public void onItemCLicked(int itemId, String name) {
+        public void onContributionListClicked(int itemId, String name) {
             Intent intent = new Intent(getActivity(), Display_a_list.class);
             intent.putExtra(LIST_NAME_EXTRA, name);
             intent.putExtra(LIST_ID_EXTRA, itemId);
@@ -258,17 +256,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onItemLongClicked(int itemId, String name) {
-            Listname_dialog dialog = new Listname_dialog();
-            Bundle bundle = new Bundle();
-            bundle.putInt(LIST_ID_EXTRA, itemId);
-            bundle.putString(LIST_NAME_EXTRA, name);
-            dialog.setArguments(bundle);
-            dialog.show(getFragmentManager(), "edit_list_name_dialog");
+        public void onContributionListLongClicked(int itemId, String name) {
+            //Todo: Put Appropriate action like select for group deleting, archiving or sharing
         }
 
         @Override
-        public void onOptionTextViewClicked(final int itemId, String name, View view) {
+        public void onContributionOptionViewClicked(final int itemId, String name, View view) {
             final int listId = itemId;
             final String listName = name;
             PopupMenu popupMenu = new PopupMenu(getContext(), view);
@@ -291,6 +284,13 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
                             break;
+                        case R.id.action_edit:
+                            Listname_dialog dialog = new Listname_dialog();
+                            Bundle bundle = new Bundle();
+                            bundle.putInt(LIST_ID_EXTRA, itemId);
+                            bundle.putString(LIST_NAME_EXTRA, listName);
+                            dialog.setArguments(bundle);
+                            dialog.show(getFragmentManager(), "edit_list_name_dialog");
                     }
                     return false;
                 }
@@ -299,7 +299,32 @@ public class MainActivity extends AppCompatActivity {
             popupMenu.show();
         }
 
-
+        @Override
+        public void onMemberOptionViewClicked(final Member member, View view) {
+            PopupMenu popupMenu = new PopupMenu(getContext(),view);
+            popupMenu.inflate(R.menu.member_option_menu);
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch(item.getItemId()){
+                        case R.id.action_edit:
+                            // Todo: Edit name of member
+                            startActivity(new Intent(getActivity(),AddMember.class));
+                            break;
+                        case R.id.action_delete:
+                            AppExecutors.getsInstance().diskIO().execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mDb.member_dao().deleteMember(member);
+                                }
+                            });
+                            break;
+                    }
+                    return false;
+                }
+            });
+            popupMenu.show();
+        }
     }
 
     /**
