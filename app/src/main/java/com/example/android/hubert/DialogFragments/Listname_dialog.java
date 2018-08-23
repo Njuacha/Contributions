@@ -7,20 +7,18 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 
-import com.example.android.hubert.Activities.Display_diff_list;
 import com.example.android.hubert.AppExecutors;
-import com.example.android.hubert.DatabaseClasses.A_list;
+import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.R;
 
 import java.util.Date;
 
-import static com.example.android.hubert.Activities.Display_diff_list.LIST_ID_EXTRA;
-import static com.example.android.hubert.Activities.Display_diff_list.LIST_NAME_EXTRA;
+import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
+
 
 /**
  * Created by hubert on 6/15/18.
@@ -29,9 +27,8 @@ import static com.example.android.hubert.Activities.Display_diff_list.LIST_NAME_
 public class Listname_dialog extends DialogFragment {
 
     private AppDatabase mdb;
-    private int listId;
+    private Alist formerList;
     private EditText editText;
-    private final int DEFAULT_LIST_ID = Display_diff_list.DEFAULT_LIST_ID;
 
     @NonNull
     @Override
@@ -67,32 +64,32 @@ public class Listname_dialog extends DialogFragment {
     }
 
     private void populateUI(){
-        editText.setText(getArguments().getString(LIST_NAME_EXTRA));
+        editText.setText(formerList.getName());
     }
 
     @Override
     public void onResume() {
         super.onResume();
         editText = getDialog().findViewById(R.id.et_list_name);
-        listId = getArguments().getInt(LIST_ID_EXTRA,DEFAULT_LIST_ID);
-        if( listId != DEFAULT_LIST_ID){ // put former name of list if we are modifying an old list
+
+        formerList = getArguments().getParcelable(LIST_EXTRA);
+        if( formerList != null){ // put former name of list if we are modifying an old list
             populateUI();
         }
     }
 
     private void saveName(){
 
-        String listName = editText.getText().toString();
-        final A_list a_list = new A_list(listName,new Date());
+        final String listName = editText.getText().toString();
 
             AppExecutors.getsInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
-                    if (listId == DEFAULT_LIST_ID){
-                        mdb.a_list_dao().insert_a_list(a_list);
+                    if (formerList == null){
+                        mdb.a_list_dao().insert_a_list(new Alist(listName,new Date()));
                     }else {
-                        a_list.setId(listId);
-                        mdb.a_list_dao().update_a_list(a_list);
+                        formerList.setName(listName);
+                        mdb.a_list_dao().update_a_list(formerList);
                     }
                 }
             });

@@ -1,36 +1,39 @@
 package com.example.android.hubert.Activities;
 
-import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.hubert.AppExecutors;
-import com.example.android.hubert.DatabaseClasses.A_member_in_a_list;
+import com.example.android.hubert.DatabaseClasses.AMemberInAList;
+import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
+import com.example.android.hubert.DatabaseClasses.History;
 import com.example.android.hubert.DatabaseClasses.Member;
 import com.example.android.hubert.R;
+import com.example.android.hubert.View_model_classes.AddContribViewModelFactory;
+import com.example.android.hubert.View_model_classes.AddContributionViewModel;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
 
 public class Add_a_contribution extends AppCompatActivity {
     Spinner memberSpinner;
     EditText et_amount;
     TextView tv_empty;
     private AppDatabase mdb;
-    A_member_in_a_list a_member_in_a_list;
-    int mListId;
-    String mListName;
+    AMemberInAList AMemberInA_list;
+    Alist mAlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,61 +41,60 @@ public class Add_a_contribution extends AppCompatActivity {
 
         mdb = AppDatabase.getDatabaseInstance(this);
         getListIdAndNameFromIntent();
-       // setUpViewModel();
+        setUpViewModel();
     }
-/*
+
     private void setUpViewModel() {
-      AppExecutors.getsInstance().diskIO().execute(new Runnable() {
-          @Override
-          public void run() {
-              List<Member> allMembers = mdb.member_dao().loadAllMembers();
-              List<Member> membersInlist = mdb.a_member_in_a_list_dao().loadMembersInList(mListId);
-              allMembers.removeAll(membersInlist);
 
-              final List<Member> members = allMembers;
-              runOnUiThread(new Runnable() {
-                  @Override
-                  public void run() {
-                      if(members.size() == 0){
-                          setContentView(R.layout.empty);
-                          tv_empty = findViewById(R.id.tv_explain_emptiness);
-                          tv_empty.setText(R.string.add_contribution_empty);
-                      }else{
-                          setContentView(R.layout.activity_add_a_contribution);
-                          memberSpinner = findViewById(R.id.sp_members);
-                          et_amount = findViewById(R.id.et_amount);
-                          memberSpinner.setAdapter(new ArrayAdapter<Member>(getApplicationContext()
-                                  , android.R.layout.simple_spinner_item,members));
-                      }
+        AddContribViewModelFactory factory = new AddContribViewModelFactory(mdb,mAlist.getId());
+        final AddContributionViewModel viewModel = ViewModelProviders.of(this,factory).get(AddContributionViewModel.class);
 
-                  }
-              });
-          }
-      });
+        viewModel.getAllMembers().observe(this, new Observer<List<Member>>() {
+            @Override
+            public void onChanged(@Nullable List<Member> members) {
+                members.removeAll(viewModel.getMembersAlreadyInList());
+                if(members.size() == 0){
+                    setContentView(R.layout.empty);
+                    tv_empty = findViewById(R.id.tv_explain_emptiness);
+                    tv_empty.setText(R.string.add_contribution_empty);
+                }else{
+                    setContentView(R.layout.activity_add_a_contribution);
+                    memberSpinner = findViewById(R.id.sp_members);
+                    et_amount = findViewById(R.id.et_amount);
+                    memberSpinner.setAdapter(new ArrayAdapter<Member>(getApplicationContext()
+                            , android.R.layout.simple_spinner_item,members));
+                }
+            }
+        });
     }
-*/
+
     public void add(View view) {
         add_a_member_in_a_list();
         finish();
     }
 
     private void getListIdAndNameFromIntent() {
-        if (getIntent().hasExtra(Display_diff_list.LIST_ID_EXTRA) && getIntent().hasExtra(Display_diff_list.LIST_NAME_EXTRA)) {
-            mListId = getIntent().getIntExtra(Display_diff_list.LIST_ID_EXTRA, Display_diff_list.DEFAULT_LIST_ID);
-            mListName = getIntent().getStringExtra(Display_diff_list.LIST_NAME_EXTRA);
+        if (getIntent().hasExtra(LIST_EXTRA)) {
+            mAlist = getIntent().getParcelableExtra(LIST_EXTRA);
         }
     }
 
 
     private void add_a_member_in_a_list() {
-        Member member = (Member) memberSpinner.getSelectedItem();
-        int amount = Integer.parseInt(et_amount.getText().toString());
-        a_member_in_a_list = new A_member_in_a_list(member.getMemberId(), mListId, amount);
+        final Member member = (Member) memberSpinner.getSelectedItem();
+
 
         AppExecutors.getsInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                mdb.a_member_in_a_list_dao().insert_a_member_in_a_list(a_member_in_a_list);
+                // Write a memberInAList object to database
+                int amount = Integer.parseInt(et_amount.getText().toString());
+                int memberId = member.getMemberId();
+                AMemberInA_list = new AMemberInAList(memberId, mAlist.getId(), amount);
+                mdb.a_member_in_a_list_dao().insert_a_member_in_a_list(AMemberInA_list);
+
+                // Write a record of a contribution in History table
+                mdb.historyDoa().insertContributionWithDate(new History(mAlist.getId(),memberId,new Date(),amount));
             }
         });
     }

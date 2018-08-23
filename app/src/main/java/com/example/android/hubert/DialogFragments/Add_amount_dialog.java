@@ -49,7 +49,7 @@ public class Add_amount_dialog extends DialogFragment {
         builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                EditText etAmount = (EditText) getDialog().findViewById(R.id.et_amount);
+                EditText etAmount = getDialog().findViewById(R.id.et_amount);
                 // Call the call back method while passing in the amount entered
                 try{
                     int amount = Integer.parseInt(etAmount.getText().toString());

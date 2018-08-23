@@ -4,19 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:mContext="com.example.android.hubert.Activities.Display_a_list"
-    tools:showIn="@layout/activity_display_a_list">
+    tools:context="com.example.android.hubert.Activities.HistoryActivity">
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_contributions"
+        android:id="@+id/rv_history"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:paddingBottom="80dp">
     </android.support.v7.widget.RecyclerView>
-    <TextView
-        android:id="@+id/tv_explain_emptiness"
-        style="@style/ExplainEmptyStyle" />
-
 
 </FrameLayout>

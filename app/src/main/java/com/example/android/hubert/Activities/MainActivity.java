@@ -18,6 +18,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +30,7 @@ import android.widget.TextView;
 import com.example.android.hubert.Adapters.ContributionsAdapter;
 import com.example.android.hubert.Adapters.MembersAdapter;
 import com.example.android.hubert.AppExecutors;
-import com.example.android.hubert.DatabaseClasses.A_list;
+import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.DatabaseClasses.Member;
 import com.example.android.hubert.DialogFragments.Listname_dialog;
@@ -59,10 +60,10 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private static AppDatabase mDb;
 
-    public static final String LIST_ID_EXTRA = "list Id";
-    public static final String LIST_NAME_EXTRA = "list name";
+    public static final String LIST_EXTRA = "list";
     private static final String DEFAULT_LIST_NAME = "No Name";
     public final static int DEFAULT_LIST_ID = -1;
+    public static final String EXTRA_MEMBER = "member";
     int mFabState = 0;
 
     @Override
@@ -70,17 +71,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
 
         mDb = AppDatabase.getDatabaseInstance(this);
 
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 if(mFabState == 0){
                     startActivity(new Intent(MainActivity.this,AddMember.class));
                 }else if(mFabState == 1){
-                    open_edit_list_name_dialog(DEFAULT_LIST_ID,DEFAULT_LIST_NAME);
+                    open_edit_list_name_dialog(null);
                 }
             }
         });
@@ -133,21 +134,24 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch(id){
+            case R.id.action_settings:
+                // Show settings
+                return true;
+            case R.id.action_search:
+                // Carry out search
+                return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void open_edit_list_name_dialog(int listId, String name) {
+    public void open_edit_list_name_dialog(Alist alist) {
 
         Listname_dialog dialog = new Listname_dialog();
         Bundle bundle = new Bundle();
-        bundle.putInt(LIST_ID_EXTRA, listId);
-        bundle.putString(LIST_NAME_EXTRA, name);
+        bundle.putParcelable(LIST_EXTRA,alist);
         dialog.setArguments(bundle);
         dialog.show(getSupportFragmentManager(), "edit_list_name_dialog");
     }
@@ -163,6 +167,8 @@ public class MainActivity extends AppCompatActivity {
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static final int MEMBERS_SECTION = 1;
         private static final int CONTRIBUTIONS_SECTION = 2;
+
+
         public static int sectionNumb;
 
         public PlaceholderFragment() {
@@ -184,9 +190,9 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            final TextView textView = (TextView) rootView.findViewById(R.id.tv_empty);
+            final TextView textView = rootView.findViewById(R.id.tv_empty);
             // Declare and instantiate recycler view
-            final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+            final RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view);
             // Set the layout of the recycler view to be a linear la
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             // Declare, instantiate and a divider that would separate items in recycler view
@@ -225,17 +231,17 @@ public class MainActivity extends AppCompatActivity {
                     recyclerView.setAdapter(contributionsAdapter);
                     // Instantiates view model which provides list of contributions data
                     ContributionsViewModel contViewModel = ViewModelProviders.of(this).get(ContributionsViewModel.class);
-                    contViewModel.getLists().observe(this, new Observer<List<A_list>>() {
+                    contViewModel.getLists().observe(this, new Observer<List<Alist>>() {
                         @Override
-                        public void onChanged(@Nullable List<A_list> a_lists) {
-                            if (a_lists.size() == 0) {
+                        public void onChanged(@Nullable List<Alist> lists) {
+                            if (lists.size() == 0) {
                                 recyclerView.setVisibility(View.INVISIBLE);
                                 textView.setVisibility(View.VISIBLE);
                                 textView.setText(R.string.no_list_available);
                             } else {
                                 recyclerView.setVisibility(View.VISIBLE);
                                 textView.setVisibility(View.INVISIBLE);
-                                contributionsAdapter.setListEntries(a_lists);
+                                contributionsAdapter.setListEntries(lists);
                             }
                         }
                     });
@@ -248,10 +254,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         @Override
-        public void onContributionListClicked(int itemId, String name) {
+        public void onContributionListClicked(Alist a_list) {
             Intent intent = new Intent(getActivity(), Display_a_list.class);
-            intent.putExtra(LIST_NAME_EXTRA, name);
-            intent.putExtra(LIST_ID_EXTRA, itemId);
+            intent.putExtra(LIST_EXTRA,a_list);
             startActivity(intent);
         }
 
@@ -261,9 +266,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onContributionOptionViewClicked(final int itemId, String name, View view) {
-            final int listId = itemId;
-            final String listName = name;
+        public void onContributionOptionViewClicked(final Alist alist, View view) {
             PopupMenu popupMenu = new PopupMenu(getContext(), view);
             popupMenu.inflate(R.menu.list);
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -272,23 +275,21 @@ public class MainActivity extends AppCompatActivity {
                     switch (item.getItemId()) {
                         case R.id.action_details:
                             Intent showSummaryIntent = new Intent(getActivity(), SummaryActivity.class);
-                            showSummaryIntent.putExtra(LIST_ID_EXTRA, listId);
-                            showSummaryIntent.putExtra(LIST_NAME_EXTRA, listName);
+                            showSummaryIntent.putExtra(LIST_EXTRA, alist);
                             startActivity(showSummaryIntent);
                             break;
                         case R.id.action_delete:
                             AppExecutors.getsInstance().diskIO().execute(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mDb.a_list_dao().delete_a_list(itemId);
+                                    mDb.a_list_dao().delete_a_list(alist.getId());
                                 }
                             });
                             break;
                         case R.id.action_edit:
                             Listname_dialog dialog = new Listname_dialog();
                             Bundle bundle = new Bundle();
-                            bundle.putInt(LIST_ID_EXTRA, itemId);
-                            bundle.putString(LIST_NAME_EXTRA, listName);
+                            bundle.putParcelable(LIST_EXTRA,alist);
                             dialog.setArguments(bundle);
                             dialog.show(getFragmentManager(), "edit_list_name_dialog");
                     }
@@ -308,8 +309,7 @@ public class MainActivity extends AppCompatActivity {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch(item.getItemId()){
                         case R.id.action_edit:
-                            // Todo: Edit name of member
-                            startActivity(new Intent(getActivity(),AddMember.class));
+                            startActivity(new Intent(getActivity(),AddMember.class).putExtra(EXTRA_MEMBER,member));
                             break;
                         case R.id.action_delete:
                             AppExecutors.getsInstance().diskIO().execute(new Runnable() {

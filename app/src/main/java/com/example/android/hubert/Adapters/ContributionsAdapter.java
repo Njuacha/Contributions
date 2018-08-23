@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.android.hubert.DatabaseClasses.A_list;
+import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.R;
 
 
@@ -21,7 +21,7 @@ import java.util.List;
 public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdapter.A_list_ViewHolder> {
 
     private Context mContext;
-    private List<A_list> mListEntries;
+    private List<Alist> mListEntries;
     private final ItemClickListeners mItemClickListeners;
 
     public ContributionsAdapter(Context context, ItemClickListeners listener ){
@@ -38,8 +38,8 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
 
     @Override
     public void onBindViewHolder(@NonNull final A_list_ViewHolder holder, int position) {
-        A_list a_list = mListEntries.get(position);
-        holder.tvListName.setText(a_list.getName());
+        Alist aList = mListEntries.get(position);
+        holder.tvListName.setText(aList.getName());
     }
 
     @Override
@@ -52,9 +52,9 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
     }
 
     public interface ItemClickListeners {
-        void onContributionListClicked(int itemId, String name);
+        void onContributionListClicked(Alist a_list);
         void onContributionListLongClicked(int itemId, String name);
-        void onContributionOptionViewClicked(int itemId, String name, View view);
+        void onContributionOptionViewClicked(Alist alist, View view);
     }
 
 
@@ -74,10 +74,8 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    A_list a_list = mListEntries.get(position);
-                    int itemId = a_list.getId();
-                    String name = a_list.getName();
-                    mItemClickListeners.onContributionOptionViewClicked(itemId, name,tvOptions);
+                    Alist aList = mListEntries.get(position);
+                    mItemClickListeners.onContributionOptionViewClicked(aList,tvOptions);
                 }
             });
         }
@@ -85,18 +83,16 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            A_list a_list = mListEntries.get(position);
-            int itemId = a_list.getId();
-            String name = a_list.getName();
-            mItemClickListeners.onContributionListClicked(itemId, name);
+            Alist aList = mListEntries.get(position);
+            mItemClickListeners.onContributionListClicked(aList);
         }
 
         @Override
         public boolean onLongClick(View v) {
             int position = getAdapterPosition();
-            A_list a_list = mListEntries.get(position);
-            int itemId = a_list.getId();
-            String name = a_list.getName();
+            Alist aList = mListEntries.get(position);
+            int itemId = aList.getId();
+            String name = aList.getName();
             mItemClickListeners.onContributionListLongClicked(itemId, name);
             return true;
         }
@@ -104,12 +100,12 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
 
     }
 
-    public void setListEntries(List<A_list> listEntries){
+    public void setListEntries(List<Alist> listEntries){
         this.mListEntries = listEntries;
         notifyDataSetChanged();
     }
 
-    public List<A_list> getListEntries(){
+    public List<Alist> getListEntries(){
         return mListEntries;
     }
 

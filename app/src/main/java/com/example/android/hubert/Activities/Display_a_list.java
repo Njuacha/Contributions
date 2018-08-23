@@ -12,10 +12,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,22 +26,28 @@ import android.widget.Toast;
 
 import com.example.android.hubert.Adapters.InnerContributionsAdapter;
 import com.example.android.hubert.AppExecutors;
-import com.example.android.hubert.DatabaseClasses.A_member_in_a_list;
+import com.example.android.hubert.DatabaseClasses.AMemberInAList;
+import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.DatabaseClasses.Contribution;
+import com.example.android.hubert.DatabaseClasses.History;
+import com.example.android.hubert.DatabaseClasses.Member;
 import com.example.android.hubert.DialogFragments.Add_amount_dialog;
-import com.example.android.hubert.View_model_classes.Main2ViewModelFactory;
-import com.example.android.hubert.View_model_classes.Main2_view_model;
+import com.example.android.hubert.View_model_classes.InnerContribViewModelFactory;
+import com.example.android.hubert.View_model_classes.InnerContributionsViewModel;
 import com.example.android.hubert.R;
 
+import java.util.Date;
 import java.util.List;
 
-public class Display_a_list extends AppCompatActivity implements InnerContributionsAdapter.OptionTextViewClickListerner, Add_amount_dialog.Add_amount_dialog_listener{
+import static com.example.android.hubert.Activities.MainActivity.EXTRA_MEMBER;
+import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
+
+public class Display_a_list extends AppCompatActivity implements InnerContributionsAdapter.OnCLickListeners, Add_amount_dialog.Add_amount_dialog_listener{
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 2;
     RecyclerView mRv;
     InnerContributionsAdapter mAdapter;
-    int mListId;
-    String mListName;
+    Alist mAlist;
     Contribution mContribution;
     AppDatabase mDb;
     boolean mIsAdd;
@@ -58,6 +66,9 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
         mAdapter = new InnerContributionsAdapter(this,this);
         mRv.setAdapter(mAdapter);
         mRv.setLayoutManager(new LinearLayoutManager(this));
+
+        mRv.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+
         // instantiate the database variable
         mDb = AppDatabase.getDatabaseInstance(this);
 
@@ -66,20 +77,18 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
             @Override
             public void onClick(View view) {
                 Intent addIntent = new Intent(Display_a_list.this,Add_a_contribution.class);
-                addIntent.putExtra(Display_diff_list.LIST_ID_EXTRA, mListId);
-                addIntent.putExtra(Display_diff_list.LIST_NAME_EXTRA,mListName);
+                addIntent.putExtra(LIST_EXTRA,mAlist);
                 startActivity(addIntent);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getListIdAndNameFromIntent();
-
+        getListFromIntent();
         setupViewModel();
-        setTitle(mListName);
-
+        setTitle(mAlist.getName());
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -147,10 +156,11 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
     }
 
     private void share(){
-        String fileName = mListName + Share.FILE_EXTENSION;
-        Share share = new Share(fileName,getAllListInfo(mListName),this);
+        String fileName = mAlist.getName() + Share.FILE_EXTENSION;
+        String info = getAllListInfo(mAlist.getName());
+        Share share = new Share(fileName,info,this);
         share.show();
-        }
+    }
 
     private String getAllListInfo(String listName){
         StringBuilder allInfo = new StringBuilder();
@@ -158,16 +168,16 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
         // Putting the heading which includes the listName and the date
         a_Part = String.format("Status of \"%s\" as of %s%n%n",listName,Share.date);
         allInfo.append(a_Part);
-        // Putting all the contributions
+        // Putting all the contributions inside allInfo
         writeContributions(allInfo);
         // Putting all the totalAmount
-        a_Part = String.format("%nTotal Amount = %,d%n%nCreated from:NkapJik",mAdapter.getTotalAmount());
+        a_Part = String.format("%nTotal Amount = %,d%n%nCreated from:ContributionsApp",mAdapter.getTotalAmount());
         allInfo.append(a_Part);
         return allInfo.toString();
     }
 
 
-    private void writeContributions(StringBuilder allInfo) {
+    private boolean writeContributions(StringBuilder allInfo) {
 
         int longestNameLength = mAdapter.getLongestNameLength();
         String name_label = getString(R.string.name_label);
@@ -175,34 +185,38 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
         int spacing = (name_label.length()>longestNameLength?name_label.length():longestNameLength) + 2 ;
 
         allInfo.append(String.format("%-" + spacing + "s%s%n",name_label,getString(R.string.amount_label)));
-
+        // If there are no contributions return in a list then return false
+        if(mAdapter.getmContributions() == null){
+            return false;
+        }
         for (Contribution contribution: mAdapter.getmContributions()){
             String name_amount = String.format("%-" + spacing + "s%,d%n"
                     ,contribution.getName(),contribution.getAmount());
             allInfo.append(name_amount);
         }
+        return true;
     }
 
-    private void getListIdAndNameFromIntent() {
-        if (getIntent().hasExtra(Display_diff_list.LIST_ID_EXTRA) && getIntent().hasExtra(Display_diff_list.LIST_NAME_EXTRA)) {
-            mListId = getIntent().getIntExtra(Display_diff_list.LIST_ID_EXTRA, Display_diff_list.DEFAULT_LIST_ID);
-            mListName = getIntent().getStringExtra(Display_diff_list.LIST_NAME_EXTRA);
+    private void getListFromIntent() {
+        if (getIntent().hasExtra(LIST_EXTRA)) {
+            mAlist = getIntent().getParcelableExtra(LIST_EXTRA);
         }
     }
 
     private void setupViewModel() {
-        Main2ViewModelFactory factory = new Main2ViewModelFactory(mDb,mListId);
-        Main2_view_model view_model2 = ViewModelProviders.of(this,factory).get(Main2_view_model.class);
+        InnerContribViewModelFactory factory = new InnerContribViewModelFactory(mDb,mAlist.getId());
+        InnerContributionsViewModel view_model2 = ViewModelProviders.of(this,factory).get(InnerContributionsViewModel.class);
         view_model2.getContributionsInList().observe(this, new Observer<List<Contribution>>() {
             @Override
             public void onChanged(@Nullable List<Contribution> contributions) {
-
+                mAdapter.setmContributions(contributions);
                 if (contributions.size() == 0){
                     textView.setText("No contributions in list");
                     textView.setVisibility(View.VISIBLE);
+                    mRv.setVisibility(View.INVISIBLE);
                 }else{
+                    mRv.setVisibility(View.VISIBLE);
                     textView.setVisibility(View.INVISIBLE);
-                    mAdapter.setmContributions(contributions);
                 }
             }
         });
@@ -218,10 +232,9 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
             // Opens up the same dialog when either the add or subtract option is clicked
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Add_amount_dialog dialog = new Add_amount_dialog();
-                dialog.show(getSupportFragmentManager(),"edit amount dialog fragment");
+                int id = item.getItemId();
                 // Try to record whether it was add or subtract that was selected in a boolean
-                switch(item.getItemId()){
+                switch(id){
                     case R.id.action_add:
                         mIsAdd = true;
                         break;
@@ -229,6 +242,18 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
                         mIsAdd = false;
                         break;
                 }
+                if( (id == R.id.action_add) || (id == R.id.action_subtract) ){
+                    Add_amount_dialog dialog = new Add_amount_dialog();
+                    dialog.show(getSupportFragmentManager(),"edit amount dialog fragment");
+                }else if(id == R.id.action_delete){
+                    AppExecutors.getsInstance().diskIO().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDb.a_member_in_a_list_dao().deleteAContribution(mContribution.getMemberId());
+                        }
+                    });
+                }
+
                 return false;
             }
         });
@@ -237,15 +262,27 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
     }
 
     @Override
+    public void onItemClicked(Member member) {
+        Intent intent = new Intent(this, HistoryActivity.class);
+        intent.putExtra(LIST_EXTRA,mAlist);
+        intent.putExtra(EXTRA_MEMBER,member);
+        startActivity(intent);
+    }
+
+    @Override
     public void onPositiveButtonClicked(final int amount) {
         AppExecutors.getsInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
                int memberId = mContribution.getMemberId();
-               int newAmount =  mContribution.getAmount() + (mIsAdd?amount:-amount);
-               A_member_in_a_list a_member_in_a_list = new A_member_in_a_list(memberId,mListId
+               int signedAmt = mIsAdd?amount:-amount;
+               int newAmount =  mContribution.getAmount() + signedAmt;
+               AMemberInAList AMemberInA_list = new AMemberInAList(memberId,mAlist.getId()
                        ,newAmount);
-               mDb.a_member_in_a_list_dao().update_a_member_in_a_list(a_member_in_a_list);
+               mDb.a_member_in_a_list_dao().update_a_member_in_a_list(AMemberInA_list);
+
+                // Write a record of a contribution in History table
+               mDb.historyDoa().insertContributionWithDate(new History(mAlist.getId(),memberId,new Date(),signedAmt));
             }
         });
     }

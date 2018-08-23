@@ -4,26 +4,25 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
-import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 
 /**
- * Created by hubert on 7/14/18.
+ * Created by hubert on 8/21/18.
  */
 
-public class SummaryViewModelFactory extends ViewModelProvider.NewInstanceFactory {
+public class AddContribViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private final AppDatabase mDb;
-    private final Alist mAlist;
+    private final int mlistId;
 
-    public SummaryViewModelFactory(AppDatabase db,Alist alist){
-        mDb = db;
-        mAlist = alist;
+    public AddContribViewModelFactory(AppDatabase mdb, int listId){
+        mDb = mdb;
+        mlistId = listId;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         //noinspection unchecked
-        return (T) new SummaryViewModel(mDb,mAlist);
+        return (T) new AddContributionViewModel(mDb,mlistId);
     }
 }

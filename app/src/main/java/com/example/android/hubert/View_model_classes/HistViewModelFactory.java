@@ -7,22 +7,24 @@ import android.support.annotation.NonNull;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 
 /**
- * Created by hubert on 7/10/18.
+ * Created by hubert on 8/22/18.
  */
 
-public class Main2ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
+public class HistViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private final AppDatabase mDb;
-    private final int mlistId;
+    private final int mListId;
+    private final int mMemberId;
 
-    public Main2ViewModelFactory(AppDatabase db,int listId){
+    public HistViewModelFactory(AppDatabase db, int listId, int memberId){
         mDb = db;
-        mlistId = listId;
+        mListId = listId;
+        mMemberId = memberId;
     }
+
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        //noinspection unchecked
-        return (T) new Main2_view_model(mDb,mlistId);
+        return (T) new HistViewModel(mDb,mListId,mMemberId);
     }
 }

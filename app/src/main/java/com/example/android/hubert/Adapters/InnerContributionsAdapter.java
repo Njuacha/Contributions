@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.hubert.DatabaseClasses.Contribution;
+import com.example.android.hubert.DatabaseClasses.Member;
 import com.example.android.hubert.R;
 
 import java.util.List;
@@ -23,13 +24,13 @@ public class InnerContributionsAdapter extends RecyclerView.Adapter<InnerContrib
 
     private Context mContext;
     private List<Contribution> mContributions;
-    private final OptionTextViewClickListerner mOptionTextViewClickListerner;
+    private final OnCLickListeners mOnCLickListeners;
     private int longestNameLength = 0;
     private int totalAmount = 0;
 
-    public InnerContributionsAdapter(Context mContext, OptionTextViewClickListerner optionTextViewClickListerner){
+    public InnerContributionsAdapter(Context mContext, OnCLickListeners onCLickListeners){
         this.mContext = mContext;
-        mOptionTextViewClickListerner = optionTextViewClickListerner;
+        mOnCLickListeners = onCLickListeners;
     }
 
     @NonNull
@@ -63,31 +64,44 @@ public class InnerContributionsAdapter extends RecyclerView.Adapter<InnerContrib
         else return mContributions.size();
 
     }
-    public interface OptionTextViewClickListerner{
+    public interface OnCLickListeners {
         void onOptionTextViewClicked(Contribution contribution, View view);
+        void onItemClicked(Member member);
     }
 
-    public class A_Contribution_ViewHolder extends RecyclerView.ViewHolder {
+    public class A_Contribution_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvName;
         TextView tvAmount;
         TextView tvOptions;
-        CardView cardView;
+        //CardView cardView;
 
         public A_Contribution_ViewHolder(View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tv_member);
             tvAmount = itemView.findViewById(R.id.tv_amount);
             tvOptions = itemView.findViewById(R.id.tv_options);
-            cardView = itemView.findViewById(R.id.cardView);
-
+            //cardView = itemView.findViewById(R.id.cardView);
+            itemView.setOnClickListener(this);
             tvOptions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     Contribution contribution = mContributions.get(position);
-                    mOptionTextViewClickListerner.onOptionTextViewClicked(contribution,tvOptions);
+                    mOnCLickListeners.onOptionTextViewClicked(contribution,tvOptions);
                 }
             });
+        }
+
+        @Override
+        public void onClick(View v) {
+            // Get contribution at current adapter position
+            Contribution contribtn = mContributions.get(getAdapterPosition());
+            // Get the memberId from the contribution
+            int id = contribtn.getMemberId();
+            // Get the memberName from the contribution
+            String name = contribtn.getName();
+            // Recreate the member object and parse to onClick method
+            mOnCLickListeners.onItemClicked(new Member(id,name));
         }
     }
 
