@@ -3,7 +3,6 @@
     package="com.example.android.hubert">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-<!--TODO: Ensure that only a single instance of an activity exist at a time-->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

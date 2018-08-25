@@ -17,6 +17,9 @@ public interface HistoryDoa  {
    @Query("SELECT * FROM History where listId = :listId AND memberId = :memberId ")
    List<History> getHistory(int listId, int memberId);
 
+   @Query("DELETE FROM History where listId = :listId AND memberId = :memberId")
+   void delete(int listId, int memberId);
+
 
 
 }

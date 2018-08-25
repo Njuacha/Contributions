@@ -250,6 +250,7 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
                         @Override
                         public void run() {
                             mDb.a_member_in_a_list_dao().deleteAContribution(mContribution.getMemberId());
+                            mDb.historyDoa().delete(mAlist.getId(),mContribution.getMemberId());
                         }
                     });
                 }

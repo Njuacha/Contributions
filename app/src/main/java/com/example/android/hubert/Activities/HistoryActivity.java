@@ -63,7 +63,6 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     private void setTitle() {
-        // TODO: Set the title to "memberName/NameOfList"
         String memberName = mMember.getName();
         String listName = mAlist.getName();
         setTitle(memberName + "/" + listName);
