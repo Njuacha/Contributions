@@ -2,11 +2,9 @@ package com.example.android.hubert.DatabaseClasses;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 
 /**
  * Created by hubert on 6/15/18.
@@ -28,7 +26,7 @@ public class Member implements Parcelable{
         this.name = name;
     }
 
-    protected Member(Parcel in) {
+    Member(Parcel in) {
         memberId = in.readInt();
         name = in.readString();
     }
@@ -51,10 +49,6 @@ public class Member implements Parcelable{
 
     public int getMemberId() {
         return memberId;
-    }
-
-    public void setMemberId(int memberId) {
-        this.memberId = memberId;
     }
 
     public String getName() {

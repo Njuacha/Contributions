@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 public class ContributionsViewModel extends AndroidViewModel {
-    private LiveData<List<Alist>> lists;
+    private final LiveData<List<Alist>> lists;
     private static final String TAG = ContributionsViewModel.class.getSimpleName();
 
     public ContributionsViewModel(@NonNull Application application) {

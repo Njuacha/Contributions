@@ -11,8 +11,6 @@ import android.widget.TextView;
 import com.example.android.hubert.DatabaseClasses.Member;
 import com.example.android.hubert.R;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 /**
@@ -62,8 +60,8 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberVi
 
     public class MemberViewHolder extends RecyclerView.ViewHolder {
 
-        TextView memberTv;
-        TextView tvOptions;
+        final TextView memberTv;
+        final TextView tvOptions;
 
         public MemberViewHolder(View itemView) {
             super(itemView);

@@ -17,7 +17,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,13 +44,13 @@ import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
 
 public class Display_a_list extends AppCompatActivity implements InnerContributionsAdapter.OnCLickListeners, Add_amount_dialog.Add_amount_dialog_listener{
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 2;
-    RecyclerView mRv;
-    InnerContributionsAdapter mAdapter;
-    Alist mAlist;
-    Contribution mContribution;
-    AppDatabase mDb;
-    boolean mIsAdd;
-    TextView textView;
+    private RecyclerView mRv;
+    private InnerContributionsAdapter mAdapter;
+    private Alist mAlist;
+    private Contribution mContribution;
+    private AppDatabase mDb;
+    private boolean mIsAdd;
+    private TextView textView;
 
 
     @Override
@@ -177,7 +176,7 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
     }
 
 
-    private boolean writeContributions(StringBuilder allInfo) {
+    private void writeContributions(StringBuilder allInfo) {
 
         int longestNameLength = mAdapter.getLongestNameLength();
         String name_label = getString(R.string.name_label);
@@ -187,14 +186,13 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
         allInfo.append(String.format("%-" + spacing + "s%s%n",name_label,getString(R.string.amount_label)));
         // If there are no contributions return in a list then return false
         if(mAdapter.getmContributions() == null){
-            return false;
+            return;
         }
         for (Contribution contribution: mAdapter.getmContributions()){
             String name_amount = String.format("%-" + spacing + "s%,d%n"
                     ,contribution.getName(),contribution.getAmount());
             allInfo.append(name_amount);
         }
-        return true;
     }
 
     private void getListFromIntent() {
@@ -210,7 +208,7 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
             @Override
             public void onChanged(@Nullable List<Contribution> contributions) {
                 mAdapter.setmContributions(contributions);
-                if (contributions.size() == 0){
+                if ((contributions != null ? contributions.size() : 0) == 0){
                     textView.setText("No contributions in list");
                     textView.setVisibility(View.VISIBLE);
                     mRv.setVisibility(View.INVISIBLE);

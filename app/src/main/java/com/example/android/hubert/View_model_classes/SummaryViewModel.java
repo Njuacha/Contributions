@@ -19,9 +19,9 @@ public class SummaryViewModel extends ViewModel {
     // Constant for date format
     private static final String DATE_FORMAT = "dd/MM/yyy";
     // Date formatter
-    public static SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+    public static final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
 
-    private String[] summaryInfo = new String[3];
+    private final String[] summaryInfo = new String[3];
 
     public SummaryViewModel(AppDatabase database, final Alist alist){
         final AppDatabase mDb;

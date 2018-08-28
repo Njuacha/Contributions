@@ -15,8 +15,8 @@ import java.util.Date;
 public class Alist implements Parcelable{
     @PrimaryKey(autoGenerate = true)
     private  int id;
-    public String name;
-    Date date;
+    private String name;
+    private Date date;
 
     public Alist(int id, String name, Date date) {
         this.id = id;
@@ -24,7 +24,7 @@ public class Alist implements Parcelable{
         this.date = date;
     }
 
-    protected Alist(Parcel in) {
+    Alist(Parcel in) {
         id = in.readInt();
         name = in.readString();
         date = DateConverter.toDate(in.readLong());

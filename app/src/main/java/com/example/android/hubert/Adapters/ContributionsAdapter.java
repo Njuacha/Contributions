@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdapter.A_list_ViewHolder> {
 
-    private Context mContext;
+    private final Context mContext;
     private List<Alist> mListEntries;
     private final ItemClickListeners mItemClickListeners;
 
@@ -60,8 +60,8 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
 
     public class A_list_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
-        TextView tvListName;
-        TextView tvOptions;
+        final TextView tvListName;
+        final TextView tvOptions;
 
         public A_list_ViewHolder(View itemView) {
             super(itemView);

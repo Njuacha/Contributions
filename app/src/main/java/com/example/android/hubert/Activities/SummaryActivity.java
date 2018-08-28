@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 
@@ -19,7 +18,7 @@ import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
 
 
 public class SummaryActivity extends AppCompatActivity {
-    Alist alist;
+    private Alist alist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +32,6 @@ public class SummaryActivity extends AppCompatActivity {
         getListIdAndNameFromIntent();
         setTitle(alist.getName());
         setUpSummary();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     private void getListIdAndNameFromIntent() {

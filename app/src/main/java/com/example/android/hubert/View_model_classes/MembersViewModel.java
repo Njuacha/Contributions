@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 public class MembersViewModel extends AndroidViewModel {
-    private LiveData<List<Member>> members;
+    private final LiveData<List<Member>> members;
 
     public MembersViewModel(@NonNull Application application) {
         super(application);

@@ -18,7 +18,7 @@ public class AppExecutors {
     private final Executor mainThread;
     private final Executor networkIO;
 
-    public AppExecutors(Executor diskIO,Executor networkIO,Executor mainThread){
+    private AppExecutors(Executor diskIO, Executor networkIO, Executor mainThread){
         this.diskIO = diskIO;
         this.mainThread = mainThread;
         this.networkIO = networkIO;
@@ -48,7 +48,7 @@ public class AppExecutors {
     }
 
     private static class MainThreadExecutor implements Executor {
-        private Handler mainThreadHandler = new Handler(Looper.getMainLooper());
+        private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
         @Override
         public void execute(@NonNull Runnable command) {

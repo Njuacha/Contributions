@@ -5,9 +5,9 @@ package com.example.android.hubert.DatabaseClasses;
  */
 
 public class Contribution {
-    private int memberId;
-    private String name;
-    private int amount;
+    private final int memberId;
+    private final String name;
+    private final int amount;
 
     public Contribution(int memberId, String name, int amount){
         this.memberId = memberId;

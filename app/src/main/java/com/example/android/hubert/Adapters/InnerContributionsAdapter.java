@@ -2,7 +2,6 @@ package com.example.android.hubert.Adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +21,7 @@ import java.util.List;
 
 public class InnerContributionsAdapter extends RecyclerView.Adapter<InnerContributionsAdapter.A_Contribution_ViewHolder>{
 
-    private Context mContext;
+    private final Context mContext;
     private List<Contribution> mContributions;
     private final OnCLickListeners mOnCLickListeners;
     private int longestNameLength = 0;
@@ -70,9 +69,9 @@ public class InnerContributionsAdapter extends RecyclerView.Adapter<InnerContrib
     }
 
     public class A_Contribution_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView tvName;
-        TextView tvAmount;
-        TextView tvOptions;
+        final TextView tvName;
+        final TextView tvAmount;
+        final TextView tvOptions;
         //CardView cardView;
 
         public A_Contribution_ViewHolder(View itemView) {

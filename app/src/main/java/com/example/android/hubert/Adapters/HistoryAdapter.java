@@ -20,7 +20,7 @@ import java.util.List;
  */
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
-    private Context mContext;
+    private final Context mContext;
     private List<History> mHistoryList;
 
     public HistoryAdapter(Context context){
@@ -54,9 +54,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     }
 
     public class HistoryViewHolder extends RecyclerView.ViewHolder {
-        TextView dateTv;
-        TextView amountTv;
-        TextView optionsTv;
+        final TextView dateTv;
+        final TextView amountTv;
+        final TextView optionsTv;
 
         public HistoryViewHolder(View itemView) {
             super(itemView);

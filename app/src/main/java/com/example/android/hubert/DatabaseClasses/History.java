@@ -11,12 +11,15 @@ import java.util.Date;
  */
 @Entity
 public class History {
+
+
     @PrimaryKey(autoGenerate = true)
+    private
     int id;
-    int listId;
-    int memberId;
-    Date date;
-    int amount;
+    private int listId;
+    private int memberId;
+    private Date date;
+    private int amount;
 
     public History(int id, int listId, int memberId, Date date, int amount) {
         this.id = id;
@@ -32,6 +35,10 @@ public class History {
         this.memberId = memberId;
         this.date = date;
         this.amount = amount;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public int getListId() {

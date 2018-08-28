@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 
@@ -81,6 +82,7 @@ public class Listname_dialog extends DialogFragment {
     private void saveName(){
 
         final String listName = editText.getText().toString();
+        if(TextUtils.isEmpty(listName)) return;
 
             AppExecutors.getsInstance().diskIO().execute(new Runnable() {
                 @Override

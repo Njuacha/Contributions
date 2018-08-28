@@ -8,10 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import com.example.android.hubert.Adapters.HistoryAdapter;
 import com.example.android.hubert.AppExecutors;
@@ -29,10 +26,10 @@ import static com.example.android.hubert.Activities.MainActivity.EXTRA_MEMBER;
 import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
 
 public class HistoryActivity extends AppCompatActivity {
-    Alist mAlist;
-    Member mMember;
-    HistoryAdapter mAdapter;
-    RecyclerView mRv;
+    private Alist mAlist;
+    private Member mMember;
+    private HistoryAdapter mAdapter;
+    private RecyclerView mRv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

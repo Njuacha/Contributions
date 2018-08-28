@@ -14,8 +14,8 @@ import java.util.List;
  */
 
 public class AddContributionViewModel extends ViewModel {
-    LiveData<List<Member>> allMembers;
-    List<Member> memberInList;
+    private final LiveData<List<Member>> allMembers;
+    private List<Member> memberInList;
 
     public AddContributionViewModel(final AppDatabase mdb, final int listId){
         allMembers = mdb.member_dao().loadAllMembers();
