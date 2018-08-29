@@ -1,5 +1,6 @@
 package com.example.android.hubert.View_model_classes;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.example.android.hubert.AppExecutors;
@@ -13,22 +14,14 @@ import java.util.List;
  */
 
 public class HistViewModel extends ViewModel {
-    private List<History> mHistoryList;
+    private LiveData<List<History>> mHistoryList;
 
     public HistViewModel(final AppDatabase db, final int listId, final int memberId){
-        AppExecutors.getsInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mHistoryList = db.historyDoa().getHistory(listId,memberId);
-            }
-        });
-
+        mHistoryList = db.historyDoa().getHistory(listId,memberId);
     }
 
-    public List<History> getmHistoryList(){
-        if(mHistoryList == null){
-            getmHistoryList();
-        }
+    public LiveData<List<History>> getmHistoryList(){
+
         return mHistoryList;
     }
 }

@@ -259,10 +259,10 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
     }
 
     @Override
-    public void onItemClicked(Member member) {
+    public void onItemClicked(Contribution contrib) {
         Intent intent = new Intent(this, HistoryActivity.class);
         intent.putExtra(LIST_EXTRA,mAlist);
-        intent.putExtra(EXTRA_MEMBER,member);
+        intent.putExtra(EXTRA_CONTRIB,contrib);
         startActivity(intent);
     }
 

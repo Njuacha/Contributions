@@ -3,6 +3,8 @@ package com.example.android.hubert.DatabaseClasses;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.Date;
 
@@ -10,7 +12,7 @@ import java.util.Date;
  * Created by hubert on 8/19/18.
  */
 @Entity
-public class History {
+public class History implements Parcelable{
 
 
     @PrimaryKey(autoGenerate = true)
@@ -35,6 +37,26 @@ public class History {
         this.date = date;
         this.amount = amount;
     }
+
+    protected History(Parcel in) {
+        id = in.readInt();
+        listId = in.readInt();
+        memberId = in.readInt();
+        date = in.readString();
+        amount = in.readInt();
+    }
+
+    public static final Creator<History> CREATOR = new Creator<History>() {
+        @Override
+        public History createFromParcel(Parcel in) {
+            return new History(in);
+        }
+
+        @Override
+        public History[] newArray(int size) {
+            return new History[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -70,5 +92,19 @@ public class History {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(listId);
+        dest.writeInt(memberId);
+        dest.writeString(date);
+        dest.writeInt(amount);
     }
 }

@@ -1,7 +1,9 @@
 package com.example.android.hubert.Activities;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,8 +16,11 @@ import android.view.View;
 
 import com.example.android.hubert.Adapters.HistoryAdapter;
 import com.example.android.hubert.AppExecutors;
+import com.example.android.hubert.DatabaseClasses.AMemberInAList;
+import com.example.android.hubert.DatabaseClasses.A_member_in_a_list_Dao_Impl;
 import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
+import com.example.android.hubert.DatabaseClasses.Contribution;
 import com.example.android.hubert.DatabaseClasses.History;
 import com.example.android.hubert.DatabaseClasses.Member;
 import com.example.android.hubert.R;
@@ -24,12 +29,14 @@ import com.example.android.hubert.View_model_classes.HistViewModelFactory;
 
 import java.util.List;
 
+import static com.example.android.hubert.Activities.Display_a_list.EXTRA_CONTRIB;
 import static com.example.android.hubert.Activities.MainActivity.EXTRA_MEMBER;
 import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
 
 public class HistoryActivity extends AppCompatActivity implements HistoryAdapter.ItemClickListeners {
+    public static final String EXTRA_HISTORY = "history extra";
     private Alist mAlist;
-    private Member mMember;
+    private Contribution mContribution;
     private HistoryAdapter mAdapter;
     private RecyclerView mRv;
 
@@ -53,16 +60,16 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
 
         // Get the list and the memberId from the displayListActivity
         Intent intent = getIntent();
-        if(intent.hasExtra(LIST_EXTRA)&& intent.hasExtra(EXTRA_MEMBER)){
+        if(intent.hasExtra(LIST_EXTRA)&& intent.hasExtra(EXTRA_CONTRIB)){
            mAlist = intent.getParcelableExtra(LIST_EXTRA);
-           mMember = intent.getParcelableExtra(EXTRA_MEMBER);
+           mContribution = intent.getParcelableExtra(EXTRA_CONTRIB);
         }
         setTitle();
         setUpViewModel();
     }
 
     private void setTitle() {
-        String memberName = mMember.getName();
+        String memberName = mContribution.getName();
         String listName = mAlist.getName();
         setTitle(memberName + "/" + listName);
     }
@@ -70,16 +77,16 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
     private void setUpViewModel() {
 
         HistViewModelFactory factory = new HistViewModelFactory(AppDatabase.getDatabaseInstance(this)
-                ,mAlist.getId(),mMember.getMemberId());
-        final HistViewModel viewModel = ViewModelProviders.of(this,factory).get(HistViewModel.class);
-        final List<History> historyList = viewModel.getmHistoryList();
-
-        AppExecutors.getsInstance().mainThread().execute(new Runnable() {
+                ,mAlist.getId(), mContribution.getMemberId());
+        HistViewModel viewModel = ViewModelProviders.of(this,factory).get(HistViewModel.class);
+        viewModel.getmHistoryList().observe(this, new Observer<List<History>>() {
             @Override
-            public void run() {
-                mAdapter.setHistoryList(historyList);
+            public void onChanged(@Nullable List<History> histories) {
+                mAdapter.setHistoryList(histories);
             }
         });
+
+
 
     }
 
@@ -97,7 +104,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
 
 
     @Override
-    public void onOptionViewClicked(History history, View view) {
+    public void onOptionViewClicked(final History history, View view) {
         PopupMenu popupMenu = new PopupMenu(this,view);
         popupMenu.inflate(R.menu.member_option_menu);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -106,8 +113,30 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
                 int id = item.getItemId();
                 switch(id){
                     case R.id.action_edit:
+                        // Start activity of Add Contribution and parse the History object and the Member's name
+                        Intent intent = new Intent(HistoryActivity.this, Add_a_contribution.class);
+                        intent.putExtra(EXTRA_HISTORY,history);
+                        intent.putExtra(EXTRA_CONTRIB,mContribution);
+                        startActivity(intent);
                         break;
                     case R.id.action_delete:
+                        // Delete a History object
+                        AppExecutors.getsInstance().diskIO().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                AppDatabase db = AppDatabase.getDatabaseInstance(getApplicationContext());
+                                db.historyDoa().delete(history);
+
+                                // Add the opposite of the amount to Member's contribution in list
+
+                                int newAmount = mContribution.getAmount()-history.getAmount();
+                                AMemberInAList aMemberInAList = new AMemberInAList(
+                                        mContribution.getMemberId()
+                                        ,mAlist.getId()
+                                        ,newAmount);
+                                db.a_member_in_a_list_dao().update_a_member_in_a_list(aMemberInAList);
+                            }
+                        });
                         break;
                 }
                 return false;

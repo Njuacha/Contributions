@@ -36,9 +36,14 @@ import java.util.List;
 import static com.example.android.hubert.Activities.Display_a_list.EXTRA_CONTRIB;
 import static com.example.android.hubert.Activities.Display_a_list.EXTRA_LIST_ID;
 import static com.example.android.hubert.Activities.Display_a_list.EXTRA_SUB;
+import static com.example.android.hubert.Activities.HistoryActivity.EXTRA_HISTORY;
 import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
 
 public class Add_a_contribution extends AppCompatActivity implements DatePickerFragment.DateSetListener {
+
+    private final int NEW_CONTR = 1;
+    private final int ADD_CONTR = 2;
+    private final int EDIT_CONTR = 3;
 
     private Spinner memberSpinner;
     private EditText et_amount;
@@ -46,13 +51,14 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
     private TextView tv_date;
     private Button button;
     private AppDatabase mdb;
-    private AMemberInAList AMemberInA_list;
+    private AMemberInAList memberInAList;
     private Alist mAlist;
 
     private int listId;
-    private Contribution contribution;
-    private boolean isNew = true;
+    private Contribution mContribution;
+    private History history;
     private boolean isSubtract = false;
+    private int mAction = NEW_CONTR;
 
 
     @Override
@@ -63,35 +69,73 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
         getListIdAndNameFromIntent();
         Intent intent  = getIntent();
 
-        if (intent.hasExtra(EXTRA_LIST_ID) && intent.hasExtra(EXTRA_CONTRIB)){
+        if (intent.hasExtra(EXTRA_LIST_ID) && intent.hasExtra(EXTRA_CONTRIB)){ // This is the case of Adding a new Contribution on an already existing one
             listId = intent.getIntExtra(EXTRA_LIST_ID,0);
-            contribution = intent.getParcelableExtra(EXTRA_CONTRIB);
-            // We are adding or subtracting to an older contribution so it is not new
-            isNew = false;
+            mContribution = intent.getParcelableExtra(EXTRA_CONTRIB);
+            // We are adding or subtracting to an older mContribution so it is not new
+            mAction = ADD_CONTR;
             // We populate the UI with name and set it to be fixed. Also we set the button to subtract if it is a subtraction case
-            populate(intent.hasExtra(EXTRA_SUB));
-        }else {
+            populate1(intent.hasExtra(EXTRA_SUB));
+            
+        }else if (intent.hasExtra(EXTRA_HISTORY) && intent.hasExtra(EXTRA_CONTRIB)){ // This is the case when editing formerly added mContribution
+            history = intent.getParcelableExtra(EXTRA_HISTORY);
+            mContribution = intent.getParcelableExtra(EXTRA_CONTRIB);
+            mAction = EDIT_CONTR;
+            populate2();
+        } else { // This is the case of adding new contribution in a list
             setUpViewModel();
         }
 
     }
 
-    private void populate(boolean isSubtact) {
-        this.isSubtract = isSubtact;
+    // This is called to populate the UI with name, date, amount button name(can be add or subtract)
+    private void populate2() {
         setContentView(R.layout.activity_add_a_contribution);
         instantiateSomeViews();
         button = findViewById(R.id.bt_add);
 
+
         List<Member> members = new ArrayList<>();
 
-        members.add(new Member(contribution.getMemberId()
-                ,contribution.getName()));
+        members.add(new Member(history.getMemberId()
+                , mContribution.getName()));
+
+        memberSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext()
+                , android.R.layout.simple_spinner_item, members));
+
+        tv_date.setText(history.getDate());
+
+        int amount = history.getAmount();
+        et_amount.setText(String.valueOf(amount));
+
+        if(amount<0){
+            isSubtract = true;
+            button.setText("SUBTRACT");
+        }
+
+
+
+    }
+
+    // This is called to populate the UI with the name and a default date
+    private void populate1(boolean isSubtact) {
+
+        setContentView(R.layout.activity_add_a_contribution);
+        instantiateSomeViews();
+        tv_date.setText(getDate());
+
+        button = findViewById(R.id.bt_add);
+
+        List<Member> members = new ArrayList<>();
+
+        members.add(new Member(mContribution.getMemberId()
+                , mContribution.getName()));
 
         memberSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext()
                 , android.R.layout.simple_spinner_item, members));
 
         if (isSubtact){
-            Log.d("Tag0",String.valueOf(isSubtact));
+            this.isSubtract = isSubtact;
             button.setText("SUBTRACT");
         }
 
@@ -114,8 +158,8 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
                     tv_empty.setText(R.string.add_contribution_empty);
                 } else {
                     setContentView(R.layout.activity_add_a_contribution);
-                    // TODO: put this four lines into a method since it is reused
-                   instantiateSomeViews();
+                    instantiateSomeViews();
+                    tv_date.setText(getDate());
                     memberSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext()
                             , android.R.layout.simple_spinner_item, members));
                 }
@@ -127,7 +171,6 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
         memberSpinner = findViewById(R.id.sp_members);
         et_amount = findViewById(R.id.et_amount);
         tv_date = findViewById(R.id.tv_date);
-        tv_date.setText(getDate());
     }
 
     public void add(View view) {
@@ -139,38 +182,63 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
             return;
         }
 
-        // Add contribution in a background thread
+        // Add mContribution in a background thread
         AppExecutors.getsInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
 
                 Member member = (Member) memberSpinner.getSelectedItem();
-                int amount = Integer.parseInt(amt.toString());
-                int memberId = member.getMemberId();
+                int memberId = member.getMemberId();            // Get the memberId
+                String date = tv_date.getText().toString();     // Get the date
+                int amount = Integer.parseInt(amt.toString());  // Get the amount
+                int amt = isSubtract?-amount:amount;            // Get amount to be added or subtracted
 
-                if (isNew){
-                    AMemberInA_list = new AMemberInAList(memberId, mAlist.getId(), amount);
-                    mdb.a_member_in_a_list_dao().insert_a_member_in_a_list(AMemberInA_list);
+                switch (mAction){
+                    case NEW_CONTR:
+                        memberInAList = new AMemberInAList(memberId, mAlist.getId(), amount);
+                        mdb.a_member_in_a_list_dao().insert_a_member_in_a_list(memberInAList);
 
-                    // Write a record of a contribution in History table
-                    mdb.historyDoa().insertContributionWithDate(new History(mAlist.getId()
-                            , memberId, tv_date.getText().toString(), amount));
+                        // Write a record of a mContribution in History table
+                        mdb.historyDoa().insertContributionWithDate(new History(mAlist.getId()
+                                , memberId, date, amount));
+                        break;
+                    case ADD_CONTR:
+                        int newAmount = mContribution.getAmount() + amt;
 
-                }else{
-                    int amt = isSubtract?-amount:amount;
-                    int newAmount = contribution.getAmount() + (amt);
-                    Log.d("Tag",String.valueOf(isSubtract));
-                    AMemberInA_list = new AMemberInAList(memberId,listId,newAmount);
-                    mdb.a_member_in_a_list_dao().update_a_member_in_a_list(AMemberInA_list);
+                        memberInAList = new AMemberInAList(memberId,listId,newAmount);
+                        mdb.a_member_in_a_list_dao().update_a_member_in_a_list(memberInAList);
+
+                        // Write a record of a mContribution in History table
+                        mdb.historyDoa().insertContributionWithDate(new History(listId
+                                , memberId, date, amt));
+                        break;
+                    case EDIT_CONTR:
+                        /*
+                           Update Contribution
+                           if the amount is changed
+                        */
+                        if(history.getAmount() != amt){
+                            // First obtain current amount
+                            int currentAmount = mContribution.getAmount();
+                            // Undo previous AddContrib effect
+                            int previousAmount = currentAmount - history.getAmount();
+                            // Consider now the AddContrib effect
+                            int amountAfterEdit = previousAmount + amt;
+
+                            memberInAList = new AMemberInAList(history.getMemberId(),history.getListId(),amountAfterEdit);
+                            mdb.a_member_in_a_list_dao().update_a_member_in_a_list(memberInAList);
+                        }
 
 
-                    // Write a record of a contribution in History table
-                    mdb.historyDoa().insertContributionWithDate(new History(listId
-                            , memberId, tv_date.getText().toString(), amt));
+
+                        // Update History
+                        history.setAmount(amount);
+                        history.setDate(date);
+                        mdb.historyDoa().updateHistory(history);
+
+                        break;
 
                 }
-
-
 
             }
         });

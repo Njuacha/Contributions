@@ -65,7 +65,7 @@ public class InnerContributionsAdapter extends RecyclerView.Adapter<InnerContrib
     }
     public interface OnCLickListeners {
         void onOptionTextViewClicked(Contribution contribution, View view);
-        void onItemClicked(Member member);
+        void onItemClicked(Contribution contribution);
     }
 
     public class A_Contribution_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -95,12 +95,8 @@ public class InnerContributionsAdapter extends RecyclerView.Adapter<InnerContrib
         public void onClick(View v) {
             // Get contribution at current adapter position
             Contribution contribtn = mContributions.get(getAdapterPosition());
-            // Get the memberId from the contribution
-            int id = contribtn.getMemberId();
-            // Get the memberName from the contribution
-            String name = contribtn.getName();
-            // Recreate the member object and parse to onClick method
-            mOnCLickListeners.onItemClicked(new Member(id,name));
+
+            mOnCLickListeners.onItemClicked(contribtn);
         }
     }
 
