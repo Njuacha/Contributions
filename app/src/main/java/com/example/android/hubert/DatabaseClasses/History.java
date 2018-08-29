@@ -14,14 +14,13 @@ public class History {
 
 
     @PrimaryKey(autoGenerate = true)
-    private
-    int id;
+    private int id;
     private int listId;
     private int memberId;
-    private Date date;
+    private String date;
     private int amount;
 
-    public History(int id, int listId, int memberId, Date date, int amount) {
+    public History(int id, int listId, int memberId, String date, int amount) {
         this.id = id;
         this.listId = listId;
         this.memberId = memberId;
@@ -30,7 +29,7 @@ public class History {
     }
 
     @Ignore
-    public History(int listId,int memberId, Date date,int amount){
+    public History(int listId,int memberId, String date,int amount){
         this.listId = listId;
         this.memberId = memberId;
         this.date = date;
@@ -57,11 +56,11 @@ public class History {
         this.memberId = memberId;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

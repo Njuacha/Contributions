@@ -10,9 +10,7 @@ import android.widget.TextView;
 
 import com.example.android.hubert.DatabaseClasses.History;
 import com.example.android.hubert.R;
-import com.example.android.hubert.View_model_classes.SummaryViewModel;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,9 +20,11 @@ import java.util.List;
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
     private final Context mContext;
     private List<History> mHistoryList;
+    private final ItemClickListeners mItemClickListeners;
 
-    public HistoryAdapter(Context context){
+    public HistoryAdapter(Context context, ItemClickListeners itemClickListeners){
         mContext = context;
+        mItemClickListeners = itemClickListeners;
     }
 
     @NonNull
@@ -37,13 +37,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     @Override
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
         History contribution = mHistoryList.get(position);
-        Date date = contribution.getDate();
+        String date = contribution.getDate();
         int amount = contribution.getAmount();
-        // Use a formatter already used in Summary activity to convert the date to a string
-        String dateAsString = SummaryViewModel.dateFormat.format(date);
+
         // Change amount to a string
         String amountAsString = String.format("%,d",amount);
-        holder.dateTv.setText(dateAsString);
+        holder.dateTv.setText(date);
         holder.amountTv.setText(amountAsString);
     }
 
@@ -51,6 +50,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     public int getItemCount() {
         if (mHistoryList == null) return 0;
         else return mHistoryList.size();
+    }
+
+    public interface ItemClickListeners{
+        void onOptionViewClicked(History history, View view);
     }
 
     public class HistoryViewHolder extends RecyclerView.ViewHolder {
@@ -64,6 +67,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             dateTv = itemView.findViewById(R.id.tv_member);
             amountTv = itemView.findViewById(R.id.tv_amount);
             optionsTv = itemView.findViewById(R.id.tv_options);
+
+            optionsTv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mItemClickListeners.onOptionViewClicked(mHistoryList.get(getAdapterPosition()), v);
+                }
+            });
         }
     }
 

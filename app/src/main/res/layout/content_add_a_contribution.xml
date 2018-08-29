@@ -31,6 +31,37 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
+<!--TODO : Prevent rotation of this layout-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="start"
+        android:layout_marginTop="48dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date:   "
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@android:color/primary_text_light"/>
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="02/12/2018"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@android:color/primary_text_light"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="Change Date"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@android:color/primary_text_light"
+            android:onClick="showDatePicker"
+            />
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/et_amount"
@@ -52,6 +83,7 @@
         android:text="ADD"
         android:gravity="center"
         android:background="@color/colorPrimary"
-        android:onClick="add"/>
+        android:onClick="add"
+        />
 
 </android.widget.LinearLayout>

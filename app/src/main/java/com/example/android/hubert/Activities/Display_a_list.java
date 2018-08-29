@@ -25,31 +25,29 @@ import android.widget.Toast;
 
 import com.example.android.hubert.Adapters.InnerContributionsAdapter;
 import com.example.android.hubert.AppExecutors;
-import com.example.android.hubert.DatabaseClasses.AMemberInAList;
 import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.DatabaseClasses.Contribution;
-import com.example.android.hubert.DatabaseClasses.History;
 import com.example.android.hubert.DatabaseClasses.Member;
-import com.example.android.hubert.DialogFragments.Add_amount_dialog;
 import com.example.android.hubert.View_model_classes.InnerContribViewModelFactory;
 import com.example.android.hubert.View_model_classes.InnerContributionsViewModel;
 import com.example.android.hubert.R;
 
-import java.util.Date;
 import java.util.List;
 
 import static com.example.android.hubert.Activities.MainActivity.EXTRA_MEMBER;
 import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
 
-public class Display_a_list extends AppCompatActivity implements InnerContributionsAdapter.OnCLickListeners, Add_amount_dialog.Add_amount_dialog_listener{
+public class Display_a_list extends AppCompatActivity implements InnerContributionsAdapter.OnCLickListeners{
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 2;
+    public static final String EXTRA_LIST_ID = "list Id";
+    public static final String EXTRA_CONTRIB = "contribution";
+    public static final String EXTRA_SUB = "subtract";
     private RecyclerView mRv;
     private InnerContributionsAdapter mAdapter;
     private Alist mAlist;
     private Contribution mContribution;
     private AppDatabase mDb;
-    private boolean mIsAdd;
     private TextView textView;
 
 
@@ -80,6 +78,7 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
                 startActivity(addIntent);
             }
         });
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getListFromIntent();
@@ -222,7 +221,7 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
 
     // Opens up a popup menu when the three vertical dot(optionView) is clicked
     @Override
-    public void onOptionTextViewClicked(Contribution contribution, View view) {
+    public void onOptionTextViewClicked(final Contribution contribution, View view) {
         mContribution = contribution;
         PopupMenu popupMenu = new PopupMenu(this,view);
         popupMenu.inflate(R.menu.add_amount);
@@ -231,19 +230,18 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
-                // Try to record whether it was add or subtract that was selected in a boolean
-                switch(id){
-                    case R.id.action_add:
-                        mIsAdd = true;
-                        break;
-                    case R.id.action_subtract:
-                        mIsAdd = false;
-                        break;
-                }
+               // For the case of add or subtract we open up add contribution activity
                 if( (id == R.id.action_add) || (id == R.id.action_subtract) ){
-                    Add_amount_dialog dialog = new Add_amount_dialog();
-                    dialog.show(getSupportFragmentManager(),"edit amount dialog fragment");
-                }else if(id == R.id.action_delete){
+                    Intent intent = new Intent(Display_a_list.this,Add_a_contribution.class);
+                    intent.putExtra(EXTRA_LIST_ID,mAlist.getId());
+                    intent.putExtra(EXTRA_CONTRIB,contribution);
+                    if(id == R.id.action_subtract){
+                        intent.putExtra(EXTRA_SUB,true);
+                    }
+
+                    startActivity(intent);
+
+                }else if(id == R.id.action_delete){ // For the case of delete we try to get the list Id and memberId to remove the contribution
                     AppExecutors.getsInstance().diskIO().execute(new Runnable() {
                         @Override
                         public void run() {
@@ -268,23 +266,6 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
         startActivity(intent);
     }
 
-    @Override
-    public void onPositiveButtonClicked(final int amount) {
-        AppExecutors.getsInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-               int memberId = mContribution.getMemberId();
-               int signedAmt = mIsAdd?amount:-amount;
-               int newAmount =  mContribution.getAmount() + signedAmt;
-               AMemberInAList AMemberInA_list = new AMemberInAList(memberId,mAlist.getId()
-                       ,newAmount);
-               mDb.a_member_in_a_list_dao().update_a_member_in_a_list(AMemberInA_list);
-
-                // Write a record of a contribution in History table
-               mDb.historyDoa().insertContributionWithDate(new History(mAlist.getId(),memberId,new Date(),signedAmt));
-            }
-        });
-    }
 
 
 }

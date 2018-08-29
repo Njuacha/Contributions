@@ -1,8 +1,10 @@
 package com.example.android.hubert.DatabaseClasses;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import java.util.List;
 
@@ -19,6 +21,12 @@ public interface HistoryDoa  {
 
    @Query("DELETE FROM History where listId = :listId AND memberId = :memberId")
    void delete(int listId, int memberId);
+
+   @Update
+   void updateHistory(History history);
+
+   @Delete
+   void delete(History history);
 
 
 
