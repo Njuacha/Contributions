@@ -106,11 +106,11 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
         tv_date.setText(history.getDate());
 
         int amount = history.getAmount();
-        et_amount.setText(String.valueOf(amount));
+        et_amount.setText(String.valueOf(Math.abs(amount)));
 
         if(amount<0){
             isSubtract = true;
-            button.setText("SUBTRACT");
+            button.setText(R.string.subtract);
         }
 
 
@@ -136,7 +136,8 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
 
         if (isSubtact){
             this.isSubtract = isSubtact;
-            button.setText("SUBTRACT");
+            button.setText(R.string.subtract);
+
         }
 
 
@@ -232,7 +233,7 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
 
 
                         // Update History
-                        history.setAmount(amount);
+                        history.setAmount(amt);
                         history.setDate(date);
                         mdb.historyDoa().updateHistory(history);
 

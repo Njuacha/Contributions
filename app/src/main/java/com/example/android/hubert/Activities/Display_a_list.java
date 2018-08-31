@@ -208,7 +208,7 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
             public void onChanged(@Nullable List<Contribution> contributions) {
                 mAdapter.setmContributions(contributions);
                 if ((contributions != null ? contributions.size() : 0) == 0){
-                    textView.setText("No contributions in list");
+                    textView.setText(R.string.no_contributions_in_list);
                     textView.setVisibility(View.VISIBLE);
                     mRv.setVisibility(View.INVISIBLE);
                 }else{

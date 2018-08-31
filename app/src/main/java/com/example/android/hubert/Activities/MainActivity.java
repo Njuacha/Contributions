@@ -61,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
     private static AppDatabase mDb;
 
     public static final String LIST_EXTRA = "list";
-    private static final String DEFAULT_LIST_NAME = "No Name";
-    public final static int DEFAULT_LIST_ID = -1;
     public static final String EXTRA_MEMBER = "member";
     int mFabState = 0;
 

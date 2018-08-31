@@ -9,39 +9,40 @@
     <TextView
         android:id="@+id/textView"
         android:layout_marginLeft="16dp"
-        android:text="Date Created :"
+        android:text="@string/date_created"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/SummaryHeadingStyle"/>
+        style="@style/SummaryHeadingStyle"
+        android:layout_marginStart="16dp" />
     <TextView
         android:id="@+id/tv_date"
         app:layout_constraintStart_toEndOf="@id/textView"
-        android:text="12/04/2018"
+        tools:text="@string/sample_date"
         app:layout_constraintBaseline_toBaselineOf="@id/textView"
         style="@style/SummaryValuesStyle"/>
     <TextView
         android:id="@+id/tv_number"
         app:layout_constraintStart_toStartOf="@id/textView"
         app:layout_constraintTop_toBottomOf="@id/textView"
-        android:text="Number Of Items In List :"
+        android:text="@string/number_of_items_in_list"
         style="@style/SummaryHeadingStyle"
         />
     <TextView
         android:id="@+id/tv_number_value"
         app:layout_constraintStart_toEndOf="@+id/tv_number"
-        android:text="7"
+        tools:text="7"
         app:layout_constraintBaseline_toBaselineOf="@+id/tv_number"
         style="@style/SummaryValuesStyle"/>
     <TextView
         android:id="@+id/tv_total_amt"
         app:layout_constraintTop_toBottomOf="@id/tv_number"
         app:layout_constraintStart_toStartOf="@id/tv_number"
-        android:text="Total Amount:"
+        android:text="@string/total_amount"
         style="@style/SummaryHeadingStyle"/>
     <TextView
         android:id="@+id/tv_amount_value"
         app:layout_constraintStart_toEndOf="@+id/tv_total_amt"
-        android:text="5,000"
+        tools:text="5,000"
         app:layout_constraintBaseline_toBaselineOf="@+id/tv_total_amt"
         style="@style/SummaryValuesStyle"/>
 

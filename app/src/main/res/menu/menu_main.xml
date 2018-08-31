@@ -4,7 +4,7 @@
     tools:context="com.example.android.hubert.Activities.MainActivity">
     <item
         android:id="@+id/action_search"
-        android:title="Search"
+        android:title="@string/search"
         android:icon="@android:drawable/ic_menu_search"
         app:showAsAction="always|collapseActionView"
         app:actionViewClass="android:support.v7.widget.searchView"/>
