@@ -66,7 +66,8 @@
             style="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@android:color/primary_text_light"
             android:onClick="showDatePicker"
-            android:layout_marginStart="16dp" />
+            android:layout_marginStart="16dp"
+            android:background="@color/colorPrimaryLight"/>
 
     </LinearLayout>
 

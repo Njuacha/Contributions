@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String LIST_EXTRA = "list";
     public static final String EXTRA_MEMBER = "member";
     int mFabState = 0;
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +97,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 mFabState = position;
+                if(mFabState == 1){
+                    mFab.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_action_add_list));
+                }else {
+                    mFab.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_action_name));
+                }
+
             }
 
             @Override
@@ -103,8 +111,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        mFab = findViewById(R.id.fab);
+
+
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 0 stands for first page which is members page
@@ -135,9 +146,6 @@ public class MainActivity extends AppCompatActivity {
         switch(id){
             case R.id.action_settings:
                 // Show settings
-                return true;
-            case R.id.action_search:
-                // Carry out search
                 return true;
         }
 
@@ -220,6 +228,8 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
+
+
                     break;
                 case CONTRIBUTIONS_SECTION:
 
@@ -243,6 +253,9 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
+
+
+
 
                     break;
 
