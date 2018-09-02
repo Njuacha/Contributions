@@ -44,14 +44,6 @@
             android:label="@string/title_activity_add_a_contribution" />
         <activity android:name=".Activities.AddMember" />
         <activity
-            android:name=".Activities.MainSettingsActivity"
-            android:label="@string/general_settings"
-            android:parentActivityName=".Activities.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.hubert.Activities.MainActivity" />
-        </activity>
-        <activity
             android:name=".Activities.SummaryActivity"
             android:parentActivityName=".Activities.MainActivity">
             <meta-data

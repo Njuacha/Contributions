@@ -61,6 +61,6 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
         android:tint="@color/colorPrimaryLight"
-        android:src="@drawable/ic_action_name"/>
+        android:src="@drawable/ic_action_add_person"/>
 
 </android.support.design.widget.CoordinatorLayout>

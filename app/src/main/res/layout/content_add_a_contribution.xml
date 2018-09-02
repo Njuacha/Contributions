@@ -45,12 +45,6 @@
             style="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@android:color/primary_text_light"/>
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/colon"
-            style="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@android:color/primary_text_light"/>
-        <TextView
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

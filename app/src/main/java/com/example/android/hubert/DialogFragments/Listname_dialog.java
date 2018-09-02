@@ -39,21 +39,21 @@ public class Listname_dialog extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setTitle("Name of list");   // Give our dailog a name
+        builder.setTitle(R.string.create_list_dialog);   // Give our dailog a name
 
         LayoutInflater inflater = LayoutInflater.from(getContext());         // inflate and set the layout
         builder.setView(inflater.inflate(R.layout.edit_list_name,null));
 
 
 
-        builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 saveName();
             }
         });
 
-        builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
