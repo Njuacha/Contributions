@@ -56,9 +56,10 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberVi
 
     public interface ItemClickListeners{
         void onMemberOptionViewClicked(Member member, View view);
+        void onMemberClicked(Member member);
     }
 
-    public class MemberViewHolder extends RecyclerView.ViewHolder {
+    public class MemberViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         final TextView memberTv;
         final TextView tvOptions;
@@ -68,6 +69,8 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberVi
             memberTv = itemView.findViewById(R.id.tv_list_name);
             tvOptions = itemView.findViewById(R.id.tv_options);
 
+            itemView.setOnClickListener(this);
+
             tvOptions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -75,6 +78,11 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberVi
                     itemClickListeners.onMemberOptionViewClicked(mMemberList.get(getAdapterPosition()), tvOptions);
                 }
             });
+        }
+
+        @Override
+        public void onClick(View v) {
+            itemClickListeners.onMemberClicked(mMemberList.get(getAdapterPosition()));
         }
     }
 }

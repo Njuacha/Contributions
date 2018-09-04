@@ -335,6 +335,11 @@ public class MainActivity extends AppCompatActivity {
             });
             popupMenu.show();
         }
+
+        @Override
+        public void onMemberClicked(Member member) {
+            startActivity(new Intent().putExtra(EXTRA_MEMBER, member));
+        }
     }
 
     /**
