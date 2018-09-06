@@ -22,9 +22,9 @@ public interface AListDao {
     @Query("SELECT * FROM Alist ")
     LiveData<List<Alist>> load_all_list_names();
 
-    @Query("SELECT * FROM Alist WHERE id = :id")
-    Alist load_a_list(int id);
+    @Query("SELECT * FROM Alist WHERE listId = :listId")
+    Alist load_a_list(int listId);
 
-    @Query("DELETE FROM Alist where id = :id")
-    void delete_a_list(int id);
+    @Query("DELETE FROM Alist where listId = :listId")
+    void delete_a_list(int listId);
 }

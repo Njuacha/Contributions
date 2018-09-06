@@ -12,7 +12,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
  */
 @Entity(primaryKeys = {"memberId","listId"},
         foreignKeys = {@ForeignKey(entity = Member.class, parentColumns = "memberId",childColumns = "memberId",onDelete=CASCADE),
-                       @ForeignKey(entity = Alist.class, parentColumns = "id",childColumns = "listId",onDelete=CASCADE)
+                       @ForeignKey(entity = Alist.class, parentColumns = "listId",childColumns = "listId",onDelete=CASCADE)
         },
         indices = {@Index(value = { "listId"}), @Index(value = {"memberId"})}
         )

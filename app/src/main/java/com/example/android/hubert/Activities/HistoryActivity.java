@@ -17,12 +17,10 @@ import android.view.View;
 import com.example.android.hubert.Adapters.HistoryAdapter;
 import com.example.android.hubert.AppExecutors;
 import com.example.android.hubert.DatabaseClasses.AMemberInAList;
-import com.example.android.hubert.DatabaseClasses.A_member_in_a_list_Dao_Impl;
 import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
-import com.example.android.hubert.DatabaseClasses.Contribution;
+import com.example.android.hubert.DatabaseClasses.ListBasedContribution;
 import com.example.android.hubert.DatabaseClasses.History;
-import com.example.android.hubert.DatabaseClasses.Member;
 import com.example.android.hubert.R;
 import com.example.android.hubert.View_model_classes.HistViewModel;
 import com.example.android.hubert.View_model_classes.HistViewModelFactory;
@@ -30,13 +28,12 @@ import com.example.android.hubert.View_model_classes.HistViewModelFactory;
 import java.util.List;
 
 import static com.example.android.hubert.Activities.Display_a_list.EXTRA_CONTRIB;
-import static com.example.android.hubert.Activities.MainActivity.EXTRA_MEMBER;
 import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
 
 public class HistoryActivity extends AppCompatActivity implements HistoryAdapter.ItemClickListeners {
     public static final String EXTRA_HISTORY = "history extra";
     private Alist mAlist;
-    private Contribution mContribution;
+    private ListBasedContribution mListBasedContribution;
     private HistoryAdapter mAdapter;
     private RecyclerView mRv;
 
@@ -62,14 +59,14 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
         Intent intent = getIntent();
         if(intent.hasExtra(LIST_EXTRA)&& intent.hasExtra(EXTRA_CONTRIB)){
            mAlist = intent.getParcelableExtra(LIST_EXTRA);
-           mContribution = intent.getParcelableExtra(EXTRA_CONTRIB);
+           mListBasedContribution = intent.getParcelableExtra(EXTRA_CONTRIB);
         }
         setTitle();
         setUpViewModel();
     }
 
     private void setTitle() {
-        String memberName = mContribution.getName();
+        String memberName = mListBasedContribution.getName();
         String listName = mAlist.getName();
         setTitle(memberName + "/" + listName);
     }
@@ -77,7 +74,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
     private void setUpViewModel() {
 
         HistViewModelFactory factory = new HistViewModelFactory(AppDatabase.getDatabaseInstance(this)
-                ,mAlist.getId(), mContribution.getMemberId());
+                ,mAlist.getListId(), mListBasedContribution.getMemberId());
         HistViewModel viewModel = ViewModelProviders.of(this,factory).get(HistViewModel.class);
         viewModel.getmHistoryList().observe(this, new Observer<List<History>>() {
             @Override
@@ -113,10 +110,10 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
                 int id = item.getItemId();
                 switch(id){
                     case R.id.action_edit:
-                        // Start activity of Add Contribution and parse the History object and the Member's name
+                        // Start activity of Add ListBasedContribution and parse the History object and the Member's name
                         Intent intent = new Intent(HistoryActivity.this, Add_a_contribution.class);
                         intent.putExtra(EXTRA_HISTORY,history);
-                        intent.putExtra(EXTRA_CONTRIB,mContribution);
+                        intent.putExtra(EXTRA_CONTRIB, mListBasedContribution);
                         startActivity(intent);
                         break;
                     case R.id.action_delete:
@@ -129,10 +126,10 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
 
                                 // Add the opposite of the amount to Member's contribution in list
 
-                                int newAmount = mContribution.getAmount()-history.getAmount();
+                                int newAmount = mListBasedContribution.getAmount()-history.getAmount();
                                 AMemberInAList aMemberInAList = new AMemberInAList(
-                                        mContribution.getMemberId()
-                                        ,mAlist.getId()
+                                        mListBasedContribution.getMemberId()
+                                        ,mAlist.getListId()
                                         ,newAmount);
                                 db.a_member_in_a_list_dao().update_a_member_in_a_list(aMemberInAList);
                             }

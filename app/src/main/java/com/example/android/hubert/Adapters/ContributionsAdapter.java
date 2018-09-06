@@ -91,7 +91,7 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
         public boolean onLongClick(View v) {
             int position = getAdapterPosition();
             Alist aList = mListEntries.get(position);
-            int itemId = aList.getId();
+            int itemId = aList.getListId();
             String name = aList.getName();
             mItemClickListeners.onContributionListLongClicked(itemId, name);
             return true;

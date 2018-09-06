@@ -7,32 +7,32 @@ import android.os.Parcelable;
  * Created by hubert on 6/19/18.
  */
 
-public class Contribution implements Parcelable {
+public class ListBasedContribution implements Parcelable {
     private final int memberId;
     private final String name;
     private final int amount;
 
-    public Contribution(int memberId, String name, int amount){
+    public ListBasedContribution(int memberId, String name, int amount){
         this.memberId = memberId;
         this.name = name;
         this.amount = amount;
     }
 
-    protected Contribution(Parcel in) {
+    protected ListBasedContribution(Parcel in) {
         memberId = in.readInt();
         name = in.readString();
         amount = in.readInt();
     }
 
-    public static final Creator<Contribution> CREATOR = new Creator<Contribution>() {
+    public static final Creator<ListBasedContribution> CREATOR = new Creator<ListBasedContribution>() {
         @Override
-        public Contribution createFromParcel(Parcel in) {
-            return new Contribution(in);
+        public ListBasedContribution createFromParcel(Parcel in) {
+            return new ListBasedContribution(in);
         }
 
         @Override
-        public Contribution[] newArray(int size) {
-            return new Contribution[size];
+        public ListBasedContribution[] newArray(int size) {
+            return new ListBasedContribution[size];
         }
     };
 

@@ -23,30 +23,28 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.hubert.Adapters.InnerContributionsAdapter;
+import com.example.android.hubert.Adapters.ListContributionsAdapter;
 import com.example.android.hubert.AppExecutors;
 import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
-import com.example.android.hubert.DatabaseClasses.Contribution;
-import com.example.android.hubert.DatabaseClasses.Member;
-import com.example.android.hubert.View_model_classes.InnerContribViewModelFactory;
-import com.example.android.hubert.View_model_classes.InnerContributionsViewModel;
+import com.example.android.hubert.DatabaseClasses.ListBasedContribution;
+import com.example.android.hubert.View_model_classes.LIstContribViewModelFactory;
+import com.example.android.hubert.View_model_classes.ListContribViewModel;
 import com.example.android.hubert.R;
 
 import java.util.List;
 
-import static com.example.android.hubert.Activities.MainActivity.EXTRA_MEMBER;
 import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
 
-public class Display_a_list extends AppCompatActivity implements InnerContributionsAdapter.OnCLickListeners{
+public class Display_a_list extends AppCompatActivity implements ListContributionsAdapter.OnCLickListeners{
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 2;
     public static final String EXTRA_LIST_ID = "list Id";
     public static final String EXTRA_CONTRIB = "contribution";
     public static final String EXTRA_SUB = "subtract";
     private RecyclerView mRv;
-    private InnerContributionsAdapter mAdapter;
+    private ListContributionsAdapter mAdapter;
     private Alist mAlist;
-    private Contribution mContribution;
+    private ListBasedContribution mListBasedContribution;
     private AppDatabase mDb;
     private TextView textView;
 
@@ -60,12 +58,11 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
 
         mRv = findViewById(R.id.rv_contributions);
         textView = findViewById(R.id.tv_explain_emptiness);
-        mAdapter = new InnerContributionsAdapter(this,this);
-        mRv.setAdapter(mAdapter);
+        mAdapter = new ListContributionsAdapter(this,this);
+
         mRv.setLayoutManager(new LinearLayoutManager(this));
-
         mRv.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
-
+        mRv.setAdapter(mAdapter);
         // instantiate the database variable
         mDb = AppDatabase.getDatabaseInstance(this);
 
@@ -184,12 +181,12 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
 
         allInfo.append(String.format("%-" + spacing + "s%s%n",name_label,getString(R.string.amount_label)));
         // If there are no contributions return in a list then return false
-        if(mAdapter.getmContributions() == null){
+        if(mAdapter.getmListBasedContributions() == null){
             return;
         }
-        for (Contribution contribution: mAdapter.getmContributions()){
+        for (ListBasedContribution listBasedContribution : mAdapter.getmListBasedContributions()){
             String name_amount = String.format("%-" + spacing + "s%,d%n"
-                    ,contribution.getName(),contribution.getAmount());
+                    , listBasedContribution.getName(), listBasedContribution.getAmount());
             allInfo.append(name_amount);
         }
     }
@@ -201,13 +198,13 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
     }
 
     private void setupViewModel() {
-        InnerContribViewModelFactory factory = new InnerContribViewModelFactory(mDb,mAlist.getId());
-        InnerContributionsViewModel view_model2 = ViewModelProviders.of(this,factory).get(InnerContributionsViewModel.class);
-        view_model2.getContributionsInList().observe(this, new Observer<List<Contribution>>() {
+        LIstContribViewModelFactory factory = new LIstContribViewModelFactory(mDb,mAlist.getListId());
+        ListContribViewModel view_model2 = ViewModelProviders.of(this,factory).get(ListContribViewModel.class);
+        view_model2.getContributionsInList().observe(this, new Observer<List<ListBasedContribution>>() {
             @Override
-            public void onChanged(@Nullable List<Contribution> contributions) {
-                mAdapter.setmContributions(contributions);
-                if ((contributions != null ? contributions.size() : 0) == 0){
+            public void onChanged(@Nullable List<ListBasedContribution> listBasedContributions) {
+                mAdapter.setmListBasedContributions(listBasedContributions);
+                if ((listBasedContributions != null ? listBasedContributions.size() : 0) == 0){
                     textView.setText(R.string.no_contributions_in_list);
                     textView.setVisibility(View.VISIBLE);
                     mRv.setVisibility(View.INVISIBLE);
@@ -221,8 +218,8 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
 
     // Opens up a popup menu when the three vertical dot(optionView) is clicked
     @Override
-    public void onOptionTextViewClicked(final Contribution contribution, View view) {
-        mContribution = contribution;
+    public void onOptionTextViewClicked(final ListBasedContribution listBasedContribution, View view) {
+        mListBasedContribution = listBasedContribution;
         PopupMenu popupMenu = new PopupMenu(this,view);
         popupMenu.inflate(R.menu.add_amount);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -230,23 +227,23 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
-               // For the case of add or subtract we open up add contribution activity
+               // For the case of add or subtract we open up add listBasedContribution activity
                 if( (id == R.id.action_add) || (id == R.id.action_subtract) ){
                     Intent intent = new Intent(Display_a_list.this,Add_a_contribution.class);
-                    intent.putExtra(EXTRA_LIST_ID,mAlist.getId());
-                    intent.putExtra(EXTRA_CONTRIB,contribution);
+                    intent.putExtra(EXTRA_LIST_ID,mAlist.getListId());
+                    intent.putExtra(EXTRA_CONTRIB, listBasedContribution);
                     if(id == R.id.action_subtract){
                         intent.putExtra(EXTRA_SUB,true);
                     }
 
                     startActivity(intent);
 
-                }else if(id == R.id.action_delete){ // For the case of delete we try to get the list Id and memberId to remove the contribution
+                }else if(id == R.id.action_delete){ // For the case of delete we try to get the list Id and memberId to remove the listBasedContribution
                     AppExecutors.getsInstance().diskIO().execute(new Runnable() {
                         @Override
                         public void run() {
-                            mDb.a_member_in_a_list_dao().deleteAContribution(mContribution.getMemberId());
-                            mDb.historyDoa().delete(mAlist.getId(),mContribution.getMemberId());
+                            mDb.a_member_in_a_list_dao().deleteAContribution(mListBasedContribution.getMemberId());
+                            mDb.historyDoa().delete(mAlist.getListId(), mListBasedContribution.getMemberId());
                         }
                     });
                 }
@@ -259,7 +256,7 @@ public class Display_a_list extends AppCompatActivity implements InnerContributi
     }
 
     @Override
-    public void onItemClicked(Contribution contrib) {
+    public void onItemClicked(ListBasedContribution contrib) {
         Intent intent = new Intent(this, HistoryActivity.class);
         intent.putExtra(LIST_EXTRA,mAlist);
         intent.putExtra(EXTRA_CONTRIB,contrib);

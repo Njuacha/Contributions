@@ -8,8 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.android.hubert.DatabaseClasses.Contribution;
-import com.example.android.hubert.DatabaseClasses.Member;
+import com.example.android.hubert.DatabaseClasses.ListBasedContribution;
 import com.example.android.hubert.R;
 
 import java.util.List;
@@ -19,15 +18,15 @@ import java.util.List;
  * Created by hubert on 6/19/18.
  */
 
-public class InnerContributionsAdapter extends RecyclerView.Adapter<InnerContributionsAdapter.A_Contribution_ViewHolder>{
+public class ListContributionsAdapter extends RecyclerView.Adapter<ListContributionsAdapter.A_Contribution_ViewHolder>{
 
     private final Context mContext;
-    private List<Contribution> mContributions;
+    private List<ListBasedContribution> mListBasedContributions;
     private final OnCLickListeners mOnCLickListeners;
     private int longestNameLength = 0;
     private int totalAmount = 0;
 
-    public InnerContributionsAdapter(Context mContext, OnCLickListeners onCLickListeners){
+    public ListContributionsAdapter(Context mContext, OnCLickListeners onCLickListeners){
         this.mContext = mContext;
         mOnCLickListeners = onCLickListeners;
     }
@@ -42,12 +41,12 @@ public class InnerContributionsAdapter extends RecyclerView.Adapter<InnerContrib
     @Override
     public void onBindViewHolder(@NonNull A_Contribution_ViewHolder holder, int position) {
 
-        String name = mContributions.get(position).getName();
+        String name = mListBasedContributions.get(position).getName();
         if ( name.length()> longestNameLength){
             longestNameLength = name.length();
         }
         holder.tvName.setText(name);
-        int amount = mContributions.get(position).getAmount();
+        int amount = mListBasedContributions.get(position).getAmount();
         totalAmount += amount;
         String amount_s = String.format("%,d",amount);
         holder.tvAmount.setText(amount_s);
@@ -57,15 +56,15 @@ public class InnerContributionsAdapter extends RecyclerView.Adapter<InnerContrib
 
     @Override
     public int getItemCount() {
-        if( mContributions == null){
+        if( mListBasedContributions == null){
             return 0;
         }
-        else return mContributions.size();
+        else return mListBasedContributions.size();
 
     }
     public interface OnCLickListeners {
-        void onOptionTextViewClicked(Contribution contribution, View view);
-        void onItemClicked(Contribution contribution);
+        void onOptionTextViewClicked(ListBasedContribution listBasedContribution, View view);
+        void onItemClicked(ListBasedContribution listBasedContribution);
     }
 
     public class A_Contribution_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -85,8 +84,8 @@ public class InnerContributionsAdapter extends RecyclerView.Adapter<InnerContrib
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    Contribution contribution = mContributions.get(position);
-                    mOnCLickListeners.onOptionTextViewClicked(contribution,tvOptions);
+                    ListBasedContribution listBasedContribution = mListBasedContributions.get(position);
+                    mOnCLickListeners.onOptionTextViewClicked(listBasedContribution,tvOptions);
                 }
             });
         }
@@ -94,21 +93,21 @@ public class InnerContributionsAdapter extends RecyclerView.Adapter<InnerContrib
         @Override
         public void onClick(View v) {
             // Get contribution at current adapter position
-            Contribution contribtn = mContributions.get(getAdapterPosition());
+            ListBasedContribution contribtn = mListBasedContributions.get(getAdapterPosition());
 
             mOnCLickListeners.onItemClicked(contribtn);
         }
     }
 
-    public void setmContributions(List<Contribution> mContributions){
-        this.mContributions = mContributions;
+    public void setmListBasedContributions(List<ListBasedContribution> mListBasedContributions){
+        this.mListBasedContributions = mListBasedContributions;
         longestNameLength = 0;
         totalAmount = 0;
         notifyDataSetChanged();
     }
 
-    public List<Contribution> getmContributions(){
-        return mContributions;
+    public List<ListBasedContribution> getmListBasedContributions(){
+        return mListBasedContributions;
     }
 
     public int getLongestNameLength(){

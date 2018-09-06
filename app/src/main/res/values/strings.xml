@@ -36,7 +36,7 @@
     <string name="edit_name">Edit name</string>
     <string name="edit">Edit</string>
     <string name="search">Search</string>
-    <string name="no_contributions_in_list">No contributions in list</string>
+    <string name="no_contributions_in_list">No listBasedContributions in list</string>
     <string name="create_list_dialog">Name of list</string>
     <string name="ok">ok</string>
     <string name="cancel">cancel</string>

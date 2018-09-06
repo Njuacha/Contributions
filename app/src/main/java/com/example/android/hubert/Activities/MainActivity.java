@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
                             AppExecutors.getsInstance().diskIO().execute(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mDb.a_list_dao().delete_a_list(alist.getId());
+                                    mDb.a_list_dao().delete_a_list(alist.getListId());
                                 }
                             });
                             break;
@@ -338,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onMemberClicked(Member member) {
-            startActivity(new Intent().putExtra(EXTRA_MEMBER, member));
+            startActivity(new Intent(getActivity(),MemberActivity.class).putExtra(EXTRA_MEMBER, member));
         }
     }
 

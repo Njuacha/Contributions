@@ -16,14 +16,14 @@
         android:layout_marginStart="16dp" />
     <TextView
         android:id="@+id/tv_date"
-        app:layout_constraintStart_toEndOf="@id/textView"
+        app:layout_constraintStart_toEndOf="@+id/textView"
         tools:text="@string/sample_date"
-        app:layout_constraintBaseline_toBaselineOf="@id/textView"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView"
         style="@style/SummaryValuesStyle"/>
     <TextView
         android:id="@+id/tv_number"
-        app:layout_constraintStart_toStartOf="@id/textView"
-        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
         android:text="@string/number_of_items_in_list"
         style="@style/SummaryHeadingStyle"
         />
@@ -35,8 +35,8 @@
         style="@style/SummaryValuesStyle"/>
     <TextView
         android:id="@+id/tv_total_amt"
-        app:layout_constraintTop_toBottomOf="@id/tv_number"
-        app:layout_constraintStart_toStartOf="@id/tv_number"
+        app:layout_constraintTop_toBottomOf="@+id/tv_number"
+        app:layout_constraintStart_toStartOf="@+id/tv_number"
         android:text="@string/total_amount"
         style="@style/SummaryHeadingStyle"/>
     <TextView

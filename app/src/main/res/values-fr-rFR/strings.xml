@@ -25,7 +25,7 @@
     <string name="edit_name">Modifier le nom</string>
     <string name="edit">Modifier</string>
     <string name="search">Chercher</string>
-    <string name="no_contributions_in_list">Aucune contribution dans la liste</string>
+    <string name="no_contributions_in_list">Aucune listBasedContribution dans la liste</string>
     <string name="create_list_dialog">Nom de la liste</string>
     <string name="ok">ok</string>
     <string name="cancel">annuler</string>

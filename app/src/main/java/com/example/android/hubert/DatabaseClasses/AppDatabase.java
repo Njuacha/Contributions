@@ -9,7 +9,7 @@ import android.content.Context;
 /**
  * Created by hubert on 6/15/18.
  */
-@Database(entities = {Alist.class, Member.class, AMemberInAList.class, History.class}, version = 1, exportSchema = false)
+@Database(entities = {Alist.class, Member.class, AMemberInAList.class, History.class}, version = 2, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract  class AppDatabase extends RoomDatabase {
 

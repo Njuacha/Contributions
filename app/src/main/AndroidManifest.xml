@@ -58,7 +58,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.hubert.Activities.Display_a_list" />
         </activity>
-        <activity android:name=".Activities.MemberActivity"></activity>
+        <activity
+            android:name=".Activities.MemberActivity"
+            android:parentActivityName=".Activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.hubert.Activities.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>

@@ -7,22 +7,22 @@ import android.support.annotation.NonNull;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 
 /**
- * Created by hubert on 7/10/18.
+ * Created by hubert on 9/6/18.
  */
 
-public class InnerContribViewModelFactory extends ViewModelProvider.NewInstanceFactory {
+public class MemberContribViewModelFactory extends ViewModelProvider.NewInstanceFactory{
     private final AppDatabase mDb;
-    private final int mlistId;
+    private final int mMemberId;
 
-    public InnerContribViewModelFactory(AppDatabase db, int listId){
+    public MemberContribViewModelFactory(AppDatabase db, int memberId){
         mDb = db;
-        mlistId = listId;
+        mMemberId = memberId;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         //noinspection unchecked
-        return (T) new InnerContributionsViewModel(mDb,mlistId);
+        return (T) new MemberContribViewModel(mDb,mMemberId);
     }
 }

@@ -24,7 +24,10 @@ public interface A_member_in_a_list_Dao {
     int[] loadAllAmountInlist(int listId);
 
     @Query("SELECT AMemberInAList.memberId, Member.name, AMemberInAList.amount FROM AMemberInAList INNER JOIN Member On AMemberInAList.memberId = Member.memberId WHERE AMemberInAList.listId = :listId")
-    LiveData<List<Contribution>> loadContributionsInList(int listId);
+    LiveData<List<ListBasedContribution>> loadContributionsInList(int listId);
+
+    @Query("SELECT AMemberInAList.listId, Alist.name, AMemberInAList.amount FROM AMemberInAList INNER JOIN Alist On AMemberInAList.listId = Alist.listId WHERE AMemberInAList.memberId = :memberId")
+    LiveData<List<MemberBasedContribution>> loadContributionOfMember(int memberId);
 
     @Query("SELECT AMemberInAList.memberId, Member.name FROM AMemberInAList INNER JOIN Member On AMemberInAList.memberId = Member.memberId WHERE AMemberInAList.listId = :listId")
     List<Member> loadMembersInList(int listId);

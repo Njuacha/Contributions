@@ -14,18 +14,18 @@ import java.util.Date;
 @Entity
 public class Alist implements Parcelable{
     @PrimaryKey(autoGenerate = true)
-    private  int id;
+    private  int listId;
     private String name;
     private Date date;
 
-    public Alist(int id, String name, Date date) {
-        this.id = id;
+    public Alist(int listId, String name, Date date) {
+        this.listId = listId;
         this.name = name;
         this.date = date;
     }
 
     Alist(Parcel in) {
-        id = in.readInt();
+        listId = in.readInt();
         name = in.readString();
         date = DateConverter.toDate(in.readLong());
     }
@@ -56,12 +56,12 @@ public class Alist implements Parcelable{
         this.date = date;
     }
 
-    public int getId() {
-        return id;
+    public int getListId() {
+        return listId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setListId(int listId) {
+        this.listId = listId;
     }
 
     public String getName() {
@@ -79,7 +79,7 @@ public class Alist implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeInt(listId);
         dest.writeString(name);
         dest.writeLong(DateConverter.toTimestamp(date));
     }
