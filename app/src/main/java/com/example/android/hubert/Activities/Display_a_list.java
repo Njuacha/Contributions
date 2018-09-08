@@ -205,7 +205,7 @@ public class Display_a_list extends AppCompatActivity implements ListContributio
             public void onChanged(@Nullable List<ListBasedContribution> listBasedContributions) {
                 mAdapter.setmListBasedContributions(listBasedContributions);
                 if ((listBasedContributions != null ? listBasedContributions.size() : 0) == 0){
-                    textView.setText(R.string.no_contributions_in_list);
+                    textView.setText(R.string.add_member_contrib);
                     textView.setVisibility(View.VISIBLE);
                     mRv.setVisibility(View.INVISIBLE);
                 }else{

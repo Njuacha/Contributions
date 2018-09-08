@@ -17,10 +17,10 @@ public interface HistoryDoa  {
    @Insert
     void insertContributionWithDate(History contribution);
 
-   @Query("SELECT * FROM History where id = :listId AND memberId = :memberId ")
+   @Query("SELECT * FROM History where listId = :listId AND memberId = :memberId ")
    LiveData<List<History>> getHistory(int listId, int memberId);
 
-   @Query("DELETE FROM History where id = :listId AND memberId = :memberId")
+   @Query("DELETE FROM History where listId = :listId AND memberId = :memberId")
    void delete(int listId, int memberId);
 
    @Update

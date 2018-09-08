@@ -219,10 +219,11 @@ public class MainActivity extends AppCompatActivity {
                             if (members.size() == 0) {
                                 recyclerView.setVisibility(View.INVISIBLE);
                                 textView.setVisibility(View.VISIBLE);
-                                textView.setText(R.string.no_list_available);
+                                textView.setText(R.string.no_members_so_add);
                             } else {
                                 recyclerView.setVisibility(View.VISIBLE);
                                 textView.setVisibility(View.INVISIBLE);
+                                textView.setText(R.string.no_members_so_add);
                                 membersAdapter.setMembers(members);
                             }
                         }
@@ -244,10 +245,11 @@ public class MainActivity extends AppCompatActivity {
                             if (lists.size() == 0) {
                                 recyclerView.setVisibility(View.INVISIBLE);
                                 textView.setVisibility(View.VISIBLE);
-                                textView.setText(R.string.no_list_available);
+                                textView.setText(R.string.no_contrib_so_add);
                             } else {
                                 recyclerView.setVisibility(View.VISIBLE);
                                 textView.setVisibility(View.INVISIBLE);
+                                textView.setText(R.string.no_contrib_so_add);
                                 contributionsAdapter.setListEntries(lists);
                             }
                         }

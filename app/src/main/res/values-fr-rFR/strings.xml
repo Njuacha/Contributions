@@ -3,7 +3,6 @@
     <string name="member_name_hint">Entrez le nom du membre</string>
     <string name="share">Partager</string>
     <string name="add_contribution_empty">Aucun membre disponible pour ajouter à la liste</string>
-    <string name="no_list_available">Aucune liste créée</string>
     <string name="name_label">Nom</string>
     <string name="amount_label">Montant</string>
     <string name="tab_text_1">Membres</string>
@@ -25,8 +24,11 @@
     <string name="edit_name">Modifier le nom</string>
     <string name="edit">Modifier</string>
     <string name="search">Chercher</string>
-    <string name="no_contributions_in_list">Aucune listBasedContribution dans la liste</string>
     <string name="create_list_dialog">Nom de la liste</string>
     <string name="ok">ok</string>
     <string name="cancel">annuler</string>
+    <string name="explain_member_no_contrib">N\'a pas encore fait de contribution</string>
+    <string name="no_members_so_add">Appuyez sur l\'icône jaune en bas à droite pour ajouter un membre</string>
+    <string name="no_contrib_so_add">Appuyez sur l\'icône jaune en bas à droite pour créer une liste de contribution.</string>
+    <string name="add_member_contrib">Appuyez sur l\'icône jaune en bas à droite pour enregistrer la contribution d\'un membre</string>
 </resources>

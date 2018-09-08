@@ -8,7 +8,6 @@
     <string name="authority" translatable="false">com.example.android.hubert.fileProvider</string>
     <string name="share">Share</string>
     <string name="add_contribution_empty">No members available to add to list</string>
-    <string name="no_list_available">No list created</string>
     <string name="name_label">Name</string>
     <string name="amount_label">Amount</string>
     <string name="title_activity_main" translatable="false">MainActivity</string>
@@ -36,8 +35,11 @@
     <string name="edit_name">Edit name</string>
     <string name="edit">Edit</string>
     <string name="search">Search</string>
-    <string name="no_contributions_in_list">No listBasedContributions in list</string>
     <string name="create_list_dialog">Name of list</string>
     <string name="ok">ok</string>
     <string name="cancel">cancel</string>
+    <string name="explain_member_no_contrib">Has not yet made any contribution</string>
+    <string name="no_members_so_add">Tap on the yellow icon at the bottom right to add a member</string>
+    <string name="no_contrib_so_add">Tap on the yellow icon at the bottom right  to create a contribution list</string>
+    <string name="add_member_contrib">Tap on the yellow icon at the bottom right  to register a member\'s contribution</string>
 </resources>

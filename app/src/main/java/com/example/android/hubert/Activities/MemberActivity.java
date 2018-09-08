@@ -11,6 +11,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.android.hubert.Adapters.MemberContributionsAdapter;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
@@ -29,6 +31,7 @@ public class MemberActivity extends AppCompatActivity {
     Member mMember;
     MemberContributionsAdapter mAdapter;
     RecyclerView mRv;
+    TextView mTvEmty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class MemberActivity extends AppCompatActivity {
         mDb = AppDatabase.getDatabaseInstance(this);
         mAdapter = new MemberContributionsAdapter(this);
         mRv = findViewById(R.id.recycler_view);
+        mTvEmty = findViewById(R.id.tv_explain_emptiness);
 
         mRv.setLayoutManager(new LinearLayoutManager(this));
         mRv.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
@@ -67,10 +71,14 @@ public class MemberActivity extends AppCompatActivity {
         viewModel.getContributionsInList().observe(this, new Observer<List<MemberBasedContribution>>() {
             @Override
             public void onChanged(@Nullable List<MemberBasedContribution> memberBasedContributions) {
-                Log.d("Tag1","yes i am called");
                 mAdapter.setmMemberBasedContributions(memberBasedContributions);
-                if(memberBasedContributions != null){
-                    Log.d("Tag2",""+memberBasedContributions.size());
+                if(memberBasedContributions != null && memberBasedContributions.size()>0){
+                    mRv.setVisibility(View.VISIBLE);
+                    mTvEmty.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    mRv.setVisibility(View.INVISIBLE);
+                    mTvEmty.setVisibility(View.VISIBLE);
                 }
             }
         });

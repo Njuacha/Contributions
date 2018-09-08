@@ -11,6 +11,7 @@
 </android.support.v7.widget.RecyclerView>
     <TextView
         android:id="@+id/tv_explain_emptiness"
-        style="@style/ExplainEmptyStyle" />
+        style="@style/ExplainEmptyStyle"
+        android:text="@string/explain_member_no_contrib"/>
 
 </FrameLayout>
