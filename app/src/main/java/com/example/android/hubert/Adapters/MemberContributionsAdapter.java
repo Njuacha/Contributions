@@ -20,9 +20,12 @@ import java.util.List;
 public class MemberContributionsAdapter extends RecyclerView.Adapter<MemberContributionsAdapter.MContributionViewHolder> {
     private Context mContext;
     private List<MemberBasedContribution> mMemberBasedContributions;
+    private OnMemberContrClicklisteners mClicklisteners;
 
-    public MemberContributionsAdapter(Context context) {
+
+    public MemberContributionsAdapter(Context context, OnMemberContrClicklisteners clicklisteners) {
         mContext = context;
+        mClicklisteners = clicklisteners;
     }
 
     @NonNull
@@ -36,7 +39,7 @@ public class MemberContributionsAdapter extends RecyclerView.Adapter<MemberContr
     public void onBindViewHolder(@NonNull MContributionViewHolder holder, int position) {
         MemberBasedContribution contribution = mMemberBasedContributions.get(position);
         holder.tvName.setText(contribution.getName());
-        holder.tvAmount.setText(String.valueOf(contribution.getAmount()));
+        holder.tvAmount.setText(String.format("%,d",contribution.getAmount()));
     }
 
     @Override
@@ -52,7 +55,12 @@ public class MemberContributionsAdapter extends RecyclerView.Adapter<MemberContr
         notifyDataSetChanged();
     }
 
-    public class MContributionViewHolder extends RecyclerView.ViewHolder{
+    public interface OnMemberContrClicklisteners{
+        void onOptionClicked(MemberBasedContribution contrib);
+        void onMmContrbClicked(MemberBasedContribution contrib);
+    }
+
+    public class MContributionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView tvName;
         TextView tvAmount;
@@ -64,6 +72,20 @@ public class MemberContributionsAdapter extends RecyclerView.Adapter<MemberContr
             tvName = itemView.findViewById(R.id.tv_member);
             tvAmount = itemView.findViewById(R.id.tv_amount);
             tvOptions = itemView.findViewById(R.id.tv_options);
+
+            tvOptions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClicklisteners.onOptionClicked(mMemberBasedContributions.get(getAdapterPosition()));
+                }
+            });
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mClicklisteners.onMmContrbClicked(mMemberBasedContributions.get(getAdapterPosition()));
         }
     }
 }

@@ -42,10 +42,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        ActionBar actionBar = this.getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+
 
         mRv = findViewById(R.id.rv_history);
         mAdapter = new HistoryAdapter(this, this);
@@ -85,18 +82,6 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
 
 
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
-            case android.R.id.home:
-                startActivity(new Intent(this,Display_a_list.class)
-                        .putExtra(LIST_EXTRA,mAlist));
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
 
