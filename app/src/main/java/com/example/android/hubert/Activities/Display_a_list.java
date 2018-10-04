@@ -242,7 +242,7 @@ public class Display_a_list extends AppCompatActivity implements ListContributio
                     AppExecutors.getsInstance().diskIO().execute(new Runnable() {
                         @Override
                         public void run() {
-                            mDb.a_member_in_a_list_dao().deleteAContribution(mListBasedContribution.getMemberId());
+                            mDb.a_member_in_a_list_dao().deleteAContribution(mListBasedContribution.getMemberId(),mAlist.getListId());
                             mDb.historyDoa().delete(mAlist.getListId(), mListBasedContribution.getMemberId());
                         }
                     });

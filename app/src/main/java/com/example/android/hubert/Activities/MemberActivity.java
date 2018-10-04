@@ -9,12 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.android.hubert.Adapters.MemberContributionsAdapter;
+import com.example.android.hubert.AppExecutors;
 import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.DatabaseClasses.History;
@@ -29,6 +32,8 @@ import java.util.Date;
 import java.util.List;
 
 import static com.example.android.hubert.Activities.Display_a_list.EXTRA_CONTRIB;
+import static com.example.android.hubert.Activities.Display_a_list.EXTRA_LIST_ID;
+import static com.example.android.hubert.Activities.Display_a_list.EXTRA_SUB;
 import static com.example.android.hubert.Activities.MainActivity.EXTRA_MEMBER;
 import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
 
@@ -91,7 +96,45 @@ public class MemberActivity extends AppCompatActivity implements MemberContribut
     }
 
     @Override
-    public void onOptionClicked(MemberBasedContribution contrib) {
+    public void onOptionClicked(View view,final MemberBasedContribution contrib) {
+        final ListBasedContribution listBasedContribution = new ListBasedContribution(
+                                                            mMember.getMemberId()
+                                                           ,mMember.getName()
+                                                           ,contrib.getAmount());
+
+        PopupMenu popupMenu = new PopupMenu(this,view);
+        popupMenu.inflate(R.menu.add_amount);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            // Opens up the same dialog when either the add or subtract option is clicked
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                // For the case of add or subtract we open up add listBasedContribution activity
+                if( (id == R.id.action_add) || (id == R.id.action_subtract) ){
+                    Intent intent = new Intent(MemberActivity.this,Add_a_contribution.class);
+                    intent.putExtra(EXTRA_LIST_ID,contrib.getListId());
+                    intent.putExtra(EXTRA_CONTRIB, listBasedContribution);
+                    if(id == R.id.action_subtract){
+                        intent.putExtra(EXTRA_SUB,true);
+                    }
+
+                    startActivity(intent);
+
+                }else if(id == R.id.action_delete){ // For the case of delete we try to get the list Id and memberId to remove the listBasedContribution
+                    AppExecutors.getsInstance().diskIO().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDb.a_member_in_a_list_dao().deleteAContribution(listBasedContribution.getMemberId(),contrib.getListId());
+                            mDb.historyDoa().delete(contrib.getListId(), listBasedContribution.getMemberId());
+                        }
+                    });
+                }
+
+                return false;
+            }
+        });
+
+        popupMenu.show();
 
     }
 

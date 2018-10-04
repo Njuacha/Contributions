@@ -22,6 +22,6 @@
         style="@style/TextAppearance.AppCompat.Large"
         android:text="@string/add"
         android:gravity="center"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/round_edge_rect_1"
         android:onClick="add"/>
 </android.widget.LinearLayout>

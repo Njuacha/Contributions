@@ -56,7 +56,7 @@ public class MemberContributionsAdapter extends RecyclerView.Adapter<MemberContr
     }
 
     public interface OnMemberContrClicklisteners{
-        void onOptionClicked(MemberBasedContribution contrib);
+        void onOptionClicked(View view,MemberBasedContribution contrib);
         void onMmContrbClicked(MemberBasedContribution contrib);
     }
 
@@ -76,7 +76,7 @@ public class MemberContributionsAdapter extends RecyclerView.Adapter<MemberContr
             tvOptions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mClicklisteners.onOptionClicked(mMemberBasedContributions.get(getAdapterPosition()));
+                    mClicklisteners.onOptionClicked(v,mMemberBasedContributions.get(getAdapterPosition()));
                 }
             });
 

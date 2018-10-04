@@ -32,7 +32,7 @@ public interface A_member_in_a_list_Dao {
     @Query("SELECT AMemberInAList.memberId, Member.name FROM AMemberInAList INNER JOIN Member On AMemberInAList.memberId = Member.memberId WHERE AMemberInAList.listId = :listId")
     List<Member> loadMembersInList(int listId);
 
-    @Query("DELETE FROM AMemberInAList WHERE memberId = :memberId")
-    void deleteAContribution(int memberId);
+    @Query("DELETE FROM AMemberInAList WHERE memberId = :memberId AND listId = :listId")
+    void deleteAContribution(int memberId, int listId);
 
 }

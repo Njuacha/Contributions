@@ -80,8 +80,6 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
             }
         });
 
-
-
     }
 
 
