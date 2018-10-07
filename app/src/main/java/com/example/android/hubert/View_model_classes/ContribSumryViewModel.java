@@ -1,5 +1,7 @@
 package com.example.android.hubert.View_model_classes;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.example.android.hubert.AppExecutors;
@@ -21,9 +23,9 @@ public class ContribSumryViewModel extends ViewModel {
     // Date formatter
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
 
-    private final String[] summaryInfo = new String[3];
+    private MutableLiveData<String[]> summaryInfo = new MutableLiveData<>();
 
-    public ContribSumryViewModel(AppDatabase database, final Alist alist){
+    public ContribSumryViewModel(AppDatabase database, final Alist alist) {
         final AppDatabase mDb;
         mDb = database;
 
@@ -33,23 +35,27 @@ public class ContribSumryViewModel extends ViewModel {
             public void run() {
                 // Get date from list
                 Date date = alist.getDate();
-                summaryInfo[0] = dateFormat.format(date);
 
                 // Query database with listId to get amounts contributed
                 int[] amounts = mDb.a_member_in_a_list_dao().loadAllAmountInlist(alist.getListId());
                 // Iterate through the amounts to sum them all into totalAmt variable
                 int totalAmt = 0;
-                for( int amount:amounts){
-                    totalAmt+= amount;
+                for (int amount : amounts) {
+                    totalAmt += amount;
                 }
-                summaryInfo[1] =  String.valueOf(amounts.length);
-                summaryInfo[2] =  String.valueOf(totalAmt);
+
+
+                summaryInfo.postValue(new String[]{
+                        dateFormat.format(date)
+                        , String.valueOf(amounts.length)
+                        , String.valueOf(totalAmt)
+                });
             }
         });
 
     }
 
-    public String[] getSummaryInfo() {
+    public LiveData<String[]> getSummaryInfo() {
         return summaryInfo;
     }
 }
