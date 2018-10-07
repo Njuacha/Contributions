@@ -15,7 +15,7 @@ import java.util.Locale;
  * Created by hubert on 7/14/18.
  */
 
-public class SummaryViewModel extends ViewModel {
+public class ContribSumryViewModel extends ViewModel {
     // Constant for date format
     private static final String DATE_FORMAT = "dd/MM/yyy";
     // Date formatter
@@ -23,7 +23,7 @@ public class SummaryViewModel extends ViewModel {
 
     private final String[] summaryInfo = new String[3];
 
-    public SummaryViewModel(AppDatabase database, final Alist alist){
+    public ContribSumryViewModel(AppDatabase database, final Alist alist){
         final AppDatabase mDb;
         mDb = database;
 

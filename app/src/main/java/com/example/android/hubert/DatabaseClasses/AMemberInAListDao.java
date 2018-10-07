@@ -12,7 +12,7 @@ import java.util.List;
  * Created by hubert on 6/18/18.
  */
 @Dao
-public interface A_member_in_a_list_Dao {
+public interface AMemberInAListDao {
 
     @Insert
     void insert_a_member_in_a_list(AMemberInAList AMemberInA_list);
@@ -22,6 +22,9 @@ public interface A_member_in_a_list_Dao {
 
     @Query("SELECT amount FROM AMemberInAList WHERE listId = :listId")
     int[] loadAllAmountInlist(int listId);
+
+    @Query("SELECT amount FROM AMemberInAList WHERE memberId = :memberId")
+    int[] loadAllAmtOfMember(int memberId);
 
     @Query("SELECT AMemberInAList.memberId, Member.name, AMemberInAList.amount FROM AMemberInAList INNER JOIN Member On AMemberInAList.memberId = Member.memberId WHERE AMemberInAList.listId = :listId")
     LiveData<List<ListBasedContribution>> loadContributionsInList(int listId);

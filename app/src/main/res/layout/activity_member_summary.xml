@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.MemberSummaryActivity">
+
+
+    <TextView
+        android:id="@+id/tv_label_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="16dp"
+        style="@style/SummaryHeadingStyle"
+        android:text="Number of Contributions made :" />
+    <TextView
+        android:id="@+id/tv_numb_of_contrbutns"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/tv_label_1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_label_1"
+        style="@style/SummaryValuesStyle"
+        tools:text="3"/>
+    <TextView
+        android:id="@+id/tv_label_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_numb_of_contrbutns"
+        app:layout_constraintStart_toStartOf="@+id/tv_label_1"
+        style="@style/SummaryHeadingStyle"
+        android:text="Total Amount:"/>
+    <TextView
+        android:id="@+id/tv_amount_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="35,000"
+        app:layout_constraintLeft_toRightOf="@id/tv_label_2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_label_2"
+        style="@style/SummaryValuesStyle"/>
+</android.support.constraint.ConstraintLayout>

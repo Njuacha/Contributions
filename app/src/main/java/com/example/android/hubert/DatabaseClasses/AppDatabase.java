@@ -29,7 +29,7 @@ public abstract  class AppDatabase extends RoomDatabase {
     }
 
     public abstract AListDao a_list_dao();
-    public abstract A_member_in_a_list_Dao a_member_in_a_list_dao();
+    public abstract AMemberInAListDao a_member_in_a_list_dao();
     public abstract MemberDao member_dao();
     public abstract HistoryDoa historyDoa();
 

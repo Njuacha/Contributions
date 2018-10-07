@@ -11,11 +11,11 @@ import com.example.android.hubert.DatabaseClasses.AppDatabase;
  * Created by hubert on 7/14/18.
  */
 
-public class SummaryViewModelFactory extends ViewModelProvider.NewInstanceFactory {
+public class ContribSumryViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private final AppDatabase mDb;
     private final Alist mAlist;
 
-    public SummaryViewModelFactory(AppDatabase db,Alist alist){
+    public ContribSumryViewModelFactory(AppDatabase db, Alist alist){
         mDb = db;
         mAlist = alist;
     }
@@ -24,6 +24,6 @@ public class SummaryViewModelFactory extends ViewModelProvider.NewInstanceFactor
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         //noinspection unchecked
-        return (T) new SummaryViewModel(mDb,mAlist);
+        return (T) new ContribSumryViewModel(mDb,mAlist);
     }
 }

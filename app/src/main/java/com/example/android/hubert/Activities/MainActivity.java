@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.action_details:
-                            Intent showSummaryIntent = new Intent(getActivity(), SummaryActivity.class);
+                            Intent showSummaryIntent = new Intent(getActivity(), ContributionSummaryActivity.class);
                             showSummaryIntent.putExtra(LIST_EXTRA, alist);
                             startActivity(showSummaryIntent);
                             break;
@@ -315,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onMemberOptionViewClicked(final Member member, View view) {
             PopupMenu popupMenu = new PopupMenu(getContext(),view);
-            popupMenu.inflate(R.menu.member_option_menu);
+            popupMenu.inflate(R.menu.list);
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
@@ -330,6 +330,10 @@ public class MainActivity extends AppCompatActivity {
                                     mDb.member_dao().deleteMember(member);
                                 }
                             });
+                            break;
+                        case R.id.action_details:
+                            Intent intent = new Intent(getActivity(),MemberSummaryActivity.class);
+                            startActivity(intent.putExtra(EXTRA_MEMBER,member));
                             break;
                     }
                     return false;
