@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.hubert.Adapters.ContributionsAdapter;
 import com.example.android.hubert.Adapters.MembersAdapter;
@@ -33,16 +34,17 @@ import com.example.android.hubert.AppExecutors;
 import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.DatabaseClasses.Member;
-import com.example.android.hubert.DialogFragments.Listname_dialog;
+import com.example.android.hubert.DialogFragments.NameDialog;
 import com.example.android.hubert.R;
-import com.example.android.hubert.View_model_classes.ContributionsViewModel;
-import com.example.android.hubert.View_model_classes.MembersViewModel;
+import com.example.android.hubert.ViewModels.ContributionsViewModel;
+import com.example.android.hubert.ViewModels.MembersViewModel;
 
+import java.util.Date;
 import java.util.List;
 
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NameDialog.NameDialogListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -59,11 +61,14 @@ public class MainActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
     private static AppDatabase mDb;
+    private static Alist mlist;
+    private static Member mMember;
 
     public static final String LIST_EXTRA = "list";
     public static final String EXTRA_MEMBER = "member";
     int mFabState = 0;
     private FloatingActionButton mFab;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,9 +124,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // 0 stands for first page which is members page
                 if(mFabState == 0){
-                    startActivity(new Intent(MainActivity.this,AddMember.class));
+                    openNameDialog(getString(R.string.name_of_member));
                 }else if(mFabState == 1){
-                    open_edit_list_name_dialog(null);
+                    openNameDialog(getString(R.string.nameOfList));
                 }
             }
         });
@@ -152,13 +157,47 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void open_edit_list_name_dialog(Alist alist) {
+    public void openNameDialog(String title) {
 
-        Listname_dialog dialog = new Listname_dialog();
+        NameDialog dialog = new NameDialog();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(LIST_EXTRA,alist);
+        bundle.putString("title",title);
         dialog.setArguments(bundle);
         dialog.show(getSupportFragmentManager(), "edit_list_name_dialog");
+    }
+
+    @Override
+    public void onOkSelected(final String textEntered) {
+        Toast.makeText(this,textEntered,Toast.LENGTH_SHORT).show();
+        final AppDatabase db = AppDatabase.getDatabaseInstance(this);
+
+        AppExecutors.getsInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                // 0 stands for first page which is members page
+                if(mFabState == 0){
+                    if(mMember == null){
+                        db.member_dao().insertMember(new Member(textEntered));
+                        mMember = null;
+                    }else{
+                        // Set the new name to member object
+                        mMember.setName(textEntered);
+                        db.member_dao().updateMember(mMember);
+                    }
+                }else if(mFabState == 1){
+                    if (mlist == null){
+                        db.a_list_dao().insert_a_list(new Alist(textEntered,new Date()));
+                        mlist = null;
+                    }else {
+                        mlist.setName(textEntered);
+                        db.a_list_dao().update_a_list(mlist);
+                    }
+                }
+
+
+            }
+        });
     }
 
     /**
@@ -267,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onContributionListClicked(Alist a_list) {
-            Intent intent = new Intent(getActivity(), Display_a_list.class);
+            Intent intent = new Intent(getActivity(), DisplayAList.class);
             intent.putExtra(LIST_EXTRA,a_list);
             startActivity(intent);
         }
@@ -299,11 +338,13 @@ public class MainActivity extends AppCompatActivity {
                             });
                             break;
                         case R.id.action_edit:
-                            Listname_dialog dialog = new Listname_dialog();
+                            mlist = alist;
+                            NameDialog dialog = new NameDialog();
                             Bundle bundle = new Bundle();
-                            bundle.putParcelable(LIST_EXTRA,alist);
+                            bundle.putString(getString(R.string.name),alist.getName());
+                            bundle.putString(getString(R.string.dialog_title),getString(R.string.nameOfList));
                             dialog.setArguments(bundle);
-                            dialog.show(getFragmentManager(), "edit_list_name_dialog");
+                            dialog.show(getFragmentManager(), "name dialog");
                     }
                     return false;
                 }
@@ -321,7 +362,14 @@ public class MainActivity extends AppCompatActivity {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch(item.getItemId()){
                         case R.id.action_edit:
-                            startActivity(new Intent(getActivity(),AddMember.class).putExtra(EXTRA_MEMBER,member));
+                            //startActivity(new Intent(getActivity(),AddMember.class).putExtra(EXTRA_MEMBER,member));
+                            mMember = member;
+                            NameDialog dialog = new NameDialog();
+                            Bundle bundle = new Bundle();
+                            bundle.putString(getString(R.string.dialog_title),getString(R.string.name_of_member));
+                            bundle.putString(getString(R.string.name),member.getName());
+                            dialog.setArguments(bundle);
+                            dialog.show(getFragmentManager(), "name dialog");
                             break;
                         case R.id.action_delete:
                             AppExecutors.getsInstance().diskIO().execute(new Runnable() {

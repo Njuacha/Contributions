@@ -28,15 +28,15 @@ import com.example.android.hubert.AppExecutors;
 import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.DatabaseClasses.ListBasedContribution;
-import com.example.android.hubert.View_model_classes.LIstContribViewModelFactory;
-import com.example.android.hubert.View_model_classes.ListContribViewModel;
+import com.example.android.hubert.ViewModels.LIstContribViewModelFactory;
+import com.example.android.hubert.ViewModels.ListContribViewModel;
 import com.example.android.hubert.R;
 
 import java.util.List;
 
 import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
 
-public class Display_a_list extends AppCompatActivity implements ListContributionsAdapter.OnCLickListeners{
+public class DisplayAList extends AppCompatActivity implements ListContributionsAdapter.OnCLickListeners{
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 2;
     public static final String EXTRA_LIST_ID = "list Id";
     public static final String EXTRA_CONTRIB = "contribution";
@@ -70,7 +70,7 @@ public class Display_a_list extends AppCompatActivity implements ListContributio
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent addIntent = new Intent(Display_a_list.this,Add_a_contribution.class);
+                Intent addIntent = new Intent(DisplayAList.this,Add_a_contribution.class);
                 addIntent.putExtra(LIST_EXTRA,mAlist);
                 startActivity(addIntent);
             }
@@ -229,7 +229,7 @@ public class Display_a_list extends AppCompatActivity implements ListContributio
                 int id = item.getItemId();
                // For the case of add or subtract we open up add listBasedContribution activity
                 if( (id == R.id.action_add) || (id == R.id.action_subtract) ){
-                    Intent intent = new Intent(Display_a_list.this,Add_a_contribution.class);
+                    Intent intent = new Intent(DisplayAList.this,Add_a_contribution.class);
                     intent.putExtra(EXTRA_LIST_ID,mAlist.getListId());
                     intent.putExtra(EXTRA_CONTRIB, listBasedContribution);
                     if(id == R.id.action_subtract){

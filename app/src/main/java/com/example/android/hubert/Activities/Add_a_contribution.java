@@ -24,17 +24,17 @@ import com.example.android.hubert.DatabaseClasses.History;
 import com.example.android.hubert.DatabaseClasses.Member;
 import com.example.android.hubert.DialogFragments.DatePickerFragment;
 import com.example.android.hubert.R;
-import com.example.android.hubert.View_model_classes.AddContribViewModelFactory;
-import com.example.android.hubert.View_model_classes.AddContributionViewModel;
+import com.example.android.hubert.ViewModels.AddContribViewModelFactory;
+import com.example.android.hubert.ViewModels.AddContributionViewModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 
-import static com.example.android.hubert.Activities.Display_a_list.EXTRA_CONTRIB;
-import static com.example.android.hubert.Activities.Display_a_list.EXTRA_LIST_ID;
-import static com.example.android.hubert.Activities.Display_a_list.EXTRA_SUB;
+import static com.example.android.hubert.Activities.DisplayAList.EXTRA_CONTRIB;
+import static com.example.android.hubert.Activities.DisplayAList.EXTRA_LIST_ID;
+import static com.example.android.hubert.Activities.DisplayAList.EXTRA_SUB;
 import static com.example.android.hubert.Activities.HistoryActivity.EXTRA_HISTORY;
 import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
 

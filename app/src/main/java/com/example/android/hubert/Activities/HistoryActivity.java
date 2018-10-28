@@ -4,7 +4,6 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -22,12 +21,12 @@ import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.DatabaseClasses.ListBasedContribution;
 import com.example.android.hubert.DatabaseClasses.History;
 import com.example.android.hubert.R;
-import com.example.android.hubert.View_model_classes.HistViewModel;
-import com.example.android.hubert.View_model_classes.HistViewModelFactory;
+import com.example.android.hubert.ViewModels.HistViewModel;
+import com.example.android.hubert.ViewModels.HistViewModelFactory;
 
 import java.util.List;
 
-import static com.example.android.hubert.Activities.Display_a_list.EXTRA_CONTRIB;
+import static com.example.android.hubert.Activities.DisplayAList.EXTRA_CONTRIB;
 import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
 
 public class HistoryActivity extends AppCompatActivity implements HistoryAdapter.ItemClickListeners {

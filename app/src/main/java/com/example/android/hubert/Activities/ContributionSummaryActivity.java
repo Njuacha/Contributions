@@ -9,12 +9,11 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 
-import com.example.android.hubert.AppExecutors;
 import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.R;
-import com.example.android.hubert.View_model_classes.ContribSumryViewModel;
-import com.example.android.hubert.View_model_classes.ContribSumryViewModelFactory;
+import com.example.android.hubert.ViewModels.ContribSumryViewModel;
+import com.example.android.hubert.ViewModels.ContribSumryViewModelFactory;
 
 import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
 

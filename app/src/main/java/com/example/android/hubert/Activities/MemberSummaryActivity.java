@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.DatabaseClasses.Member;
 import com.example.android.hubert.R;
-import com.example.android.hubert.View_model_classes.MembSumryViewModel;
-import com.example.android.hubert.View_model_classes.MembSumryViewModelFactory;
+import com.example.android.hubert.ViewModels.MembSumryViewModel;
+import com.example.android.hubert.ViewModels.MembSumryViewModelFactory;
 
 import static com.example.android.hubert.Activities.MainActivity.EXTRA_MEMBER;
 

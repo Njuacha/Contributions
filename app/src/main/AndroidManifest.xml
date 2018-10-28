@@ -32,7 +32,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.Display_a_list"
+            android:name=".Activities.DisplayAList"
             android:label="@string/title_activity_display_a_list"
             android:parentActivityName=".Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -43,7 +43,6 @@
         <activity
             android:name=".Activities.Add_a_contribution"
             android:label="@string/title_activity_add_a_contribution" />
-        <activity android:name=".Activities.AddMember" />
         <activity
             android:name=".Activities.ContributionSummaryActivity"
             android:parentActivityName=".Activities.MainActivity">

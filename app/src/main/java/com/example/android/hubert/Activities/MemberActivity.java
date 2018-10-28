@@ -11,7 +11,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -20,20 +19,19 @@ import com.example.android.hubert.Adapters.MemberContributionsAdapter;
 import com.example.android.hubert.AppExecutors;
 import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
-import com.example.android.hubert.DatabaseClasses.History;
 import com.example.android.hubert.DatabaseClasses.ListBasedContribution;
 import com.example.android.hubert.DatabaseClasses.Member;
 import com.example.android.hubert.DatabaseClasses.MemberBasedContribution;
 import com.example.android.hubert.R;
-import com.example.android.hubert.View_model_classes.MemberContribViewModel;
-import com.example.android.hubert.View_model_classes.MemberContribViewModelFactory;
+import com.example.android.hubert.ViewModels.MemberContribViewModel;
+import com.example.android.hubert.ViewModels.MemberContribViewModelFactory;
 
 import java.util.Date;
 import java.util.List;
 
-import static com.example.android.hubert.Activities.Display_a_list.EXTRA_CONTRIB;
-import static com.example.android.hubert.Activities.Display_a_list.EXTRA_LIST_ID;
-import static com.example.android.hubert.Activities.Display_a_list.EXTRA_SUB;
+import static com.example.android.hubert.Activities.DisplayAList.EXTRA_CONTRIB;
+import static com.example.android.hubert.Activities.DisplayAList.EXTRA_LIST_ID;
+import static com.example.android.hubert.Activities.DisplayAList.EXTRA_SUB;
 import static com.example.android.hubert.Activities.MainActivity.EXTRA_MEMBER;
 import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
 
