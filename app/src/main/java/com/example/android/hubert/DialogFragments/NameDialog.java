@@ -28,7 +28,6 @@ import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
 
 public class NameDialog extends DialogFragment {
 
-    private AppDatabase mdb;
     private String name;
     private EditText editText;
     private NameDialogListener nameDialogListener;
@@ -50,9 +49,8 @@ public class NameDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        String title = getArguments().getString(getString(R.string.dialog_title));
 
-        mdb = AppDatabase.getDatabaseInstance(getContext()); // instantiate database
+        String title = getArguments().getString(getString(R.string.dialog_title));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -67,7 +65,10 @@ public class NameDialog extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String listName = editText.getText().toString();
-                nameDialogListener.onOkSelected(listName);
+                if (!listName.isEmpty()){
+                    nameDialogListener.onOkSelected(listName);
+                }
+
             }
         });
 
@@ -77,7 +78,8 @@ public class NameDialog extends DialogFragment {
 
             }
         });
-
+        // Get the name
+        name = getArguments().getString("name");
 
         return builder.create();
     }
@@ -87,9 +89,9 @@ public class NameDialog extends DialogFragment {
     public void onResume() {
         super.onResume();
         editText = getDialog().findViewById(R.id.et_list_name);
-
+        // If name is not null then set the name
         if( name != null){
-            editText.setText(R.string.name);
+            editText.setText(name);
         }
     }
 

@@ -62,7 +62,8 @@ public class ContributionSummaryActivity extends AppCompatActivity {
 
                 mTvDateCreated.setText(strings[0]);
                 mTvNumber.setText(strings[1]);
-                mTvTotalAmt.setText(strings[2]);
+                String amountAsString = String.format("%,d",Integer.parseInt(strings[2]));
+                mTvTotalAmt.setText(amountAsString);
             }
         });
 

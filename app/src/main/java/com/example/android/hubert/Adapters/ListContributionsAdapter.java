@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.hubert.DatabaseClasses.ListBasedContribution;
@@ -70,22 +71,22 @@ public class ListContributionsAdapter extends RecyclerView.Adapter<ListContribut
     public class A_Contribution_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final TextView tvName;
         final TextView tvAmount;
-        final TextView tvOptions;
+        final ImageView ivOptions;
         //CardView cardView;
 
         public A_Contribution_ViewHolder(View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tv_member);
             tvAmount = itemView.findViewById(R.id.tv_amount);
-            tvOptions = itemView.findViewById(R.id.tv_options);
+            ivOptions = itemView.findViewById(R.id.tv_options);
             //cardView = itemView.findViewById(R.id.cardView);
             itemView.setOnClickListener(this);
-            tvOptions.setOnClickListener(new View.OnClickListener() {
+            ivOptions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     ListBasedContribution listBasedContribution = mListBasedContributions.get(position);
-                    mOnCLickListeners.onOptionTextViewClicked(listBasedContribution,tvOptions);
+                    mOnCLickListeners.onOptionTextViewClicked(listBasedContribution, ivOptions);
                 }
             });
         }

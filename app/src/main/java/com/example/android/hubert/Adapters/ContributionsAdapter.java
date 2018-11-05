@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.hubert.DatabaseClasses.Alist;
@@ -61,21 +62,21 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
     public class A_list_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         final TextView tvListName;
-        final TextView tvOptions;
+        final ImageView ivOptions;
 
         public A_list_ViewHolder(View itemView) {
             super(itemView);
             tvListName = itemView.findViewById(R.id.tv_list_name);
-            tvOptions = itemView.findViewById(R.id.tv_options);
+            ivOptions = itemView.findViewById(R.id.tv_options);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
 
-            tvOptions.setOnClickListener(new View.OnClickListener() {
+            ivOptions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     Alist aList = mListEntries.get(position);
-                    mItemClickListeners.onContributionOptionViewClicked(aList,tvOptions);
+                    mItemClickListeners.onContributionOptionViewClicked(aList, ivOptions);
                 }
             });
         }

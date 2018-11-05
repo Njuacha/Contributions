@@ -3,11 +3,14 @@ package com.example.android.hubert.Activities;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -68,6 +71,7 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
         getListIdAndNameFromIntent();
         Intent intent  = getIntent();
 
+
         if (intent.hasExtra(EXTRA_LIST_ID) && intent.hasExtra(EXTRA_CONTRIB)){ // This is the case of Adding a new ListBasedContribution on an already existing one
             listId = intent.getIntExtra(EXTRA_LIST_ID,0);
             mListBasedContribution = intent.getParcelableExtra(EXTRA_CONTRIB);
@@ -85,6 +89,7 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
             setUpViewModel();
         }
 
+
     }
 
     // This is called to populate the UI with name, date, amount button name(can be add or subtract)
@@ -99,8 +104,11 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
         members.add(new Member(history.getMemberId()
                 , mListBasedContribution.getName()));
 
-        memberSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext()
-                , android.R.layout.simple_spinner_item, members));
+        ArrayAdapter arrayAdapter = new ArrayAdapter<Member>(this
+                , android.R.layout.simple_spinner_item, members);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        memberSpinner.setAdapter(arrayAdapter);
 
         tv_date.setText(history.getDate());
 
@@ -130,8 +138,11 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
         members.add(new Member(mListBasedContribution.getMemberId()
                 , mListBasedContribution.getName()));
 
-        memberSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext()
-                , android.R.layout.simple_spinner_item, members));
+        ArrayAdapter arrayAdapter = new ArrayAdapter<Member>(this
+                , android.R.layout.simple_spinner_item, members);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        memberSpinner.setAdapter(arrayAdapter);
 
         if (isSubtact){
             this.isSubtract = isSubtact;
@@ -178,7 +189,7 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
         final String amt = et_amount.getText().toString();
         // If the user doesn't enter an amount then the return false after showing a toast
         if (TextUtils.isEmpty(amt)) {
-            Toast.makeText(this, "Enter an amount", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.enter_an_amount, Toast.LENGTH_SHORT).show();
             return;
         }
 

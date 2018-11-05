@@ -88,7 +88,10 @@ public class DisplayAList extends AppCompatActivity implements ListContributions
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         String share = getResources().getString(R.string.share);
-        menu.add(0,1,1,share);
+        menu.add(0,1,1,share)
+                .setIcon(R.drawable.ic_action_share)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
         return true;
     }
 

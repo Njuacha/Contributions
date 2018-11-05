@@ -53,7 +53,7 @@ public class MemberSummaryActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable int[] ints) {
                 mTvNumbOfContrib.setText(String.valueOf(ints[0]));
-                mTvAmount.setText(String.valueOf(ints[1]));
+                mTvAmount.setText(String.format("%,d",ints[1]));
             }
         });
     }

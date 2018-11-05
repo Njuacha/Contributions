@@ -27,16 +27,14 @@
                 android:textColor="@android:color/primary_text_light"
                 android:layout_marginEnd="8dp" />
 
-            <TextView
+            <ImageView
                 android:id="@+id/tv_options"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:layout_constraintRight_toRightOf="parent"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:text="@string/options_text"
-                android:textColor="@android:color/primary_text_light"
-                style="@style/TextAppearance.AppCompat.Medium" />
+                android:src="@drawable/ic_action_more_options" />
 
         </android.support.constraint.ConstraintLayout>
 

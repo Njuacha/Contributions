@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.hubert.DatabaseClasses.Member;
@@ -62,20 +63,20 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberVi
     public class MemberViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         final TextView memberTv;
-        final TextView tvOptions;
+        final ImageView ivOptions;
 
         public MemberViewHolder(View itemView) {
             super(itemView);
             memberTv = itemView.findViewById(R.id.tv_list_name);
-            tvOptions = itemView.findViewById(R.id.tv_options);
+            ivOptions = itemView.findViewById(R.id.tv_options);
 
             itemView.setOnClickListener(this);
 
-            tvOptions.setOnClickListener(new View.OnClickListener() {
+            ivOptions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // Parse the member when the option view is clicked
-                    itemClickListeners.onMemberOptionViewClicked(mMemberList.get(getAdapterPosition()), tvOptions);
+                    itemClickListeners.onMemberOptionViewClicked(mMemberList.get(getAdapterPosition()), ivOptions);
                 }
             });
         }

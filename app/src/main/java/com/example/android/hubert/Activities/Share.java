@@ -39,7 +39,7 @@ class Share  {
 
     private void createFile(){
         try{
-            File root = new File(Environment.getExternalStorageDirectory(),"NkapJik");
+            File root = new File(Environment.getExternalStorageDirectory(),"Contributions");
             if(!root.exists()){
                 root.mkdir();
             }

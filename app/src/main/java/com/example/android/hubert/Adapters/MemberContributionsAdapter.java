@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.hubert.DatabaseClasses.MemberBasedContribution;
@@ -64,16 +65,16 @@ public class MemberContributionsAdapter extends RecyclerView.Adapter<MemberContr
 
         TextView tvName;
         TextView tvAmount;
-        TextView tvOptions;
+        ImageView ivOptions;
 
         public MContributionViewHolder(View itemView) {
             super(itemView);
 
             tvName = itemView.findViewById(R.id.tv_member);
             tvAmount = itemView.findViewById(R.id.tv_amount);
-            tvOptions = itemView.findViewById(R.id.tv_options);
+            ivOptions = itemView.findViewById(R.id.tv_options);
 
-            tvOptions.setOnClickListener(new View.OnClickListener() {
+            ivOptions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mClicklisteners.onOptionClicked(v,mMemberBasedContributions.get(getAdapterPosition()));

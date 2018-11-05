@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.hubert.DatabaseClasses.History;
@@ -59,16 +60,16 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     public class HistoryViewHolder extends RecyclerView.ViewHolder {
         final TextView dateTv;
         final TextView amountTv;
-        final TextView optionsTv;
+        final ImageView optionsIv;
 
         public HistoryViewHolder(View itemView) {
             super(itemView);
 
             dateTv = itemView.findViewById(R.id.tv_member);
             amountTv = itemView.findViewById(R.id.tv_amount);
-            optionsTv = itemView.findViewById(R.id.tv_options);
+            optionsIv = itemView.findViewById(R.id.tv_options);
 
-            optionsTv.setOnClickListener(new View.OnClickListener() {
+            optionsIv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mItemClickListeners.onOptionViewClicked(mHistoryList.get(getAdapterPosition()), v);

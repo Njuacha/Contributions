@@ -85,7 +85,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
     @Override
     public void onOptionViewClicked(final History history, View view) {
         PopupMenu popupMenu = new PopupMenu(this,view);
-        popupMenu.inflate(R.menu.member_option_menu);
+        popupMenu.inflate(R.menu.history_menu);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

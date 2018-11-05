@@ -168,7 +168,6 @@ public class MainActivity extends AppCompatActivity implements NameDialog.NameDi
 
     @Override
     public void onOkSelected(final String textEntered) {
-        Toast.makeText(this,textEntered,Toast.LENGTH_SHORT).show();
         final AppDatabase db = AppDatabase.getDatabaseInstance(this);
 
         AppExecutors.getsInstance().diskIO().execute(new Runnable() {
