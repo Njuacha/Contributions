@@ -27,7 +27,7 @@ import com.example.android.hubert.ViewModels.HistViewModelFactory;
 import java.util.List;
 
 import static com.example.android.hubert.Activities.DisplayAList.EXTRA_CONTRIB;
-import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
+import static com.example.android.hubert.PlaceholderFragment.LIST_EXTRA;
 
 public class HistoryActivity extends AppCompatActivity implements HistoryAdapter.ItemClickListeners {
     public static final String EXTRA_HISTORY = "history extra";

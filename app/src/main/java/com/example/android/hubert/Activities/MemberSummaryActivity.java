@@ -15,7 +15,8 @@ import com.example.android.hubert.R;
 import com.example.android.hubert.ViewModels.MembSumryViewModel;
 import com.example.android.hubert.ViewModels.MembSumryViewModelFactory;
 
-import static com.example.android.hubert.Activities.MainActivity.EXTRA_MEMBER;
+import static com.example.android.hubert.PlaceholderFragment.EXTRA_MEMBER;
+
 
 public class MemberSummaryActivity extends AppCompatActivity {
 

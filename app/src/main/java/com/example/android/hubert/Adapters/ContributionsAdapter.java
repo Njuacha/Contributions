@@ -54,12 +54,11 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
 
     public interface ItemClickListeners {
         void onContributionListClicked(Alist a_list);
-        void onContributionListLongClicked(int itemId, String name);
         void onContributionOptionViewClicked(Alist alist, View view);
     }
 
 
-    public class A_list_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+    public class A_list_ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         final TextView tvListName;
         final ImageView ivOptions;
@@ -69,7 +68,6 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
             tvListName = itemView.findViewById(R.id.tv_list_name);
             ivOptions = itemView.findViewById(R.id.tv_options);
             itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
 
             ivOptions.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -88,15 +86,6 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
             mItemClickListeners.onContributionListClicked(aList);
         }
 
-        @Override
-        public boolean onLongClick(View v) {
-            int position = getAdapterPosition();
-            Alist aList = mListEntries.get(position);
-            int itemId = aList.getListId();
-            String name = aList.getName();
-            mItemClickListeners.onContributionListLongClicked(itemId, name);
-            return true;
-        }
 
 
     }

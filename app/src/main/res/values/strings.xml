@@ -43,6 +43,5 @@
     <string name="no_contrib_so_add">Tap on the yellow icon at the bottom right  to create a contribution list</string>
     <string name="add_member_contrib">Tap on the yellow icon at the bottom right  to register a member\'s contribution</string>
     <string name="name_of_member">Name of Member</string>
-    <string name="dialog_title" translatable="false">title</string>
     <string name="name" translatable="false">name</string>
 </resources>

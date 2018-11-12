@@ -39,7 +39,7 @@ import static com.example.android.hubert.Activities.DisplayAList.EXTRA_CONTRIB;
 import static com.example.android.hubert.Activities.DisplayAList.EXTRA_LIST_ID;
 import static com.example.android.hubert.Activities.DisplayAList.EXTRA_SUB;
 import static com.example.android.hubert.Activities.HistoryActivity.EXTRA_HISTORY;
-import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
+import static com.example.android.hubert.PlaceholderFragment.LIST_EXTRA;
 
 public class Add_a_contribution extends AppCompatActivity implements DatePickerFragment.DateSetListener {
 

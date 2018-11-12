@@ -32,8 +32,8 @@ import java.util.List;
 import static com.example.android.hubert.Activities.DisplayAList.EXTRA_CONTRIB;
 import static com.example.android.hubert.Activities.DisplayAList.EXTRA_LIST_ID;
 import static com.example.android.hubert.Activities.DisplayAList.EXTRA_SUB;
-import static com.example.android.hubert.Activities.MainActivity.EXTRA_MEMBER;
-import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
+import static com.example.android.hubert.PlaceholderFragment.EXTRA_MEMBER;
+import static com.example.android.hubert.PlaceholderFragment.LIST_EXTRA;
 
 public class MemberActivity extends AppCompatActivity implements MemberContributionsAdapter.OnMemberContrClicklisteners {
     AppDatabase mDb;

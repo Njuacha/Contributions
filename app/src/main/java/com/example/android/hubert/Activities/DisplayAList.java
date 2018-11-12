@@ -34,7 +34,8 @@ import com.example.android.hubert.R;
 
 import java.util.List;
 
-import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
+import static com.example.android.hubert.PlaceholderFragment.LIST_EXTRA;
+
 
 public class DisplayAList extends AppCompatActivity implements ListContributionsAdapter.OnCLickListeners{
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 2;

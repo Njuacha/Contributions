@@ -15,7 +15,7 @@ import com.example.android.hubert.R;
 import com.example.android.hubert.ViewModels.ContribSumryViewModel;
 import com.example.android.hubert.ViewModels.ContribSumryViewModelFactory;
 
-import static com.example.android.hubert.Activities.MainActivity.LIST_EXTRA;
+import static com.example.android.hubert.PlaceholderFragment.LIST_EXTRA;
 
 
 public class ContributionSummaryActivity extends AppCompatActivity {
