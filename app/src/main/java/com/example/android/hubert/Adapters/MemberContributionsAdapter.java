@@ -19,9 +19,9 @@ import java.util.List;
  */
 
 public class MemberContributionsAdapter extends RecyclerView.Adapter<MemberContributionsAdapter.MContributionViewHolder> {
-    private Context mContext;
+    private final Context mContext;
     private List<MemberBasedContribution> mMemberBasedContributions;
-    private OnMemberContrClicklisteners mClicklisteners;
+    private final OnMemberContrClicklisteners mClicklisteners;
 
 
     public MemberContributionsAdapter(Context context, OnMemberContrClicklisteners clicklisteners) {
@@ -63,11 +63,11 @@ public class MemberContributionsAdapter extends RecyclerView.Adapter<MemberContr
 
     public class MContributionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        TextView tvName;
-        TextView tvAmount;
-        ImageView ivOptions;
+        final TextView tvName;
+        final TextView tvAmount;
+        final ImageView ivOptions;
 
-        public MContributionViewHolder(View itemView) {
+        MContributionViewHolder(View itemView) {
             super(itemView);
 
             tvName = itemView.findViewById(R.id.tv_member);

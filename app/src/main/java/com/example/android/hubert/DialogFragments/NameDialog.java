@@ -107,11 +107,11 @@ public class NameDialog extends DialogFragment {
                     }
                 }else if(tab.equals(CONTRIBUTIONS_TAB)){
                     if (editItem == null){
-                        db.a_list_dao().insert_a_list(new Alist(textEntered,new Date()));
+                        db.a_list_dao().insertAList(new Alist(textEntered,new Date()));
                     }else{
                         Alist alist = (Alist)editItem;
                         alist.setName(textEntered);
-                        db.a_list_dao().update_a_list(alist);
+                        db.a_list_dao().updateAList(alist);
 
                     }
                 }

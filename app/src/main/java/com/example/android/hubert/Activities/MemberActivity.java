@@ -36,11 +36,11 @@ import static com.example.android.hubert.PlaceholderFragment.EXTRA_MEMBER;
 import static com.example.android.hubert.PlaceholderFragment.LIST_EXTRA;
 
 public class MemberActivity extends AppCompatActivity implements MemberContributionsAdapter.OnMemberContrClicklisteners {
-    AppDatabase mDb;
-    Member mMember;
-    MemberContributionsAdapter mAdapter;
-    RecyclerView mRv;
-    TextView mTvEmty;
+    private AppDatabase mDb;
+    private Member mMember;
+    private MemberContributionsAdapter mAdapter;
+    private RecyclerView mRv;
+    private TextView mTvEmty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -91,7 +91,7 @@ public class DisplayAList extends AppCompatActivity implements ListContributions
         String share = getResources().getString(R.string.share);
         menu.add(0,1,1,share)
                 .setIcon(R.drawable.ic_action_share)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
         return true;
     }
@@ -146,7 +146,6 @@ public class DisplayAList extends AppCompatActivity implements ListContributions
                     Toast.makeText(this,"Cann't share until you grant permission to write to external storage"
                             ,Toast.LENGTH_LONG).show();
                 }
-                return;
             }
             // other 'case' lines to check for other
             // permissions this app might request.

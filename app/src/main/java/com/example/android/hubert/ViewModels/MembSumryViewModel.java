@@ -8,7 +8,7 @@ import com.example.android.hubert.AppExecutors;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 
 public class MembSumryViewModel extends ViewModel {
-    MutableLiveData<int[]> summaryInfo = new MutableLiveData<>() ;
+    private final MutableLiveData<int[]> summaryInfo = new MutableLiveData<>() ;
 
     public MembSumryViewModel(final AppDatabase db, final int membId){
 

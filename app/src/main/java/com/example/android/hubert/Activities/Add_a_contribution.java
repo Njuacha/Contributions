@@ -3,14 +3,11 @@ package com.example.android.hubert.Activities;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -104,7 +101,7 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
         members.add(new Member(history.getMemberId()
                 , mListBasedContribution.getName()));
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter<Member>(this
+        ArrayAdapter arrayAdapter = new ArrayAdapter<>(this
                 , android.R.layout.simple_spinner_item, members);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -138,7 +135,7 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
         members.add(new Member(mListBasedContribution.getMemberId()
                 , mListBasedContribution.getName()));
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter<Member>(this
+        ArrayAdapter arrayAdapter = new ArrayAdapter<>(this
                 , android.R.layout.simple_spinner_item, members);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -147,7 +144,6 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
         if (isSubtact){
             this.isSubtract = isSubtact;
             button.setText(R.string.subtract);
-
         }
 
 
@@ -201,7 +197,7 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
                 Member member = (Member) memberSpinner.getSelectedItem();
                 int memberId = member.getMemberId();            // Get the memberId
                 String date = tv_date.getText().toString();     // Get the date
-                int amount = Integer.parseInt(amt.toString());  // Get the amount
+                int amount = Integer.parseInt(amt);  // Get the amount
                 int amt = isSubtract?-amount:amount;            // Get amount to be added or subtracted
 
                 switch (mAction){

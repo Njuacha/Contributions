@@ -9,9 +9,9 @@ import android.os.Parcelable;
 
 public class MemberBasedContribution implements Parcelable{
 
-    int listId;
-    String name;
-    int amount;
+    private final int listId;
+    private final String name;
+    private final int amount;
 
     public MemberBasedContribution(int listId, String name, int amount) {
         this.listId = listId;

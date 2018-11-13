@@ -21,9 +21,9 @@ public class ContribSumryViewModel extends ViewModel {
     // Constant for date format
     private static final String DATE_FORMAT = "dd/MM/yyy";
     // Date formatter
-    public static final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
 
-    private MutableLiveData<String[]> summaryInfo = new MutableLiveData<>();
+    private final MutableLiveData<String[]> summaryInfo = new MutableLiveData<>();
 
     public ContribSumryViewModel(AppDatabase database, final Alist alist) {
         final AppDatabase mDb;

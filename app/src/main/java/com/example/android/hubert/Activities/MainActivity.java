@@ -4,14 +4,10 @@ import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 
@@ -25,21 +21,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String MEMBERS_TAB = "members tab";
     public static final String CONTRIBUTIONS_TAB = "contritutions tab";
     public static final String EXTRA_TAB = "tab";
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
-    private int mFabState = 0;
+    public static int mFabState = 0;
     private FloatingActionButton mFab;
 
 
@@ -53,10 +36,21 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the two
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        /*
+      The {@link android.support.v4.view.PagerAdapter} that will provide
+      fragments for each of the sections. We use a
+      {@link FragmentPagerAdapter} derivative, which will keep every
+      loaded fragment in memory. If this becomes too memory intensive, it
+      may be best to switch to a
+      {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = findViewById(R.id.container);
+        /*
+      The {@link ViewPager} that will host the section contents.
+     */
+        ViewPager mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = findViewById(R.id.tabs);
@@ -107,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void openNameDialog(String tab) {
+    private void openNameDialog(String tab) {
 
         NameDialog dialog = new NameDialog();
         Bundle bundle = new Bundle();
@@ -116,10 +110,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show(getSupportFragmentManager(), "edit_list_name_dialog");
     }
 
-    public interface SearchListener{
-        void onSearchTyped(String query);
-        void onSearchClosed();
-    }
+
 
 
 }

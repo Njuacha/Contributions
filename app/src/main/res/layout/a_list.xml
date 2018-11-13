@@ -51,7 +51,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_amount"
             app:layout_constraintBottom_toBottomOf="@+id/tv_amount"
-            />
+            android:contentDescription="@string/options" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline"

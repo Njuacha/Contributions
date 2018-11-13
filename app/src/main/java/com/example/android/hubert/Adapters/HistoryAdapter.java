@@ -62,7 +62,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         final TextView amountTv;
         final ImageView optionsIv;
 
-        public HistoryViewHolder(View itemView) {
+        HistoryViewHolder(View itemView) {
             super(itemView);
 
             dateTv = itemView.findViewById(R.id.tv_member);

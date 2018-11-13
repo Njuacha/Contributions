@@ -74,7 +74,7 @@ public class ListContributionsAdapter extends RecyclerView.Adapter<ListContribut
         final ImageView ivOptions;
         //CardView cardView;
 
-        public A_Contribution_ViewHolder(View itemView) {
+        A_Contribution_ViewHolder(View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tv_member);
             tvAmount = itemView.findViewById(R.id.tv_amount);

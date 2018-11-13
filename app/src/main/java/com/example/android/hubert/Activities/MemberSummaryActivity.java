@@ -41,6 +41,7 @@ public class MemberSummaryActivity extends AppCompatActivity {
         if (intent.hasExtra(EXTRA_MEMBER)){
             mMember = intent.getParcelableExtra(EXTRA_MEMBER);
             setUpViewModel();
+            setTitle(mMember.getName());
         }
 
     }

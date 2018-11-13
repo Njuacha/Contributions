@@ -23,7 +23,7 @@ public class ContributionsViewModel extends AndroidViewModel {
         super(application);
         AppDatabase mdb = AppDatabase.getDatabaseInstance(this.getApplication());
         Log.d(TAG, "Actively retreiving all listNames from database");
-        lists = mdb.a_list_dao().load_all_list_names();
+        lists = mdb.a_list_dao().loadAllListNames();
     }
 
     public LiveData<List<Alist>> getLists() {

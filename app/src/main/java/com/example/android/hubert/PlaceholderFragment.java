@@ -3,6 +3,7 @@ package com.example.android.hubert;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -34,13 +35,14 @@ import com.example.android.hubert.DialogFragments.NameDialog;
 import com.example.android.hubert.ViewModels.ContributionsViewModel;
 import com.example.android.hubert.ViewModels.MembersViewModel;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 import static com.example.android.hubert.Activities.MainActivity.CONTRIBUTIONS_TAB;
 import static com.example.android.hubert.Activities.MainActivity.EXTRA_TAB;
 import static com.example.android.hubert.Activities.MainActivity.MEMBERS_TAB;
+import static com.example.android.hubert.Activities.MainActivity.mFabState;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -58,8 +60,9 @@ public class PlaceholderFragment extends Fragment implements ContributionsAdapte
     public static final String EXTRA_MEMBER = "member";
     private static AppDatabase mDb;
 
+    private MembersAdapter mMembersAdapter;
+    private ContributionsAdapter mContributionsAdapter;
 
-    public static int sectionNumb;
 
     public PlaceholderFragment() {
     }
@@ -90,19 +93,23 @@ public class PlaceholderFragment extends Fragment implements ContributionsAdapte
         // Set the layout of the recycler view to be a linear la
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         // Declare, instantiate and a divider that would separate items in recycler view
-        DividerItemDecoration decoration = new DividerItemDecoration(getContext().getApplicationContext(), VERTICAL);
+        DividerItemDecoration decoration = new DividerItemDecoration(getContext(), VERTICAL);
         recyclerView.addItemDecoration(decoration);
         // Get the section number
-        sectionNumb = getArguments().getInt(ARG_SECTION_NUMBER);
+        int sectionNumb = getArguments().getInt(ARG_SECTION_NUMBER);
         // Use sectionNumb in a switch
+        // Instantiate Members Adapter
+        mMembersAdapter = new MembersAdapter(getContext(), this);
+        // Instantiate Contributions Adapter
+        mContributionsAdapter = new ContributionsAdapter(getContext(), this);
+
         switch (sectionNumb) {
             case MEMBERS_SECTION:
-                // Declare and instantiate Members Adapter
-                final MembersAdapter membersAdapter = new MembersAdapter(getContext(), this);
-                recyclerView.setAdapter(membersAdapter);
+
+                recyclerView.setAdapter(mMembersAdapter);
                 // Instantiates view model which provides list of members data
-                MembersViewModel membView_model = ViewModelProviders.of(this).get(MembersViewModel.class);
-                membView_model.getMembers().observe(this, new Observer<List<Member>>() {
+                MembersViewModel mMembView_model = ViewModelProviders.of(this).get(MembersViewModel.class);
+                mMembView_model.getMembers().observe(this, new Observer<List<Member>>() {
                     @Override
                     public void onChanged(@Nullable List<Member> members) {
                         if (members.size() == 0) {
@@ -113,22 +120,21 @@ public class PlaceholderFragment extends Fragment implements ContributionsAdapte
                             recyclerView.setVisibility(View.VISIBLE);
                             textView.setVisibility(View.INVISIBLE);
                             textView.setText(R.string.no_members_so_add);
-                            membersAdapter.setMembers(members);
+                            mMembersAdapter.setMembers(members);
                         }
                     }
                 });
 
 
+
                 break;
             case CONTRIBUTIONS_SECTION:
 
-                // Declare and instantiate Contributions Adapter
-                final ContributionsAdapter contributionsAdapter = new ContributionsAdapter(getContext(), this);
                 // Set the adapter to the recycler view
-                recyclerView.setAdapter(contributionsAdapter);
+                recyclerView.setAdapter(mContributionsAdapter);
                 // Instantiates view model which provides list of contributions data
-                ContributionsViewModel contViewModel = ViewModelProviders.of(this).get(ContributionsViewModel.class);
-                contViewModel.getLists().observe(this, new Observer<List<Alist>>() {
+                ContributionsViewModel mContribViewModel = ViewModelProviders.of(this).get(ContributionsViewModel.class);
+                mContribViewModel.getLists().observe(this, new Observer<List<Alist>>() {
                     @Override
                     public void onChanged(@Nullable List<Alist> lists) {
                         if (lists.size() == 0) {
@@ -139,12 +145,10 @@ public class PlaceholderFragment extends Fragment implements ContributionsAdapte
                             recyclerView.setVisibility(View.VISIBLE);
                             textView.setVisibility(View.INVISIBLE);
                             textView.setText(R.string.no_contrib_so_add);
-                            contributionsAdapter.setListEntries(lists);
+                            mContributionsAdapter.setListEntries(lists);
                         }
                     }
                 });
-
-
 
 
                 break;
@@ -181,7 +185,7 @@ public class PlaceholderFragment extends Fragment implements ContributionsAdapte
                         AppExecutors.getsInstance().diskIO().execute(new Runnable() {
                             @Override
                             public void run() {
-                                mDb.a_list_dao().delete_a_list(alist.getListId());
+                                mDb.a_list_dao().deleteAList(alist.getListId());
                             }
                         });
                         break;
@@ -229,14 +233,18 @@ public class PlaceholderFragment extends Fragment implements ContributionsAdapte
         startActivity(new Intent(getActivity(),MemberActivity.class).putExtra(EXTRA_MEMBER, member));
     }
 
-    public void openNameDialog(String tab, Parcelable itemToEdit){
+    private void openNameDialog(String tab, Parcelable itemToEdit){
 
         NameDialog dialog = new NameDialog();
         Bundle bundle = new Bundle();
         bundle.putString(EXTRA_TAB,tab);
         bundle.putParcelable(EXTRA_EDIT_ITEM,itemToEdit);
         dialog.setArguments(bundle);
-        dialog.show(getFragmentManager(), "name dialog");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            dialog.show(Objects.requireNonNull(getFragmentManager()), "name dialog");
+        }else{
+            dialog.show(getFragmentManager(), "name dialog");
+        }
     }
 
     @Override
@@ -249,12 +257,26 @@ public class PlaceholderFragment extends Fragment implements ContributionsAdapte
         searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
+                if (mFabState == 0){
+                    // If there is no member yet then there is nothing to search
+                    if (mMembersAdapter.getItemCount() == 0) return false;
+                    mMembersAdapter.saveOriginalList();
+
+                }else if (mFabState == 1){
+                    // if there is no contribution yet then there is nothing to search
+                    if (mContributionsAdapter.getItemCount() == 0) return false;
+                    mContributionsAdapter.saveOriginalList();
+                }
                 return true;
             }
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-
+                if (mFabState == 0){
+                    mMembersAdapter.restoreOriginalList();
+                }else if (mFabState == 1){
+                    mContributionsAdapter.restoreOriginalList();
+                }
                 return true;
             }
         });
@@ -266,19 +288,22 @@ public class PlaceholderFragment extends Fragment implements ContributionsAdapte
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
+                Log.d("section Number",String.valueOf(mFabState));
+                if (mFabState == 0){
+                    mMembersAdapter.searchMembersStartingWith(newText);
+                }else if (mFabState == 1){
+                    mContributionsAdapter.searchListStartingWith(newText);
+                }
                 return false;
             }
         });
         super.onCreateOptionsMenu(menu, inflater);
     }
-
 
 
 

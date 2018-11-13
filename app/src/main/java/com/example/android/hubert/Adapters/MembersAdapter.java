@@ -20,6 +20,8 @@ import java.util.List;
  */
 
 public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberViewHolder> {
+
+    private List<Member> mOriginalList;
     private List<Member> mMemberList;
     private final Context mContext;
     private final ItemClickListeners itemClickListeners;
@@ -51,11 +53,6 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberVi
 
     }
 
-    public void setMembers(List<Member> members){
-        mMemberList = members;
-        notifyDataSetChanged();
-    }
-
 
     public interface ItemClickListeners{
         void onMemberOptionViewClicked(Member member, View view);
@@ -67,7 +64,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberVi
         final TextView memberTv;
         final ImageView ivOptions;
 
-        public MemberViewHolder(View itemView) {
+        MemberViewHolder(View itemView) {
             super(itemView);
             memberTv = itemView.findViewById(R.id.tv_list_name);
             ivOptions = itemView.findViewById(R.id.tv_options);
@@ -87,5 +84,34 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberVi
         public void onClick(View v) {
             itemClickListeners.onMemberClicked(mMemberList.get(getAdapterPosition()));
         }
+    }
+
+    public void setMembers(List<Member> members){
+        mMemberList = members;
+        notifyDataSetChanged();
+    }
+
+    public void searchMembersStartingWith(String text){
+        List<Member> searchResult = new ArrayList<>();
+
+        if ( mOriginalList == null) return;
+
+        for(Member member: mOriginalList){
+
+            String memberName = member.getName();
+            if(memberName.toLowerCase().startsWith(text.toLowerCase()))
+                searchResult.add(member);
+
+        }
+        setMembers(searchResult);
+    }
+
+    public void saveOriginalList(){
+        mOriginalList = mMemberList;
+    }
+
+    public void restoreOriginalList(){
+        mMemberList = mOriginalList;
+        mOriginalList = null;
     }
 }

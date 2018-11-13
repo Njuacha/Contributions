@@ -38,16 +38,14 @@ public class ContributionSummaryActivity extends AppCompatActivity {
         mTvNumber = findViewById(R.id.tv_number_value);
         mTvTotalAmt = findViewById(R.id.tv_amount_value);
 
-        getListIdAndNameFromIntent();
-        setTitle(alist.getName());
+        if (getIntent().hasExtra(LIST_EXTRA)) {
+            alist = getIntent().getParcelableExtra(LIST_EXTRA);
+            setTitle(alist.getName());
+        }
+
         setUpSummary();
     }
 
-    private void getListIdAndNameFromIntent() {
-        if (getIntent().hasExtra(LIST_EXTRA)) {
-            alist = getIntent().getParcelableExtra(LIST_EXTRA);
-        }
-    }
 
     private void setUpSummary() {
         AppDatabase mDb = AppDatabase.getDatabaseInstance(this);

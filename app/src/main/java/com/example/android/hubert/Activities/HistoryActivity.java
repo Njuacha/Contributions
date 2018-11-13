@@ -34,7 +34,6 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
     private Alist mAlist;
     private ListBasedContribution mListBasedContribution;
     private HistoryAdapter mAdapter;
-    private RecyclerView mRv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +41,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
         setContentView(R.layout.activity_history);
 
 
-
-        mRv = findViewById(R.id.rv_history);
+        RecyclerView mRv = findViewById(R.id.rv_history);
         mAdapter = new HistoryAdapter(this, this);
         mRv.setAdapter(mAdapter);
         mRv.setLayoutManager(new LinearLayoutManager(this));

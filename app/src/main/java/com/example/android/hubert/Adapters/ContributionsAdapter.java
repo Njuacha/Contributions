@@ -13,6 +13,7 @@ import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.R;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +23,7 @@ import java.util.List;
 public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdapter.A_list_ViewHolder> {
 
     private final Context mContext;
+    private List<Alist> mOriginalList;
     private List<Alist> mListEntries;
     private final ItemClickListeners mItemClickListeners;
 
@@ -63,7 +65,7 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
         final TextView tvListName;
         final ImageView ivOptions;
 
-        public A_list_ViewHolder(View itemView) {
+        A_list_ViewHolder(View itemView) {
             super(itemView);
             tvListName = itemView.findViewById(R.id.tv_list_name);
             ivOptions = itemView.findViewById(R.id.tv_options);
@@ -95,9 +97,26 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
         notifyDataSetChanged();
     }
 
+    public void searchListStartingWith(String text){
+        List<Alist> searchResults = new ArrayList<>();
 
-    public List<Alist> getListEntries(){
-        return mListEntries;
+        if ( mOriginalList == null) return;
+
+        for(Alist alist:mOriginalList){
+            if ( alist.getName().toLowerCase().startsWith(text.toLowerCase()))
+                searchResults.add(alist);
+        }
+
+        setListEntries(searchResults);
+    }
+
+    public void saveOriginalList(){
+        mOriginalList = mListEntries;
+    }
+
+    public void restoreOriginalList(){
+        mListEntries = mOriginalList;
+        mOriginalList = null;
     }
 
 

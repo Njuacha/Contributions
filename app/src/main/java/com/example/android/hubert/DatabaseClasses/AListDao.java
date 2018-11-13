@@ -14,17 +14,14 @@ import java.util.List;
 @Dao
 public interface AListDao {
     @Insert
-    void insert_a_list(Alist aList);
+    void insertAList(Alist aList);
 
     @Update
-    void update_a_list(Alist aList);
+    void updateAList(Alist aList);
 
     @Query("SELECT * FROM Alist ")
-    LiveData<List<Alist>> load_all_list_names();
-
-    @Query("SELECT * FROM Alist WHERE listId = :listId")
-    Alist load_a_list(int listId);
+    LiveData<List<Alist>> loadAllListNames();
 
     @Query("DELETE FROM Alist where listId = :listId")
-    void delete_a_list(int listId);
+    void deleteAList(int listId);
 }

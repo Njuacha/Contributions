@@ -13,7 +13,7 @@ import java.util.List;
  */
 
 public class HistViewModel extends ViewModel {
-    private LiveData<List<History>> mHistoryList;
+    private final LiveData<List<History>> mHistoryList;
 
     public HistViewModel(final AppDatabase db, final int listId, final int memberId){
         mHistoryList = db.historyDoa().getHistory(listId,memberId);

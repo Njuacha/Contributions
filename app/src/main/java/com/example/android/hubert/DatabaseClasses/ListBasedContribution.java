@@ -18,7 +18,7 @@ public class ListBasedContribution implements Parcelable {
         this.amount = amount;
     }
 
-    protected ListBasedContribution(Parcel in) {
+    private ListBasedContribution(Parcel in) {
         memberId = in.readInt();
         name = in.readString();
         amount = in.readInt();
