@@ -95,6 +95,7 @@ public class ContributionsAdapter extends RecyclerView.Adapter<ContributionsAdap
         notifyDataSetChanged();
     }
 
+
     public List<Alist> getListEntries(){
         return mListEntries;
     }

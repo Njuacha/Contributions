@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.android.hubert.DatabaseClasses.Member;
 import com.example.android.hubert.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,6 +55,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberVi
         mMemberList = members;
         notifyDataSetChanged();
     }
+
 
     public interface ItemClickListeners{
         void onMemberOptionViewClicked(Member member, View view);

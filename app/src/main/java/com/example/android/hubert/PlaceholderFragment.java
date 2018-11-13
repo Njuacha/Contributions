@@ -11,7 +11,11 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +57,6 @@ public class PlaceholderFragment extends Fragment implements ContributionsAdapte
     public static final String LIST_EXTRA = "list";
     public static final String EXTRA_MEMBER = "member";
     private static AppDatabase mDb;
-    private static Alist mlist;
 
 
     public static int sectionNumb;
@@ -76,6 +79,7 @@ public class PlaceholderFragment extends Fragment implements ContributionsAdapte
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         // Instantiate the database i would be using
         mDb = AppDatabase.getDatabaseInstance(getContext());
 
@@ -235,6 +239,52 @@ public class PlaceholderFragment extends Fragment implements ContributionsAdapte
         dialog.show(getFragmentManager(), "name dialog");
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main,menu);
+
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+
+
+        searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+
+                return true;
+            }
+        });
+
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+
+        searchView.setSubmitButtonEnabled(true);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                return false;
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+
+
+
 
 }
+
+
 

@@ -4,6 +4,7 @@ import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.FragmentPagerAdapter;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
+        // Create the adapter that will return a fragment for each of the two
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -106,29 +107,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        switch(id){
-            case R.id.action_settings:
-                // Show settings
-                return true;
-        }
-
-
-        return super.onOptionsItemSelected(item);
-    }
-
     public void openNameDialog(String tab) {
 
         NameDialog dialog = new NameDialog();
@@ -138,22 +116,10 @@ public class MainActivity extends AppCompatActivity {
         dialog.show(getSupportFragmentManager(), "edit_list_name_dialog");
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public interface SearchListener{
+        void onSearchTyped(String query);
+        void onSearchClosed();
+    }
 
 
 }
