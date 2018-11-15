@@ -36,6 +36,7 @@ import static com.example.android.hubert.PlaceholderFragment.EXTRA_MEMBER;
 import static com.example.android.hubert.PlaceholderFragment.LIST_EXTRA;
 
 public class MemberActivity extends AppCompatActivity implements MemberContributionsAdapter.OnMemberContrClicklisteners {
+    public static final String EXTRA_LIST_NAME = "list name";
     private AppDatabase mDb;
     private Member mMember;
     private MemberContributionsAdapter mAdapter;
@@ -111,6 +112,7 @@ public class MemberActivity extends AppCompatActivity implements MemberContribut
                 if( (id == R.id.action_add) || (id == R.id.action_subtract) ){
                     Intent intent = new Intent(MemberActivity.this,Add_a_contribution.class);
                     intent.putExtra(EXTRA_LIST_ID,contrib.getListId());
+                    intent.putExtra(EXTRA_LIST_NAME,contrib.getName());
                     intent.putExtra(EXTRA_CONTRIB, listBasedContribution);
                     if(id == R.id.action_subtract){
                         intent.putExtra(EXTRA_SUB,true);

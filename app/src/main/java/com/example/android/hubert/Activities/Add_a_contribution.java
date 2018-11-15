@@ -36,6 +36,7 @@ import static com.example.android.hubert.Activities.DisplayAList.EXTRA_CONTRIB;
 import static com.example.android.hubert.Activities.DisplayAList.EXTRA_LIST_ID;
 import static com.example.android.hubert.Activities.DisplayAList.EXTRA_SUB;
 import static com.example.android.hubert.Activities.HistoryActivity.EXTRA_HISTORY;
+import static com.example.android.hubert.Activities.MemberActivity.EXTRA_LIST_NAME;
 import static com.example.android.hubert.PlaceholderFragment.LIST_EXTRA;
 
 public class Add_a_contribution extends AppCompatActivity implements DatePickerFragment.DateSetListener {
@@ -53,7 +54,7 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
     private AMemberInAList memberInAList;
     private Alist mAlist;
 
-    private int listId;
+    private int mListId;
     private ListBasedContribution mListBasedContribution;
     private History history;
     private boolean isSubtract = false;
@@ -65,26 +66,33 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
         super.onCreate(savedInstanceState);
 
         mdb = AppDatabase.getDatabaseInstance(this);
-        getListIdAndNameFromIntent();
         Intent intent  = getIntent();
 
+        if (intent.hasExtra(EXTRA_CONTRIB) && intent.hasExtra(EXTRA_LIST_NAME) ){
 
-        if (intent.hasExtra(EXTRA_LIST_ID) && intent.hasExtra(EXTRA_CONTRIB)){ // This is the case of Adding a new ListBasedContribution on an already existing one
-            listId = intent.getIntExtra(EXTRA_LIST_ID,0);
-            mListBasedContribution = intent.getParcelableExtra(EXTRA_CONTRIB);
-            // We are adding or subtracting to an older mListBasedContribution so it is not new
-            mAction = ADD_CONTR;
-            // We populate the UI with name and set it to be fixed. Also we set the button to subtract if it is a subtraction case
-            populate1(intent.hasExtra(EXTRA_SUB));
-            
-        }else if (intent.hasExtra(EXTRA_HISTORY) && intent.hasExtra(EXTRA_CONTRIB)){ // This is the case when editing formerly added mListBasedContribution
-            history = intent.getParcelableExtra(EXTRA_HISTORY);
-            mListBasedContribution = intent.getParcelableExtra(EXTRA_CONTRIB);
-            mAction = EDIT_CONTR;
-            populate2();
-        } else { // This is the case of adding new contribution in a list
+            setTitle(intent.getStringExtra(EXTRA_LIST_NAME));
+
+            if (intent.hasExtra(EXTRA_LIST_ID)){// This is the case of Adding a new ListBasedContribution on an already existing one
+                mListId = intent.getIntExtra(EXTRA_LIST_ID,0);
+                mListBasedContribution = intent.getParcelableExtra(EXTRA_CONTRIB);
+                // We are adding or subtracting to an older mListBasedContribution so it is not new
+                mAction = ADD_CONTR;
+                // We populate the UI with name and set it to be fixed. Also we set the button to subtract if it is a subtraction case
+                populate1(intent.hasExtra(EXTRA_SUB));
+            }else if (intent.hasExtra(EXTRA_HISTORY)){// This is the case when editing formerly added mListBasedContribution
+                history = intent.getParcelableExtra(EXTRA_HISTORY);
+                mListBasedContribution = intent.getParcelableExtra(EXTRA_CONTRIB);
+                mAction = EDIT_CONTR;
+                populate2();
+            }
+
+        }else if (intent.hasExtra(LIST_EXTRA)){ // This is the case of adding new contribution in a list
+            mAlist = intent.getParcelableExtra(LIST_EXTRA);
+            setTitle(mAlist.getName());
             setUpViewModel();
         }
+
+
 
 
     }
@@ -212,11 +220,11 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
                     case ADD_CONTR:
                         int newAmount = mListBasedContribution.getAmount() + amt;
 
-                        memberInAList = new AMemberInAList(memberId,listId,newAmount);
+                        memberInAList = new AMemberInAList(memberId, mListId,newAmount);
                         mdb.a_member_in_a_list_dao().update_a_member_in_a_list(memberInAList);
 
                         // Write a record of a mListBasedContribution in History table
-                        mdb.historyDoa().insertContributionWithDate(new History(listId
+                        mdb.historyDoa().insertContributionWithDate(new History(mListId
                                 , memberId, date, amt));
                         break;
                     case EDIT_CONTR:
@@ -251,12 +259,6 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
         });
 
         finish();
-    }
-
-    private void getListIdAndNameFromIntent() {
-        if (getIntent().hasExtra(LIST_EXTRA)) {
-            mAlist = getIntent().getParcelableExtra(LIST_EXTRA);
-        }
     }
 
     private String getDate(){

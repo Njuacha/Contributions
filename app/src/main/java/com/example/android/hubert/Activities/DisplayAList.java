@@ -34,6 +34,7 @@ import com.example.android.hubert.R;
 
 import java.util.List;
 
+import static com.example.android.hubert.Activities.MemberActivity.EXTRA_LIST_NAME;
 import static com.example.android.hubert.PlaceholderFragment.LIST_EXTRA;
 
 
@@ -234,6 +235,7 @@ public class DisplayAList extends AppCompatActivity implements ListContributions
                 if( (id == R.id.action_add) || (id == R.id.action_subtract) ){
                     Intent intent = new Intent(DisplayAList.this,Add_a_contribution.class);
                     intent.putExtra(EXTRA_LIST_ID,mAlist.getListId());
+                    intent.putExtra(EXTRA_LIST_NAME,mAlist.getName());
                     intent.putExtra(EXTRA_CONTRIB, listBasedContribution);
                     if(id == R.id.action_subtract){
                         intent.putExtra(EXTRA_SUB,true);

@@ -27,6 +27,7 @@ import com.example.android.hubert.ViewModels.HistViewModelFactory;
 import java.util.List;
 
 import static com.example.android.hubert.Activities.DisplayAList.EXTRA_CONTRIB;
+import static com.example.android.hubert.Activities.MemberActivity.EXTRA_LIST_NAME;
 import static com.example.android.hubert.PlaceholderFragment.LIST_EXTRA;
 
 public class HistoryActivity extends AppCompatActivity implements HistoryAdapter.ItemClickListeners {
@@ -94,6 +95,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
                         Intent intent = new Intent(HistoryActivity.this, Add_a_contribution.class);
                         intent.putExtra(EXTRA_HISTORY,history);
                         intent.putExtra(EXTRA_CONTRIB, mListBasedContribution);
+                        intent.putExtra(EXTRA_LIST_NAME,mAlist.getName());
                         startActivity(intent);
                         break;
                     case R.id.action_delete:
