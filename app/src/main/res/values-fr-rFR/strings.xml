@@ -28,8 +28,8 @@
     <string name="ok">ok</string>
     <string name="cancel">annuler</string>
     <string name="explain_member_no_contrib">N\'a pas encore fait de contribution</string>
-    <string name="no_members_so_add">Appuyez sur l\'icône jaune en bas à droite pour ajouter un membre</string>
-    <string name="no_contrib_so_add">Appuyez sur l\'icône jaune en bas à droite pour créer une liste de contribution.</string>
-    <string name="add_member_contrib">Appuyez sur l\'icône jaune en bas à droite pour enregistrer la contribution d\'un membre</string>
+    <string name="no_members_so_add">Appuyez sur l\'icône jaune en bas pour ajouter un membre</string>
+    <string name="no_contrib_so_add">Appuyez sur l\'icône jaune en bas pour créer une liste de contribution.</string>
+    <string name="add_member_contrib">Appuyez sur l\'icône jaune en bas pour enregistrer la contribution d\'un membre</string>
     <string name="name_of_member">Nom du Membre</string>
 </resources>
