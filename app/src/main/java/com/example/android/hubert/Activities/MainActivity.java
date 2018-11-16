@@ -61,11 +61,14 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
+                                    .setIsSmartLockEnabled(false)
                                     .setAvailableProviders(Arrays.asList(
-                                            new AuthUI.IdpConfig.GoogleBuilder().build()
+                                            new AuthUI.IdpConfig.EmailBuilder().build()
+
                                             ))
                                     .build(),
                             RC_SIGN_IN);
+                    //new AuthUI.IdpConfig.FacebookBuilder().build()
                 }
             }
         };
