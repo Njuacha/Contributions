@@ -28,7 +28,7 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity {
 
     public static final String MEMBERS_TAB = "members tab";
-    public static final String CONTRIBUTIONS_TAB = "contritutions tab";
+    public static final String CONTRIBUTIONS_TAB = "contributions tab";
     public static final String EXTRA_TAB = "tab";
     private static final int RC_SIGN_IN = 123;
 
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Intialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
-
+        /*
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+        */
         // Create the adapter that will return a fragment for each of the two
         // primary sections of the activity.
         /*
@@ -169,13 +170,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+        //mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+       // mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
 
     private void openNameDialog(String tab) {
