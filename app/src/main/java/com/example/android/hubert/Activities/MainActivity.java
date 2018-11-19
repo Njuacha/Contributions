@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,8 +33,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_TAB = "tab";
     private static final int RC_SIGN_IN = 123;
 
-    public static int mFabState = 0;
+    public static int mFabState;
     private FloatingActionButton mFab;
+    private TabLayout tabLayout;
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -92,9 +94,9 @@ public class MainActivity extends AppCompatActivity {
         ViewPager mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout = findViewById(R.id.tabs);
 
-
+        mFabState = tabLayout.getSelectedTabPosition();
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
@@ -128,12 +130,7 @@ public class MainActivity extends AppCompatActivity {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 0 stands for first page which is members page
-                if (mFabState == 0) {
-                    openNameDialog(MEMBERS_TAB);
-                } else if (mFabState == 1) {
-                    openNameDialog(CONTRIBUTIONS_TAB);
-                }
+                openNameDialog();
             }
         });
 
@@ -179,8 +176,16 @@ public class MainActivity extends AppCompatActivity {
        // mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
 
-    private void openNameDialog(String tab) {
-
+    private void openNameDialog() {
+        int position = tabLayout.getSelectedTabPosition();
+        String tab ;
+        if (position == 0){
+            tab = MEMBERS_TAB;
+        }else if (position == 1){
+            tab = CONTRIBUTIONS_TAB;
+        }else {
+            return;
+        }
         NameDialog dialog = new NameDialog();
         Bundle bundle = new Bundle();
         bundle.putString(EXTRA_TAB, tab);

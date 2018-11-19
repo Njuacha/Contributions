@@ -32,4 +32,6 @@
     <string name="no_contrib_so_add">Appuyez sur l\'icône jaune en bas pour créer une liste de contribution.</string>
     <string name="add_member_contrib">Appuyez sur l\'icône jaune en bas pour enregistrer la contribution d\'un membre</string>
     <string name="name_of_member">Nom du Membre</string>
+    <string name="options">Options</string>
+    <string name="number_of_contributions_made">Nombre de contributions faites :</string>
 </resources>

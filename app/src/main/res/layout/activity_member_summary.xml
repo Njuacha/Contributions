@@ -15,7 +15,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginLeft="16dp"
         style="@style/SummaryHeadingStyle"
-        android:text="Number of Contributions made :" />
+        android:text="@string/number_of_contributions_made" />
     <TextView
         android:id="@+id/tv_numb_of_contrbutns"
         android:layout_width="0dp"
@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_numb_of_contrbutns"
         app:layout_constraintStart_toStartOf="@+id/tv_label_1"
         style="@style/SummaryHeadingStyle"
-        android:text="Total Amount:"/>
+        android:text="@string/total_amount"/>
     <TextView
         android:id="@+id/tv_amount_value"
         android:layout_width="0dp"
