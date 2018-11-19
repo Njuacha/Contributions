@@ -60,7 +60,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
         android:layout_margin="@dimen/fab_margin"
-        android:tint="@color/colorPrimaryLight"
-        android:src="@drawable/ic_action_add_person"/>
+        android:tint="@android:color/white"
+        android:src="@drawable/ic_action_add_person"
+        />
 
 </android.support.design.widget.CoordinatorLayout>
