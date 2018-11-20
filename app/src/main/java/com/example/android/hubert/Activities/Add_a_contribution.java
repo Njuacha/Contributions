@@ -6,12 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.example.android.hubert.DialogFragments.DatePickerFragment;
 import com.example.android.hubert.R;
 import com.example.android.hubert.ViewModels.AddContribViewModelFactory;
 import com.example.android.hubert.ViewModels.AddContributionViewModel;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,7 +47,7 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
     private final int ADD_CONTR = 2;
     private final int EDIT_CONTR = 3;
 
-    private Spinner memberSpinner;
+    private SearchableSpinner memberSpinner;
     private EditText et_amount;
     private TextView tv_empty;
     private TextView tv_date;
@@ -109,11 +111,7 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
         members.add(new Member(history.getMemberId()
                 , mListBasedContribution.getName()));
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter<>(this
-                , android.R.layout.simple_spinner_item, members);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        memberSpinner.setAdapter(arrayAdapter);
+        setItemsOnSpinner(members);
 
         tv_date.setText(history.getDate());
 
@@ -143,11 +141,8 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
         members.add(new Member(mListBasedContribution.getMemberId()
                 , mListBasedContribution.getName()));
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter<>(this
-                , android.R.layout.simple_spinner_item, members);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        memberSpinner.setAdapter(arrayAdapter);
+        setItemsOnSpinner(members);
 
         if (isSubtact){
             this.isSubtract = isSubtact;
@@ -175,8 +170,7 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
                     setContentView(R.layout.activity_add_a_contribution);
                     instantiateSomeViews();
                     tv_date.setText(getDate());
-                    memberSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext()
-                            , android.R.layout.simple_spinner_item, members));
+                    setItemsOnSpinner(members);
                 }
             }
         });
@@ -279,5 +273,15 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
     @Override
     public void onDateSet(int year, int month, int dayOfMonth) {
         tv_date.setText(String.format("%02d/%02d/%d", dayOfMonth,month,year));
+    }
+
+    public void setItemsOnSpinner(List<Member> members){
+        ArrayAdapter arrayAdapter;
+        arrayAdapter = new ArrayAdapter<Member>(this
+                , android.R.layout.simple_spinner_item);
+
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        arrayAdapter.addAll(members);
+        memberSpinner.setAdapter(arrayAdapter);
     }
 }
