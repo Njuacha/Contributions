@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -185,9 +186,14 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
     public void add(View view) {
 
         final String amt = et_amount.getText().toString();
-        // If the user doesn't enter an amount then the return false after showing a toast
+        // If the user doesn't enter an amount then the return after showing a toast
         if (TextUtils.isEmpty(amt)) {
             Toast.makeText(this, R.string.enter_an_amount, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // If the user doesn't choose a name then return after showing a toast
+        if (((Member)memberSpinner.getSelectedItem()).getName().equals(getString(R.string.choose_a_name))){
+            Toast.makeText(this, R.string.choose_a_name, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -275,13 +281,21 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
         tv_date.setText(String.format("%02d/%02d/%d", dayOfMonth,month,year));
     }
 
-    public void setItemsOnSpinner(List<Member> members){
+    public void setItemsOnSpinner(final List<Member> members){
+
         ArrayAdapter arrayAdapter;
+
+        if (!members.contains(new Member(getString(R.string.choose_a_name)))){
+            members.add(0,new Member(getString(R.string.choose_a_name)));
+        }
+
         arrayAdapter = new ArrayAdapter<Member>(this
-                , android.R.layout.simple_spinner_item);
+                , android.R.layout.simple_spinner_item, members);
 
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        arrayAdapter.addAll(members);
+
         memberSpinner.setAdapter(arrayAdapter);
+
+
     }
 }

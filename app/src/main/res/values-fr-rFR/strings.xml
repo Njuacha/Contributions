@@ -16,7 +16,7 @@
     <string name="date_created">Date créée :</string>
     <string name="number_of_items_in_list">Nombre d\'éléments dans la liste :</string>
     <string name="total_amount">Montant Total :</string>
-    <string name="choose_a_name">Choisissez un nom :</string>
+    <string name="choose_a_name">Choisissez un nom</string>
     <string name="date">Date :</string>
     <string name="change_date">Autre date</string>
     <string name="enter_an_amount">Entrez un montant…</string>
@@ -34,4 +34,6 @@
     <string name="name_of_member">Nom du Membre</string>
     <string name="options">Options</string>
     <string name="number_of_contributions_made">Nombre de contributions faites :</string>
+    <string name="contribution_from">Contribution De:</string>
+    <string name="recieved_on">Reçu Le:</string>
 </resources>

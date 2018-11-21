@@ -22,7 +22,7 @@
     <string name="sample_date" translatable="false">12/04/2018</string>
     <string name="number_of_items_in_list">Number Of Items In List :</string>
     <string name="total_amount">Total Amount :</string>
-    <string name="choose_a_name">Choose a name :</string>
+    <string name="choose_a_name">Choose a name</string>
     <string name="date">Date :</string>
     <string name="change_date">Other date</string>
     <string name="enter_an_amount">Enter an amount…</string>
@@ -40,4 +40,6 @@
     <string name="name_of_member">Name of Member</string>
     <string name="options">Options</string>
     <string name="number_of_contributions_made">Number of Contributions made :</string>
+    <string name="contribution_from">Contribution From:</string>
+    <string name="recieved_on">Recieved On:</string>
 </resources>

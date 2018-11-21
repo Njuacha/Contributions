@@ -19,7 +19,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="@string/choose_a_name"
+            android:text="@string/contribution_from"
             style="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@android:color/primary_text_light"
             app:layout_constraintTop_toTopOf="parent"
@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:text="@string/date"
+            android:text="@string/recieved_on"
             style="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@android:color/primary_text_light"
             app:layout_constraintStart_toStartOf="@id/tv_member"
@@ -50,7 +50,6 @@
             android:paddingLeft="8dp"
             tools:text="02/12/2018"
             style="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@android:color/primary_text_light"
             app:layout_constraintLeft_toRightOf="@+id/date_label"
             app:layout_constraintTop_toTopOf="@id/date_label"/>
         <Button
