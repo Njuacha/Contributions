@@ -6,14 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,9 +46,9 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
     private final int EDIT_CONTR = 3;
 
     private SearchableSpinner memberSpinner;
-    private EditText et_amount;
-    private TextView tv_empty;
-    private TextView tv_date;
+    private EditText etAmount;
+    private TextView tvEmpty;
+    private TextView tvDate;
     private Button button;
     private AppDatabase mdb;
     private AMemberInAList memberInAList;
@@ -114,10 +111,10 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
 
         setItemsOnSpinner(members);
 
-        tv_date.setText(history.getDate());
+        tvDate.setText(history.getDate());
 
         int amount = history.getAmount();
-        et_amount.setText(String.valueOf(Math.abs(amount)));
+        etAmount.setText(String.valueOf(Math.abs(amount)));
 
         if(amount<0){
             isSubtract = true;
@@ -133,7 +130,7 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
 
         setContentView(R.layout.activity_add_a_contribution);
         instantiateSomeViews();
-        tv_date.setText(getDate());
+        tvDate.setText(getDate());
 
         button = findViewById(R.id.bt_add);
 
@@ -165,12 +162,15 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
                 members.removeAll(viewModel.getMembersAlreadyInList());
                 if (members.size() == 0) {
                     setContentView(R.layout.empty);
-                    tv_empty = findViewById(R.id.tv_explain_emptiness);
-                    tv_empty.setText(R.string.add_contribution_empty);
+                    tvEmpty = findViewById(R.id.tv_explain_emptiness);
+                    tvEmpty.setText(R.string.add_contribution_empty);
                 } else {
                     setContentView(R.layout.activity_add_a_contribution);
                     instantiateSomeViews();
-                    tv_date.setText(getDate());
+                    tvDate.setText(getDate());
+                    if (!members.contains(new Member(getString(R.string.choose_a_name)))){
+                        members.add(0,new Member(getString(R.string.choose_a_name)));
+                    }
                     setItemsOnSpinner(members);
                 }
             }
@@ -179,13 +179,13 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
 
     private void instantiateSomeViews() {
         memberSpinner = findViewById(R.id.sp_members);
-        et_amount = findViewById(R.id.et_amount);
-        tv_date = findViewById(R.id.tv_date);
+        etAmount = findViewById(R.id.et_amount);
+        tvDate = findViewById(R.id.tv_date);
     }
 
     public void add(View view) {
 
-        final String amt = et_amount.getText().toString();
+        final String amt = etAmount.getText().toString();
         // If the user doesn't enter an amount then the return after showing a toast
         if (TextUtils.isEmpty(amt)) {
             Toast.makeText(this, R.string.enter_an_amount, Toast.LENGTH_SHORT).show();
@@ -204,7 +204,7 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
 
                 Member member = (Member) memberSpinner.getSelectedItem();
                 int memberId = member.getMemberId();            // Get the memberId
-                String date = tv_date.getText().toString();     // Get the date
+                String date = tvDate.getText().toString();     // Get the date
                 int amount = Integer.parseInt(amt);  // Get the amount
                 int amt = isSubtract?-amount:amount;            // Get amount to be added or subtracted
 
@@ -278,16 +278,12 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
 
     @Override
     public void onDateSet(int year, int month, int dayOfMonth) {
-        tv_date.setText(String.format("%02d/%02d/%d", dayOfMonth,month,year));
+        tvDate.setText(String.format("%02d/%02d/%d", dayOfMonth,month,year));
     }
 
-    public void setItemsOnSpinner(final List<Member> members){
+    private void setItemsOnSpinner(final List<Member> members){
 
         ArrayAdapter arrayAdapter;
-
-        if (!members.contains(new Member(getString(R.string.choose_a_name)))){
-            members.add(0,new Member(getString(R.string.choose_a_name)));
-        }
 
         arrayAdapter = new ArrayAdapter<Member>(this
                 , android.R.layout.simple_spinner_item, members);
@@ -296,6 +292,9 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
 
         memberSpinner.setAdapter(arrayAdapter);
 
-
     }
+
+
+
+
 }
