@@ -42,4 +42,6 @@
     <string name="number_of_contributions_made">Number of Contributions made :</string>
     <string name="contribution_from">Contribution From:</string>
     <string name="recieved_on">Recieved On:</string>
+    <string name="adUnitId1" translatable="false">ca-app-pub-2753645322508525/1032980531</string>
+    <string name="adUnitIdTest" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

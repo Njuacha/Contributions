@@ -23,8 +23,10 @@ import com.example.android.hubert.DatabaseClasses.History;
 import com.example.android.hubert.DatabaseClasses.Member;
 import com.example.android.hubert.DialogFragments.DatePickerFragment;
 import com.example.android.hubert.R;
+import com.example.android.hubert.Utils.MyMobileAds;
 import com.example.android.hubert.ViewModels.AddContribViewModelFactory;
 import com.example.android.hubert.ViewModels.AddContributionViewModel;
+import com.google.android.gms.ads.AdView;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ import static com.example.android.hubert.Activities.HistoryActivity.EXTRA_HISTOR
 import static com.example.android.hubert.Activities.MemberActivity.EXTRA_LIST_NAME;
 import static com.example.android.hubert.PlaceholderFragment.LIST_EXTRA;
 
-public class Add_a_contribution extends AppCompatActivity implements DatePickerFragment.DateSetListener {
+public class AddAContribution extends AppCompatActivity implements DatePickerFragment.DateSetListener {
 
     private final int NEW_CONTR = 1;
     private final int ADD_CONTR = 2;
@@ -91,8 +93,6 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
             setTitle(mAlist.getName());
             setUpViewModel();
         }
-
-
 
 
     }
@@ -181,6 +181,9 @@ public class Add_a_contribution extends AppCompatActivity implements DatePickerF
         memberSpinner = findViewById(R.id.sp_members);
         etAmount = findViewById(R.id.et_amount);
         tvDate = findViewById(R.id.tv_date);
+        // Initialize MyMobileAds
+        AdView adView = findViewById(R.id.adView5);
+        MyMobileAds.loadAdIntoAdView(this,adView);
     }
 
     public void add(View view) {

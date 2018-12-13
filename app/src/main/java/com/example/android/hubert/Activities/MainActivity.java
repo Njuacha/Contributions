@@ -14,12 +14,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 
 import com.example.android.hubert.DialogFragments.NameDialog;
 import com.example.android.hubert.R;
 import com.example.android.hubert.SectionsPagerAdapter;
+import com.example.android.hubert.Utils.MyMobileAds;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -51,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Intialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
-        /*
+
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -70,11 +75,10 @@ public class MainActivity extends AppCompatActivity {
                                             ))
                                     .build(),
                             RC_SIGN_IN);
-                    //new AuthUI.IdpConfig.FacebookBuilder().build()
                 }
             }
         };
-        */
+
         // Create the adapter that will return a fragment for each of the two
         // primary sections of the activity.
         /*
@@ -123,16 +127,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         mFab = findViewById(R.id.fab);
-
-
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openNameDialog();
             }
         });
+
+        // Initialize MyMobileAds
+        AdView adView = findViewById(R.id.adView1);
+        MyMobileAds.loadAdIntoAdView(this,adView);
+
 
     }
 
@@ -142,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == RC_SIGN_IN){
             if (resultCode == RESULT_OK){
-
             } else if (resultCode == RESULT_CANCELED){
                 finish();
             }
@@ -167,13 +172,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-       // mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
 
     private void openNameDialog() {

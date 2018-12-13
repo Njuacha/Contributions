@@ -28,9 +28,11 @@ import com.example.android.hubert.AppExecutors;
 import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.DatabaseClasses.ListBasedContribution;
+import com.example.android.hubert.Utils.MyMobileAds;
 import com.example.android.hubert.ViewModels.LIstContribViewModelFactory;
 import com.example.android.hubert.ViewModels.ListContribViewModel;
 import com.example.android.hubert.R;
+import com.google.android.gms.ads.AdView;
 
 import java.util.List;
 
@@ -72,7 +74,7 @@ public class DisplayAList extends AppCompatActivity implements ListContributions
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent addIntent = new Intent(DisplayAList.this,Add_a_contribution.class);
+                Intent addIntent = new Intent(DisplayAList.this,AddAContribution.class);
                 addIntent.putExtra(LIST_EXTRA,mAlist);
                 startActivity(addIntent);
             }
@@ -83,6 +85,10 @@ public class DisplayAList extends AppCompatActivity implements ListContributions
         getListFromIntent();
         setupViewModel();
         setTitle(mAlist.getName());
+
+        // Initialize MyMobileAds
+        AdView adView = findViewById(R.id.adView4);
+        MyMobileAds.loadAdIntoAdView(this,adView);
 
     }
 
@@ -233,7 +239,7 @@ public class DisplayAList extends AppCompatActivity implements ListContributions
                 int id = item.getItemId();
                // For the case of add or subtract we open up add listBasedContribution activity
                 if( (id == R.id.action_add) || (id == R.id.action_subtract) ){
-                    Intent intent = new Intent(DisplayAList.this,Add_a_contribution.class);
+                    Intent intent = new Intent(DisplayAList.this,AddAContribution.class);
                     intent.putExtra(EXTRA_LIST_ID,mAlist.getListId());
                     intent.putExtra(EXTRA_LIST_NAME,mAlist.getName());
                     intent.putExtra(EXTRA_CONTRIB, listBasedContribution);

@@ -21,8 +21,10 @@ import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.DatabaseClasses.ListBasedContribution;
 import com.example.android.hubert.DatabaseClasses.History;
 import com.example.android.hubert.R;
+import com.example.android.hubert.Utils.MyMobileAds;
 import com.example.android.hubert.ViewModels.HistViewModel;
 import com.example.android.hubert.ViewModels.HistViewModelFactory;
+import com.google.android.gms.ads.AdView;
 
 import java.util.List;
 
@@ -58,6 +60,10 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
         }
         setTitle();
         setUpViewModel();
+
+        // Initialize MyMobileAds
+        AdView adView = findViewById(R.id.adView3);
+        MyMobileAds.loadAdIntoAdView(this,adView);
     }
 
     private void setTitle() {
@@ -92,7 +98,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
                 switch(id){
                     case R.id.action_edit:
                         // Start activity of Add ListBasedContribution and parse the History object and the Member's name
-                        Intent intent = new Intent(HistoryActivity.this, Add_a_contribution.class);
+                        Intent intent = new Intent(HistoryActivity.this, AddAContribution.class);
                         intent.putExtra(EXTRA_HISTORY,history);
                         intent.putExtra(EXTRA_CONTRIB, mListBasedContribution);
                         intent.putExtra(EXTRA_LIST_NAME,mAlist.getName());

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="80dp">
+        android:paddingBottom="100dp">
     </android.support.v7.widget.RecyclerView>
     <TextView
         android:id="@+id/tv_explain_emptiness"

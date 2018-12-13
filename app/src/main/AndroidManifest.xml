@@ -3,6 +3,8 @@
     package="com.example.android.hubert">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <supports-screens
+        android:xlargeScreens="false"/>
 
     <application
         android:allowBackup="true"
@@ -11,6 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-2753645322508525~9181318898"/>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.example.android.hubert.fileProvider"
@@ -41,7 +47,7 @@
                 android:value="com.example.android.hubert.Activities.MainActivity" />
         </activity>
         <activity
-            android:name=".Activities.Add_a_contribution"
+            android:name=".Activities.AddAContribution"
             android:label="@string/title_activity_add_a_contribution" />
         <activity
             android:name=".Activities.ContributionSummaryActivity"

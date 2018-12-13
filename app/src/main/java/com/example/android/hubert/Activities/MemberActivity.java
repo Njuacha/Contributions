@@ -23,8 +23,10 @@ import com.example.android.hubert.DatabaseClasses.ListBasedContribution;
 import com.example.android.hubert.DatabaseClasses.Member;
 import com.example.android.hubert.DatabaseClasses.MemberBasedContribution;
 import com.example.android.hubert.R;
+import com.example.android.hubert.Utils.MyMobileAds;
 import com.example.android.hubert.ViewModels.MemberContribViewModel;
 import com.example.android.hubert.ViewModels.MemberContribViewModelFactory;
+import com.google.android.gms.ads.AdView;
 
 import java.util.Date;
 import java.util.List;
@@ -70,7 +72,9 @@ public class MemberActivity extends AppCompatActivity implements MemberContribut
         }
 
 
-
+        // Initialize MyMobileAds
+        AdView adView = findViewById(R.id.adView2);
+        MyMobileAds.loadAdIntoAdView(this,adView);
     }
 
     private void setUpViewModel() {
@@ -110,7 +114,7 @@ public class MemberActivity extends AppCompatActivity implements MemberContribut
                 int id = item.getItemId();
                 // For the case of add or subtract we open up add listBasedContribution activity
                 if( (id == R.id.action_add) || (id == R.id.action_subtract) ){
-                    Intent intent = new Intent(MemberActivity.this,Add_a_contribution.class);
+                    Intent intent = new Intent(MemberActivity.this,AddAContribution.class);
                     intent.putExtra(EXTRA_LIST_ID,contrib.getListId());
                     intent.putExtra(EXTRA_LIST_NAME,contrib.getName());
                     intent.putExtra(EXTRA_CONTRIB, listBasedContribution);
