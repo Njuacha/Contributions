@@ -13,5 +13,6 @@ public class MyMobileAds {
         MobileAds.initialize(context, "ca-app-pub-2753645322508525~9181318898");
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
+
     }
 }

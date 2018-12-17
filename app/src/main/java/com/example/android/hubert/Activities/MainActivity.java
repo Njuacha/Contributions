@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN){
             if (resultCode == RESULT_OK){
             } else if (resultCode == RESULT_CANCELED){
+                
                 finish();
             }
         }
