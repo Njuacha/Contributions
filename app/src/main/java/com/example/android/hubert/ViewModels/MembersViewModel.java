@@ -20,7 +20,7 @@ public class MembersViewModel extends AndroidViewModel {
     public MembersViewModel(@NonNull Application application) {
         super(application);
         AppDatabase mdb = AppDatabase.getDatabaseInstance(this.getApplication());
-        members = mdb.member_dao().loadAllMembers();
+        members = mdb.member_dao().loadAllMembers(0);
     }
 
     public LiveData<List<Member>> getMembers() {

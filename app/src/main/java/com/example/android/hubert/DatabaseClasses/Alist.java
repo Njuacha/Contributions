@@ -17,11 +17,17 @@ public class Alist implements Parcelable{
     private  int listId;
     private String name;
     private Date date;
+    private int groupId;
 
-    public Alist(int listId, String name, Date date) {
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public Alist(int listId, String name, Date date, int groupId) {
         this.listId = listId;
         this.name = name;
         this.date = date;
+        this.groupId = groupId;
     }
 
     Alist(Parcel in) {
@@ -51,9 +57,10 @@ public class Alist implements Parcelable{
     }
 
     @Ignore
-    public Alist(String name, Date date) {
+    public Alist(String name, Date date, int groupId) {
         this.name = name;
         this.date = date;
+        this.groupId = groupId;
     }
 
     public int getListId() {

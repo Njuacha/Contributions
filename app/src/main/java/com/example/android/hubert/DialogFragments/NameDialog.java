@@ -99,7 +99,7 @@ public class NameDialog extends DialogFragment {
 
                 if (tab.equals(MEMBERS_TAB)){
                     if (editItem == null){
-                        db.member_dao().insertMember(new Member(textEntered));
+                        db.member_dao().insertMember(new Member(textEntered,0));
                     }else{
                         Member member = (Member)editItem;
                         member.setName(textEntered);
@@ -107,12 +107,11 @@ public class NameDialog extends DialogFragment {
                     }
                 }else if(tab.equals(CONTRIBUTIONS_TAB)){
                     if (editItem == null){
-                        db.a_list_dao().insertAList(new Alist(textEntered,new Date()));
+                        db.a_list_dao().insertAList(new Alist(textEntered,new Date(),0));
                     }else{
                         Alist alist = (Alist)editItem;
                         alist.setName(textEntered);
                         db.a_list_dao().updateAList(alist);
-
                     }
                 }
             }

@@ -144,7 +144,7 @@ public class MemberActivity extends AppCompatActivity implements MemberContribut
 
     @Override
     public void onMmContrbClicked(MemberBasedContribution contrib) {
-        Alist alist = new Alist(contrib.getListId(),contrib.getName(),new Date());
+        Alist alist = new Alist(contrib.getListId(),contrib.getName(),new Date(), 0);
         ListBasedContribution contribution = new ListBasedContribution(mMember.getMemberId()
                                                               ,mMember.getName()
                                                               ,contrib.getAmount());

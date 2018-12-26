@@ -107,7 +107,7 @@ public class AddAContribution extends AppCompatActivity implements DatePickerFra
         List<Member> members = new ArrayList<>();
 
         members.add(new Member(history.getMemberId()
-                , mListBasedContribution.getName()));
+                , mListBasedContribution.getName(),0));
 
         setItemsOnSpinner(members);
 
@@ -137,7 +137,7 @@ public class AddAContribution extends AppCompatActivity implements DatePickerFra
         List<Member> members = new ArrayList<>();
 
         members.add(new Member(mListBasedContribution.getMemberId()
-                , mListBasedContribution.getName()));
+                , mListBasedContribution.getName(),0));
 
 
         setItemsOnSpinner(members);
@@ -168,8 +168,8 @@ public class AddAContribution extends AppCompatActivity implements DatePickerFra
                     setContentView(R.layout.activity_add_a_contribution);
                     instantiateSomeViews();
                     tvDate.setText(getDate());
-                    if (!members.contains(new Member(getString(R.string.choose_a_name)))){
-                        members.add(0,new Member(getString(R.string.choose_a_name)));
+                    if (!members.contains(new Member(getString(R.string.choose_a_name), 0))){
+                        members.add(0,new Member(getString(R.string.choose_a_name), 0));
                     }
                     setItemsOnSpinner(members);
                 }

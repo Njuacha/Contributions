@@ -2,6 +2,7 @@ package com.example.android.hubert.Activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     private DrawerLayout mDrawerLayout;
+
+    private NavigationView mNavigationView;
 
 
     @Override
@@ -150,8 +153,24 @@ public class MainActivity extends AppCompatActivity {
         AdView adView = findViewById(R.id.adView1);
         MyMobileAds.loadAdIntoAdView(this,adView);
 
+        // Initialize the NavigationView
+        mNavigationView = findViewById(R.id.nav_view);
+
+        // Add listener to respond to navigation item clicked
+        mNavigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        item.setChecked(true);
+                        mDrawerLayout.closeDrawers();
+                        return true;
+                    }
+                }
+        );
+        
 
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

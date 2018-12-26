@@ -15,15 +15,22 @@ public class Member implements Parcelable{
     @PrimaryKey(autoGenerate = true)
     private int memberId;
     private String name;
+    private int groupId;
 
-    public Member(int memberId, String name) {
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public Member(int memberId, String name, int groupId) {
         this.memberId = memberId;
         this.name = name;
+        this.groupId = groupId;
     }
 
     @Ignore
-    public Member(String name) {
+    public Member(String name, int groupId) {
         this.name = name;
+        this.groupId = groupId;
     }
 
     Member(Parcel in) {

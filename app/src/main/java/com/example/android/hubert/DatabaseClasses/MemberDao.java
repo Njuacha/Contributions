@@ -14,8 +14,8 @@ import java.util.List;
  */
 @Dao
 public interface MemberDao {
-    @Query("SELECT * FROM Member")
-    LiveData<List<Member>>  loadAllMembers();
+    @Query("SELECT * FROM Member where groupId = :groupId")
+    LiveData<List<Member>>  loadAllMembers(int groupId);
 
     @Insert
     void insertMember(Member member);

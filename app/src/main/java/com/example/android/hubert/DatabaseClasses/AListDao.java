@@ -19,8 +19,8 @@ public interface AListDao {
     @Update
     void updateAList(Alist aList);
 
-    @Query("SELECT * FROM Alist ")
-    LiveData<List<Alist>> loadAllListNames();
+    @Query("SELECT * FROM Alist where groupId = :groupId ")
+    LiveData<List<Alist>> loadAllListNames(int groupId);
 
     @Query("DELETE FROM Alist where listId = :listId")
     void deleteAList(int listId);
