@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -156,20 +157,9 @@ public class MainActivity extends AppCompatActivity {
         // Initialize the NavigationView
         mNavigationView = findViewById(R.id.nav_view);
 
-        // Add listener to respond to navigation item clicked
-        mNavigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        item.setChecked(true);
-                        mDrawerLayout.closeDrawers();
-                        return true;
-                    }
-                }
-        );
-        
 
     }
+
 
 
     @Override
@@ -209,6 +199,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // Add listener to respond to navigation item clicked
+        mNavigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        item.setChecked(true);
+                        mDrawerLayout.closeDrawers();
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
+                        return true;
+                    }
+                }
+        );
+        
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
@@ -234,6 +239,5 @@ public class MainActivity extends AppCompatActivity {
         dialog.setArguments(bundle);
         dialog.show(getSupportFragmentManager(), "edit_list_name_dialog");
     }
-
 
 }
