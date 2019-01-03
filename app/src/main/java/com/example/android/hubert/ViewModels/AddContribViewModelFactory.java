@@ -2,6 +2,7 @@ package com.example.android.hubert.ViewModels;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
@@ -11,11 +12,12 @@ import com.example.android.hubert.DatabaseClasses.AppDatabase;
  */
 
 public class AddContribViewModelFactory extends ViewModelProvider.NewInstanceFactory {
-    private final AppDatabase mDb;
+    private final Context mContext;
     private final int mlistId;
 
-    public AddContribViewModelFactory(AppDatabase mdb, int listId){
-        mDb = mdb;
+
+    public AddContribViewModelFactory(Context context, int listId){
+        mContext = context;
         mlistId = listId;
     }
 
@@ -23,6 +25,6 @@ public class AddContribViewModelFactory extends ViewModelProvider.NewInstanceFac
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         //noinspection unchecked
-        return (T) new AddContributionViewModel(mDb,mlistId);
+        return (T) new AddContributionViewModel(mContext,mlistId);
     }
 }

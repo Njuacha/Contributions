@@ -152,7 +152,7 @@ public class AddAContribution extends AppCompatActivity implements DatePickerFra
 
     private void setUpViewModel() {
 
-        AddContribViewModelFactory factory = new AddContribViewModelFactory(mdb, mAlist.getListId());
+        AddContribViewModelFactory factory = new AddContribViewModelFactory(this, mAlist.getListId());
         final AddContributionViewModel viewModel = ViewModelProviders.of(this, factory).get(AddContributionViewModel.class);
 
         viewModel.getAllMembers().observe(this, new Observer<List<Member>>() {

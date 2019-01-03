@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_TAB = "tab";
     public static final String EXTRA_GROUP_ID = "group id";
     private static final int RC_SIGN_IN = 123;
-    private static final int DEFAULT_GROUP_ID = -1 ;
+    public static final int DEFAULT_GROUP_ID = -1 ;
 
     public static int mFabState;
     private FloatingActionButton mFab;
