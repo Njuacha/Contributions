@@ -185,7 +185,7 @@ public class PlaceholderFragment extends Fragment implements ContributionsAdapte
                         AppExecutors.getsInstance().diskIO().execute(new Runnable() {
                             @Override
                             public void run() {
-                                mDb.a_list_dao().deleteAList(alist.getListId());
+                                mDb.aListDao().deleteAList(alist.getListId());
                             }
                         });
                         break;
@@ -217,7 +217,7 @@ public class PlaceholderFragment extends Fragment implements ContributionsAdapte
                         AppExecutors.getsInstance().diskIO().execute(new Runnable() {
                             @Override
                             public void run() {
-                                mDb.member_dao().deleteMember(member);
+                                mDb.memberDao().deleteMember(member);
                             }
                         });
                         break;

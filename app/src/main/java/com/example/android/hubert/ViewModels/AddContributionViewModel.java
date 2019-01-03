@@ -18,11 +18,11 @@ public class AddContributionViewModel extends ViewModel {
     private List<Member> memberInList;
 
     public AddContributionViewModel(final AppDatabase mdb, final int listId){
-        allMembers = mdb.member_dao().loadAllMembers(0);
+        allMembers = mdb.memberDao().loadAllMembers(0);
         AppExecutors.getsInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                memberInList = mdb.a_member_in_a_list_dao().loadMembersInList(listId);
+                memberInList = mdb.aMemberInAListDao().loadMembersInList(listId);
             }
         });
 

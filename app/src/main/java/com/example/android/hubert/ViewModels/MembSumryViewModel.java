@@ -17,7 +17,7 @@ public class MembSumryViewModel extends ViewModel {
             @Override
             public void run() {
                 // Get all the contributions of a member
-                int[] amounts = db.a_member_in_a_list_dao().loadAllAmtOfMember(membId);
+                int[] amounts = db.aMemberInAListDao().loadAllAmtOfMember(membId);
                 // Iterate through the array of contributions in order to sum it all up
                 int total = 0;
                 int numberOfContrib = 0;

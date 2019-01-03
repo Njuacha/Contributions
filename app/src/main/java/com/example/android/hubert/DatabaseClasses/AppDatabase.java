@@ -9,7 +9,7 @@ import android.content.Context;
 /**
  * Created by hubert on 6/15/18.
  */
-@Database(entities = {Alist.class, Member.class, AMemberInAList.class, History.class}, version = 2, exportSchema = false)
+@Database(entities = {Group.class, Alist.class, Member.class, AMemberInAList.class, History.class}, version = 1, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract  class AppDatabase extends RoomDatabase {
 
@@ -28,9 +28,10 @@ public abstract  class AppDatabase extends RoomDatabase {
         return databaseInstance;
     }
 
-    public abstract AListDao a_list_dao();
-    public abstract AMemberInAListDao a_member_in_a_list_dao();
-    public abstract MemberDao member_dao();
+    public abstract GroupDoa groupDoa();
+    public abstract AListDao aListDao();
+    public abstract AMemberInAListDao aMemberInAListDao();
+    public abstract MemberDao memberDao();
     public abstract HistoryDoa historyDoa();
 
 

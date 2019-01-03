@@ -1,6 +1,10 @@
 package com.example.android.hubert.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -14,14 +18,18 @@ import android.support.v7.widget.Toolbar;
 
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.Toast;
 
 
+import com.example.android.hubert.DatabaseClasses.AppDatabase;
+import com.example.android.hubert.DatabaseClasses.Group;
 import com.example.android.hubert.DialogFragments.NameDialog;
 import com.example.android.hubert.R;
 import com.example.android.hubert.SectionsPagerAdapter;
@@ -41,7 +49,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String MEMBERS_TAB = "members tab";
     public static final String CONTRIBUTIONS_TAB = "contributions tab";
     public static final String EXTRA_TAB = "tab";
+    public static final String EXTRA_GROUP_ID = "group id";
     private static final int RC_SIGN_IN = 123;
+    private static final int DEFAULT_GROUP_ID = -1 ;
 
     public static int mFabState;
     private FloatingActionButton mFab;
@@ -53,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
 
     private NavigationView mNavigationView;
+
+    private int mGroupId;
 
 
     @Override
@@ -78,6 +90,10 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // user is signed in
+                    if ( getIntent().hasExtra(Intent.EXTRA_TEXT)){
+                        String groupName = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+                        setTitle(groupName);
+                    }
                 } else {
                     // user is not signed in
                     startActivityForResult(
@@ -86,10 +102,11 @@ public class MainActivity extends AppCompatActivity {
                                     .setIsSmartLockEnabled(false)
                                     .setAvailableProviders(Arrays.asList(
                                             new AuthUI.IdpConfig.EmailBuilder().build()
-
                                             ))
                                     .build(),
                             RC_SIGN_IN);
+
+
                 }
             }
         };
@@ -157,6 +174,18 @@ public class MainActivity extends AppCompatActivity {
         // Initialize the NavigationView
         mNavigationView = findViewById(R.id.nav_view);
 
+        // Initialize the groupId
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        mGroupId = sharedPref.getInt(getString(R.string.group_id),DEFAULT_GROUP_ID);
+
+        // Set the group name as title of action bar
+        String groupName = "No Name";
+        if(mGroupId != DEFAULT_GROUP_ID){
+            groupName = sharedPref.getString(getString(R.string.groupName),getString(R.string.no_group_created));
+            actionBar.setTitle(groupName);
+        }
+
+
 
     }
 
@@ -168,8 +197,15 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == RC_SIGN_IN){
             if (resultCode == RESULT_OK){
+
+                if ( mGroupId == DEFAULT_GROUP_ID ){
+                   // Start activity to create a group
+                    Intent intent = new Intent(MainActivity.this,GroupActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
             } else if (resultCode == RESULT_CANCELED){
-                
                 finish();
             }
         }
@@ -206,14 +242,19 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         item.setChecked(true);
                         mDrawerLayout.closeDrawers();
-                        Intent intent = getIntent();
-                        finish();
-                        startActivity(intent);
+                        if (item.getItemId()== R.id.add_group){
+                            startActivity(new Intent(MainActivity.this,GroupActivity.class));
+                            finish();
+                        }else {
+                            Intent intent = getIntent();
+                            finish();
+                            startActivity(intent);
+                        }
                         return true;
                     }
                 }
         );
-        
+
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
@@ -236,6 +277,7 @@ public class MainActivity extends AppCompatActivity {
         NameDialog dialog = new NameDialog();
         Bundle bundle = new Bundle();
         bundle.putString(EXTRA_TAB, tab);
+        bundle.putInt(EXTRA_GROUP_ID,mGroupId);
         dialog.setArguments(bundle);
         dialog.show(getSupportFragmentManager(), "edit_list_name_dialog");
     }

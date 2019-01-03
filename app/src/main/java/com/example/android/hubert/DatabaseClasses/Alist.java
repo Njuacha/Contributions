@@ -1,17 +1,22 @@
 package com.example.android.hubert.DatabaseClasses;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.Date;
 
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
 /**
  * Created by hubert on 6/15/18.
  */
-@Entity
+@Entity( foreignKeys = {@ForeignKey(entity = Group.class, parentColumns = "groupId", childColumns = "groupId", onDelete = CASCADE)}
+         ,indices = {@Index(value = "groupId")})
 public class Alist implements Parcelable{
     @PrimaryKey(autoGenerate = true)
     private  int listId;

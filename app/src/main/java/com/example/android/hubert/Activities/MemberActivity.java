@@ -128,7 +128,7 @@ public class MemberActivity extends AppCompatActivity implements MemberContribut
                     AppExecutors.getsInstance().diskIO().execute(new Runnable() {
                         @Override
                         public void run() {
-                            mDb.a_member_in_a_list_dao().deleteAContribution(listBasedContribution.getMemberId(),contrib.getListId());
+                            mDb.aMemberInAListDao().deleteAContribution(listBasedContribution.getMemberId(),contrib.getListId());
                             mDb.historyDoa().delete(contrib.getListId(), listBasedContribution.getMemberId());
                         }
                     });

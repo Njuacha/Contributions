@@ -37,7 +37,7 @@ public class ContribSumryViewModel extends ViewModel {
                 Date date = alist.getDate();
 
                 // Query database with listId to get amounts contributed
-                int[] amounts = mDb.a_member_in_a_list_dao().loadAllAmountInlist(alist.getListId());
+                int[] amounts = mDb.aMemberInAListDao().loadAllAmountInlist(alist.getListId());
                 // Iterate through the amounts to sum them all into totalAmt variable
                 int totalAmt = 0;
                 for (int amount : amounts) {

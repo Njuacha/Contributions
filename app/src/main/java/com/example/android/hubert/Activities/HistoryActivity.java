@@ -119,7 +119,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryAdapter
                                         mListBasedContribution.getMemberId()
                                         ,mAlist.getListId()
                                         ,newAmount);
-                                db.a_member_in_a_list_dao().update_a_member_in_a_list(aMemberInAList);
+                                db.aMemberInAListDao().update_a_member_in_a_list(aMemberInAList);
                             }
                         });
                         break;

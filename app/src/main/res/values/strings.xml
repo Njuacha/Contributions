@@ -48,4 +48,9 @@
     <string name="adUnitId3" translatable="false">ca-app-pub-2753645322508525/4292804353</string>
     <string name="adUnitId4" translatable="false">ca-app-pub-2753645322508525/6039385891</string>
     <string name="adUnitId5" translatable="false">ca-app-pub-2753645322508525/1308258801</string>
+    <string name="create_a_group">create a group</string>
+    <string name="hint_group_name">Enter the group\'s name here...</string>
+    <string name="group_id">groupId</string>
+    <string name="groupName">group name</string>
+    <string name="no_group_created">No Group Created</string>
 </resources>

@@ -9,18 +9,22 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 
 import com.example.android.hubert.AppExecutors;
 import com.example.android.hubert.DatabaseClasses.Alist;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
+import com.example.android.hubert.DatabaseClasses.Group;
 import com.example.android.hubert.DatabaseClasses.Member;
 import com.example.android.hubert.R;
 
 import java.util.Date;
+import java.util.List;
 
 import static com.example.android.hubert.Activities.MainActivity.CONTRIBUTIONS_TAB;
+import static com.example.android.hubert.Activities.MainActivity.EXTRA_GROUP_ID;
 import static com.example.android.hubert.Activities.MainActivity.EXTRA_TAB;
 import static com.example.android.hubert.Activities.MainActivity.MEMBERS_TAB;
 import static com.example.android.hubert.PlaceholderFragment.EXTRA_EDIT_ITEM;
@@ -36,6 +40,7 @@ public class NameDialog extends DialogFragment {
     private String tab;
     private EditText editText;
     private Parcelable editItem;
+    private int groupId;
 
 
     @NonNull
@@ -44,6 +49,7 @@ public class NameDialog extends DialogFragment {
 
         tab = getArguments().getString(EXTRA_TAB);
         editItem = getArguments().getParcelable(EXTRA_EDIT_ITEM);
+        groupId = getArguments().getInt(EXTRA_GROUP_ID);
 
 
 
@@ -99,19 +105,19 @@ public class NameDialog extends DialogFragment {
 
                 if (tab.equals(MEMBERS_TAB)){
                     if (editItem == null){
-                        db.member_dao().insertMember(new Member(textEntered,0));
+                        db.memberDao().insertMember(new Member(textEntered,groupId));
                     }else{
                         Member member = (Member)editItem;
                         member.setName(textEntered);
-                        db.member_dao().updateMember(member);
+                        db.memberDao().updateMember(member);
                     }
                 }else if(tab.equals(CONTRIBUTIONS_TAB)){
                     if (editItem == null){
-                        db.a_list_dao().insertAList(new Alist(textEntered,new Date(),0));
+                        db.aListDao().insertAList(new Alist(textEntered,new Date(),groupId));
                     }else{
                         Alist alist = (Alist)editItem;
                         alist.setName(textEntered);
-                        db.a_list_dao().updateAList(alist);
+                        db.aListDao().updateAList(alist);
                     }
                 }
             }

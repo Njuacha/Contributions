@@ -214,7 +214,7 @@ public class AddAContribution extends AppCompatActivity implements DatePickerFra
                 switch (mAction){
                     case NEW_CONTR:
                         memberInAList = new AMemberInAList(memberId, mAlist.getListId(), amount);
-                        mdb.a_member_in_a_list_dao().insert_a_member_in_a_list(memberInAList);
+                        mdb.aMemberInAListDao().insert_a_member_in_a_list(memberInAList);
 
                         // Write a record of a mListBasedContribution in History table
                         mdb.historyDoa().insertContributionWithDate(new History(mAlist.getListId()
@@ -224,7 +224,7 @@ public class AddAContribution extends AppCompatActivity implements DatePickerFra
                         int newAmount = mListBasedContribution.getAmount() + amt;
 
                         memberInAList = new AMemberInAList(memberId, mListId,newAmount);
-                        mdb.a_member_in_a_list_dao().update_a_member_in_a_list(memberInAList);
+                        mdb.aMemberInAListDao().update_a_member_in_a_list(memberInAList);
 
                         // Write a record of a mListBasedContribution in History table
                         mdb.historyDoa().insertContributionWithDate(new History(mListId
@@ -244,7 +244,7 @@ public class AddAContribution extends AppCompatActivity implements DatePickerFra
                             int amountAfterEdit = previousAmount + amt;
 
                             memberInAList = new AMemberInAList(history.getMemberId(),history.getListId(),amountAfterEdit);
-                            mdb.a_member_in_a_list_dao().update_a_member_in_a_list(memberInAList);
+                            mdb.aMemberInAListDao().update_a_member_in_a_list(memberInAList);
                         }
 
 

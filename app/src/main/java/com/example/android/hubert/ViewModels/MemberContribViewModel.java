@@ -16,7 +16,7 @@ public class MemberContribViewModel extends ViewModel {
     private final LiveData<List<MemberBasedContribution>> contributions;
 
     public MemberContribViewModel(AppDatabase db, int memberId) {
-        contributions = db.a_member_in_a_list_dao().loadContributionOfMember(memberId);
+        contributions = db.aMemberInAListDao().loadContributionOfMember(memberId);
     }
 
 
