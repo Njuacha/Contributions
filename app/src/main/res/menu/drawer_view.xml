@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group
-        android:id="@+id/groups"
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/group1"
-            android:title="group1"></item>
-        <item
-            android:id="@+id/add_group"
-            android:title="create a group"></item>
-        <item
-            android:id="@+id/sign_out"
-            android:title="Sign_out">
-        </item>
-    </group>
+
+    <item
+        android:orderInCategory="0"
+        android:id="@+id/add_group"
+        android:title="create a group"></item>
+    <item
+        android:orderInCategory="1"
+        android:id="@+id/sign_out"
+        android:title="Sign_out">
+    </item>
+
 
 
 

@@ -53,4 +53,5 @@
     <string name="group_id">groupId</string>
     <string name="groupName">group name</string>
     <string name="no_group_created">No Group Created</string>
+    <string name="groups">Groups</string>
 </resources>

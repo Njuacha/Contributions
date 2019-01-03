@@ -41,7 +41,9 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_TAB = "tab";
     public static final String EXTRA_GROUP_ID = "group id";
     private static final int RC_SIGN_IN = 123;
-    public static final int DEFAULT_GROUP_ID = -1 ;
+    public static final int DEFAULT_GROUP_ID = -1;
 
     public static int mFabState;
     private FloatingActionButton mFab;
@@ -90,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // user is signed in
-                    if ( getIntent().hasExtra(Intent.EXTRA_TEXT)){
+                    if (getIntent().hasExtra(Intent.EXTRA_TEXT)) {
                         String groupName = getIntent().getStringExtra(Intent.EXTRA_TEXT);
                         setTitle(groupName);
                     }
@@ -102,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                                     .setIsSmartLockEnabled(false)
                                     .setAvailableProviders(Arrays.asList(
                                             new AuthUI.IdpConfig.EmailBuilder().build()
-                                            ))
+                                    ))
                                     .build(),
                             RC_SIGN_IN);
 
@@ -169,43 +171,42 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize MyMobileAds
         AdView adView = findViewById(R.id.adView1);
-        MyMobileAds.loadAdIntoAdView(this,adView);
+        MyMobileAds.loadAdIntoAdView(this, adView);
 
         // Initialize the NavigationView
         mNavigationView = findViewById(R.id.nav_view);
+        loadAllGroupsIntoGroupsMenu();
 
         // Initialize the groupId
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        mGroupId = sharedPref.getInt(getString(R.string.group_id),DEFAULT_GROUP_ID);
+        mGroupId = sharedPref.getInt(getString(R.string.group_id), DEFAULT_GROUP_ID);
 
         // Set the group name as title of action bar
         String groupName = "No Name";
-        if(mGroupId != DEFAULT_GROUP_ID){
-            groupName = sharedPref.getString(getString(R.string.groupName),getString(R.string.no_group_created));
+        if (mGroupId != DEFAULT_GROUP_ID) {
+            groupName = sharedPref.getString(getString(R.string.groupName), getString(R.string.no_group_created));
             actionBar.setTitle(groupName);
         }
 
 
-
     }
-
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RC_SIGN_IN){
-            if (resultCode == RESULT_OK){
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_OK) {
 
-                if ( mGroupId == DEFAULT_GROUP_ID ){
-                   // Start activity to create a group
-                    Intent intent = new Intent(MainActivity.this,GroupActivity.class);
+                if (mGroupId == DEFAULT_GROUP_ID) {
+                    // Start activity to create a group
+                    Intent intent = new Intent(MainActivity.this, GroupActivity.class);
                     startActivity(intent);
                     finish();
                 }
 
-            } else if (resultCode == RESULT_CANCELED){
+            } else if (resultCode == RESULT_CANCELED) {
                 finish();
             }
         }
@@ -219,11 +220,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getTitle().toString().equals("Sign Out")){
+        if (item.getTitle().toString().equals("Sign Out")) {
             AuthUI.getInstance().signOut(this);
         }
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
@@ -236,16 +237,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // Add listener to respond to navigation item clicked
+
         mNavigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         item.setChecked(true);
                         mDrawerLayout.closeDrawers();
-                        if (item.getItemId()== R.id.add_group){
-                            startActivity(new Intent(MainActivity.this,GroupActivity.class));
+                        if (item.getItemId() == R.id.add_group) {
+                            startActivity(new Intent(MainActivity.this, GroupActivity.class));
                             finish();
-                        }else {
+                        } else {
                             Intent intent = getIntent();
                             finish();
                             startActivity(intent);
@@ -258,6 +260,35 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
+    private void loadAllGroupsIntoGroupsMenu() {
+        Menu menu = mNavigationView.getMenu();
+        final Menu groupsMenu = menu.addSubMenu(Menu.NONE, R.id.groups, 3, getString(R.string.groups));
+
+
+        new AsyncTask<Void, Void, List<Group>>() {
+
+            @Override
+            protected List<Group> doInBackground(Void... voids) {
+
+                List<Group> groupList = AppDatabase.getDatabaseInstance(getApplicationContext()).groupDoa().loadAllGroups();
+
+                return groupList;
+            }
+
+            @Override
+            protected void onPostExecute(List<Group> groups) {
+                int count = 1;
+                for (Group group: groups){
+                    groupsMenu.add(Menu.NONE,group.getGroupId(),count,group.getGroupName());
+                            count++;
+                }
+                mNavigationView.invalidate();
+                super.onPostExecute(groups);
+            }
+        }.execute();
+
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -266,18 +297,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void openNameDialog() {
         int position = tabLayout.getSelectedTabPosition();
-        String tab ;
-        if (position == 0){
+        String tab;
+        if (position == 0) {
             tab = MEMBERS_TAB;
-        }else if (position == 1){
+        } else if (position == 1) {
             tab = CONTRIBUTIONS_TAB;
-        }else {
+        } else {
             return;
         }
         NameDialog dialog = new NameDialog();
         Bundle bundle = new Bundle();
         bundle.putString(EXTRA_TAB, tab);
-        bundle.putInt(EXTRA_GROUP_ID,mGroupId);
+        bundle.putInt(EXTRA_GROUP_ID, mGroupId);
         dialog.setArguments(bundle);
         dialog.show(getSupportFragmentManager(), "edit_list_name_dialog");
     }
