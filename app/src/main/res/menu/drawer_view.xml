@@ -4,11 +4,11 @@
     <item
         android:orderInCategory="0"
         android:id="@+id/add_group"
-        android:title="create a group"></item>
+        android:title="Create a group"></item>
     <item
         android:orderInCategory="1"
         android:id="@+id/sign_out"
-        android:title="Sign_out">
+        android:title="SignOut">
     </item>
 
 

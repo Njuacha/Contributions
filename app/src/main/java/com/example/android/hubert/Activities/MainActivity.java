@@ -212,17 +212,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add("Sign Out");
-        return super.onCreateOptionsMenu(menu);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getTitle().toString().equals("Sign Out")) {
-            AuthUI.getInstance().signOut(this);
-        }
 
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -237,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // Add listener to respond to navigation item clicked
+        final Context context = this;
 
         mNavigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -244,14 +237,29 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         item.setChecked(true);
                         mDrawerLayout.closeDrawers();
-                        if (item.getItemId() == R.id.add_group) {
-                            startActivity(new Intent(MainActivity.this, GroupActivity.class));
-                            finish();
-                        } else {
-                            Intent intent = getIntent();
-                            finish();
-                            startActivity(intent);
+
+                        int itemId = item.getItemId();
+
+                        switch (itemId){
+                            case R.id.add_group:
+                                startActivity(new Intent(MainActivity.this, GroupActivity.class));
+                                finish();
+                                break;
+                            case R.id.sign_out:
+                                AuthUI.getInstance().signOut(context);
+                                break;
+                            default:
+                                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putInt(getString(R.string.group_id), itemId);
+                                editor.putString(getString(R.string.groupName), String.valueOf(item.getTitle()));
+                                editor.commit();
+                                Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);
+                                break;
                         }
+
                         return true;
                     }
                 }
