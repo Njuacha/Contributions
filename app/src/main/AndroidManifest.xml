@@ -30,8 +30,8 @@
         <activity
             android:name=".Activities.MainActivity"
             android:label="Contributions"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -72,7 +72,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.hubert.Activities.MainActivity" />
         </activity>
-        <activity android:name=".Activities.GroupActivity"></activity>
+        <activity android:name=".Activities.GroupActivity" />
+        <activity android:name=".Activities.SettingsActivity"
+            android:parentActivityName=".Activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.hubert.Activities.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

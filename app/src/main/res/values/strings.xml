@@ -52,6 +52,8 @@
     <string name="hint_group_name">Enter the group\'s name here...</string>
     <string name="group_id">groupId</string>
     <string name="groupName">group name</string>
-    <string name="no_group_created">No Group Created</string>
     <string name="groups">Groups</string>
+    <string name="name_of_group">Name of Group</string>
+    <string name="settings">Settings</string>
+    <string name="delete_group">Delete Group</string>
 </resources>

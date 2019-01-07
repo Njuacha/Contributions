@@ -9,6 +9,8 @@
 
         <item name="android:spinnerDropDownItemStyle">@style/SpinnerText</item>
         <item name="android:spinnerItemStyle">@style/SpinnerText</item>
+
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
     <style name="SpinnerText">

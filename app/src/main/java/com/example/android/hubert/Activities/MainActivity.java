@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.Toast;
 
 
+import com.example.android.hubert.AppExecutors;
 import com.example.android.hubert.DatabaseClasses.AppDatabase;
 import com.example.android.hubert.DatabaseClasses.Group;
 import com.example.android.hubert.DialogFragments.NameDialog;
@@ -46,7 +47,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String MEMBERS_TAB = "members tab";
     public static final String CONTRIBUTIONS_TAB = "contributions tab";
@@ -181,10 +182,13 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         mGroupId = sharedPref.getInt(getString(R.string.group_id), DEFAULT_GROUP_ID);
 
+        // Register onshared preference change listener
+        sharedPref.registerOnSharedPreferenceChangeListener(this);
+
         // Set the group name as title of action bar
         String groupName = "No Name";
         if (mGroupId != DEFAULT_GROUP_ID) {
-            groupName = sharedPref.getString(getString(R.string.groupName), getString(R.string.no_group_created));
+            groupName = sharedPref.getString(getString(R.string.groupName), getString(R.string.groupName));
             actionBar.setTitle(groupName);
         }
 
@@ -219,6 +223,12 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.action_settings:
+                startActivity(new Intent(MainActivity.this,SettingsActivity.class));
+                return true;
+            case R.id.action_delete:
+
                 return true;
         }
 
@@ -321,4 +331,31 @@ public class MainActivity extends AppCompatActivity {
         dialog.show(getSupportFragmentManager(), "edit_list_name_dialog");
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        String groupNamekey = getString(R.string.groupName);
+        if (key.equals(groupNamekey)){
+
+            final String groupName = sharedPreferences.getString(groupNamekey,groupNamekey);
+
+            setTitle(groupName);
+
+            AppExecutors.getsInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    AppDatabase.getDatabaseInstance(getApplicationContext())
+                            .groupDoa()
+                            .updateGroup(new Group(mGroupId,groupName));
+                }
+            });
+
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
+        super.onDestroy();
+    }
 }
