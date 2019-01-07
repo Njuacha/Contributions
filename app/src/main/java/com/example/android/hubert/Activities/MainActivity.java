@@ -261,6 +261,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                             default:
                                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                 SharedPreferences.Editor editor = sharedPref.edit();
+                                sharedPref.unregisterOnSharedPreferenceChangeListener(MainActivity.this);
                                 editor.putInt(getString(R.string.group_id), itemId);
                                 editor.putString(getString(R.string.groupName), String.valueOf(item.getTitle()));
                                 editor.commit();
@@ -338,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
             final String groupName = sharedPreferences.getString(groupNamekey,groupNamekey);
 
-            setTitle(groupName);
+            getSupportActionBar().setTitle(groupName);
 
             AppExecutors.getsInstance().diskIO().execute(new Runnable() {
                 @Override
@@ -349,7 +350,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 }
             });
 
+            updateGroupNameInNavMenu(groupName);
+
         }
+    }
+
+    private void updateGroupNameInNavMenu(String groupName) {
+        Menu menu = mNavigationView.getMenu();
+        menu.findItem(mGroupId).setTitle(groupName);
+        mNavigationView.invalidate();
     }
 
     @Override
